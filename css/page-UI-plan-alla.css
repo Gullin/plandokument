@@ -1,0 +1,14 @@
+﻿.hand
+{
+    cursor: pointer;
+}
+.imgPlanDokument
+{
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.imgPlanDokument:hover
+{
+  opacity: 1;
+  filter: alpha(opacity=100);
+}

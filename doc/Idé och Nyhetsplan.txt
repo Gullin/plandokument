@@ -1,0 +1,17 @@
+IDÈ - Genomfört
+ * Berörda fastighetsägare
+    aspx-sida som slår upp fastigheter beroende av berörkrets och redirect till befintliga fastighetsrapporter.
+
+
+NYHETSPLAN
+ * Fastighetsytor
+    + (del 1) Åskådliggörande av vilken fastighet som är vilken underlättas
+    + (del 2) De olika rapporterna för fastighet (lagfaren ägare, fullständig fastighetsrapport) är hädanefter knutna till fastighetsytorna.
+              ID-punkten för fastighet kommer att finnas kvar.
+ * Planytor
+    + (del 1) Information som existerar vid utflaggning
+    + (del 2) genomförandetid i kartvy planering
+ * Tillgängliggörande av planernas planhandlingar i sin helhet (inskannat material)
+    + genom planytan
+    + genom fastighetytan och planens berörkrets
+ * Fastighetsrapport genom markering av plan (fastighet genom planens den s.k. berörkrets)

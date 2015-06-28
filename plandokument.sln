@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2013 for Web
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plandokument", "plandokument.csproj", "{DE2A3E7D-9927-4F5A-A58D-E970049E240F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		DeployAIMS|Any CPU = DeployAIMS|Any CPU
+		DeployAIMS|x64 = DeployAIMS|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.Debug|x64.Build.0 = Debug|Any CPU
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.DeployAIMS|Any CPU.ActiveCfg = DeployAIMS|x64
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.DeployAIMS|Any CPU.Build.0 = DeployAIMS|x64
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.DeployAIMS|x64.ActiveCfg = DeployAIMS|x64
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.DeployAIMS|x64.Build.0 = DeployAIMS|x64
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.DeployAIMS|x64.Deploy.0 = DeployAIMS|x64
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.Release|x64.ActiveCfg = Release|x64
+		{DE2A3E7D-9927-4F5A-A58D-E970049E240F}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

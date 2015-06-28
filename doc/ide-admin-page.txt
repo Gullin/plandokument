@@ -1,0 +1,11 @@
+Cach, med planinformation för snabbare sökning
+
+Plandokument, verifering
+ Namnkonvention
+ Dokumenttyper
+ Missmatch register/dokument
+
+Kontrollera nödvändiga kataloger/virtuella
+ log
+ plandokument
+ zipTemp

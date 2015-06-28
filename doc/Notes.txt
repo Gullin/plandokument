@@ -1,0 +1,113 @@
+KONTROL AV KOMPILERAD .NET ASSEMBLY-version 
+Kontrollera kompilerad OS-version för dll-assemblys
+
+Kör Visual Studio Command Prompt och
+corflags.exe [sökväg till assembly]
+
+
+Any CPU: PE = PE32 and 32BIT = 0
+
+x86: PE = PE32 and 32BIT = 1
+
+64-bit: PE = PE32+ and 32BIT = 0
+
+
+ZIP
+http://stackoverflow.com/questions/681827/how-to-create-and-fill-a-zip-file-using-asp-net
+http://weblogs.asp.net/jongalloway//creating-zip-archives-in-net-without-an-external-library-like-sharpziplib
+http://www.4guysfromrolla.com/articles/092910-1.aspx
+http://www.aspsnippets.com/Articles/Download-multiple-files-as-Zip-Archive-File-in-ASPNet-using-C-and-VBNet.aspx
+
+
+
+IO
+http://www.evagoras.com/2011/02/09/viewing-and-editing-file-and-directory-attributes-in-asp-net/
+http://msdn.microsoft.com/en-us/library/aa328752
+http://www.progtalk.com/viewarticle.aspx?articleid=77
+
+
+
+XSD / XML / CLASS
+    Utility to generate schema or class files from given source.
+
+xsd.exe <schema>.xsd /classes|dataset [/e:] [/l:] [/n:] [/o:] [/s] [/uri:]
+xsd.exe <assembly>.dll|.exe [/outputdir:] [/type: [...]]
+xsd.exe <instance>.xml [/outputdir:]
+xsd.exe <schema>.xdr [/outputdir:]
+Kör VS Command prompt
+För hjälp: xsd /?
+
+Filnamn på cs-fil blir samma som xsd-filnamnet
+xsd [sökväg och xsd-schema] /classes /language:cs /namespace:[önskad språk output ska vara i] /out:[sökväg till katalog filen]
+
+ex.
+xsd "C:\Program Files\OSGeo\MapGuide\Server\Schema\LayerDefinition-1.0.0.xsd" /classes /language:cs /namespace:Plan.Plandokument /out:"\\landskrona.se\dfs\users\chran7\Documents\Visual Studio 2012\Projects\plan\class" /nologo
+
+
+
+
+Söktest
+http://localhost:60557/handling,nyckel/071,148,1677,1282-P98/169
+http://localhost:60557/handling,akt/071,148,1677,1282-P98/169
+http://localhost:60557/handling/071,148,1677,1282-P98/169
+Flera begrepp (nyckel och arkivserie plan/bygglov) med samma plan som svar
+	http://localhost:60557/handling/071,148
+Flera fastigheter med samma plan som svar
+	http://localhost:60557/dokument,fastighetnyckel/120284715,120318356
+
+
+
+
+TODO:
+Redovisningen av sökta objekt
+  ska vara i korrekt versal/gemen på sidan
+  För vilka sökbegrepp planen fått träff och begreppstyp
+Verifiera kartbild vid planer med flera ytor
+XML-fil för layerFeature
+  lägga till filter-tagg övergrpande i xml-definitionen
+  Kontrollera del för edl av XML-taggar för att se vad som är fel
+  Inte generera tagg för inget InnerHTML
+  Söka på fastighet och genom berörskrets hitta planer
+    plan/handling,[fastighetsnyckel|fastighetsbeteckning1]/[nyckel|fastighetsbeteckning]
+    eV. kontrollera spatial överlagring för att se överensstämning
+Tömma Session-objekt vid nya Requests när sökningar är gjorda tidigare. Visar annars tidigare resultat när sidan öppnas på nytt (1) eller söker med tomma sökparametrar (2).
+ (1) Tömma Sessions-ojekten i event Session_End
+ (2) Tömma vid sökning utan parametrar
+
+
+
+
+ERROR:
+Om problem med att köra MapGuide Open Source 2.5/AIMS 2013 webbsida
+Felsida med felmeddelande dyker upp.
+"
+HTTP Error 500 - Internal Server Error Handler
+HTTP Error 500.21 - Internal Server Error Handler "PageHandlerFactory-Integrated" has a bad module "ManagedPipelineHandler" in its module list.
+"
+
+LÖSNING:
+Koruppt installation av asp.net eller version av .net framework.
+Vid t.ex. 32-bitars maskin och version 4 eller 4.5 av .net framework
+
+1) Öppna kommandotolken (cmd) som administratör
+2) Reperation av .net framework
+    a) från katalog
+       cd\
+       cd "Windows\Microsoft.NET\Framework\v4.0.30319\SetupCache"
+    b) kör
+       setup.exe /repair /x86 /x64 /ia64 /norestart
+
+    Om datorn kör en klientprofil av .net framework gäller följande istället
+    a) från katalog
+       cd\
+       cd "Windows\Microsoft.NET\Framework\v4.0.30319\SetupCache\Client"
+    b) kör
+       setup.exe /repair /x86 /x64 /ia64 /parameterfolder Client /norestart
+3) från katalog installera asp.net version som assossieras med .net versionen
+   cd\
+   cd "Windows\Microsoft.NET\Framework\v4.0.30319\SetupCache"
+   aspnet_regiis.exe /i
+4) starta och stoppa hela webbservern och tömmer alla applikationspooler
+   iisreset
+
+
