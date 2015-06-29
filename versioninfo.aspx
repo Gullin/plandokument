@@ -388,8 +388,17 @@
                                         <ul>
                                             <li>Finns plandokument till alla gällande planer</li>
                                             <li>Följs namnkonventionen</li>
+                                            <li>Dokument som ej hör hemma eller är aktiva (upphävda kan sparas m.h.a. namnkonvention)</li>
                                             <li>När plankarta finns ska tiff-fil finnas och tvärt om</li>
-                                            <li>Tiff-filer är GeoTiff</li>
+                                            <li>Tiff-filer är GeoTiff (georefererade)</li>
+                                        </ul>
+                                    </li>
+                                    <li>Validering av nödvändiga kataloger virtuella/fysiska</li>
+                                    <li>
+                                        <ul>
+                                            <li>log</li>
+                                            <li>plandokument</li>
+                                            <li>zipTemp</li>
                                         </ul>
                                     </li>
                                 </ul>
