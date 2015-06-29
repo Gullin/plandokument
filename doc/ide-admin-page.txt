@@ -1,11 +1,12 @@
-Cach, med planinformation för snabbare sökning
+Cache, med planinformation fÃ¶r snabbare sÃ¶kning
 
 Plandokument, verifering
  Namnkonvention
  Dokumenttyper
  Missmatch register/dokument
+ Dokument som ej hÃ¶r hemma (upphÃ¤vda kan sparas m.h.a. namnkonvention)
 
-Kontrollera nödvändiga kataloger/virtuella
+Kontrollera nÃ¶dvÃ¤ndiga kataloger/virtuella
  log
  plandokument
  zipTemp
