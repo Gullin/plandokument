@@ -1,27 +1,46 @@
 SETUP
- * F�rinstallationer
+ * Förinstallationer
     + Beroende av kartmotor AIMS eller MGOS
-    + Beroende till tv� objekt i databas med namn och kolumner
-       1) GIS_V_PLANYTOR
-           a) NYCKEL
-           b) AKT
-           c) AKTTIDIGARE
-           d) AKTEGN
-           e) PLANFK
-           f) PLANNAMN
-           g) ISGENOMF
-       2) GIS_V_PLANBERORFASTIGHET
-           a) NYCKEL
-           b) NYCKEL_FASTIGHET
-           c) FASTIGHET
-    + S�kerst�ll skrivr�ttigheter f�r fysiska installationskatalogens underkatalog "log" f�r IIS-anv�ndaren
-      Skapas f�rst vid f�rsta behovet av applikationen om den inte redan finns. Kan skapas manuellt innan.
+    + Beroende till två objekt i databas med namn och kolumner
+       - Vyer
+          # LKR_GIS.GIS_V_PLANYTOR
+             ¤ Kolumner
+                NYCKEL
+                AKT
+                AKTTIDIGARE
+                AKTEGN
+                PLANFK
+                PLANNAMN
+                ISGENOMF
+             ¤ Tabeller
+                topo_ndrk.pl_plan_tsur
+                topo_ndrk.pl_area
+                topo_ndrk.pl_plan_tcen
+                topo_ndrk.pl_area_planavgift
+                topo_ndrk.pl_polygon
+                topo_ndrk.pl_polygon_planavgift
+                tefat.fir_plan
+                tefat.fir_plan_egnauppg
+                tefat.fir_plan_beslut
+                tefat.fir_firkoder
+          # LKR_GIS.GIS_V_PLANBERORFASTIGHET
+             ¤ Kolumner
+                NYCKEL
+                NYCKEL_FASTIGHET
+                FASTIGHET
+             ¤ Tabeller
+                tefat.fir_fastigh
+                tefat.fir_plan_planberor
+    + Säkerställ skrivrättigheter för fysiska installationskatalogens underkatalog "log" för IIS-användaren (ApplicationPool som används för webbapplikationen).
+      Skapas först vid första behovet av applikationen om den inte redan finns. Kan skapas manuellt innan.
+    + Säkerställ skrivrättigheter för fysiska installationskatalogens underkatalog "zipTemp" för IIS-användaren (ApplicationPool som används för webbapplikationen).
+      Skapas först vid första behovet av applikationen om den inte redan finns. Kan skapas manuellt innan.
     + Inskannade plandokuments virtuella eller fysiska katalognamn skrivs in i applikationens "Settings.config"
       Kan antingen vara fysisk katalog som ligger under applikationsinstallationen eller
-      en virtuell katalog under applikationsinstallationen om den fysiska platsen �r annan (beh�ver dock vara �tkomlig fr�n servern)
+      en virtuell katalog under applikationsinstallationen om den fysiska platsen är annan (behöver dock vara åtkomlig från servern)
     + DotNetZip
       http://dotnetzip.codeplex.com/
-      Bibliotek f�r packetering (zip) av plandokument
+      Bibliotek för packetering (zip) av plandokument
     + jQuery 1.9
     + jQuery UI 1.9.2
     + JSON 3
