@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Collections.Generic;
-using Ionic.Zip;
-using System.Linq;
+using System.IO.Compression;
 using System.Web;
 
 namespace Plan.Plandokument
@@ -27,21 +26,24 @@ namespace Plan.Plandokument
 
                 deleteOldZipFiles();
 
-                string ZipFileToCreate = string.Empty;
-                using (ZipFile zip = new ZipFile())
+                // zip-fil med path som skapas som arkiv
+                string ZipFileToCreate = HttpContext.Current.Server.MapPath(
+                    zipDirectory.Replace("~/", "") + zipFileNamePart.Replace("/", "_") + "-" + DateTime.Now.ToString("yyyyMMddTHHmmss.fff") + ".zip"
+                    );
+
+                // Om filen, mot förmodan, skulle existera raderas den.
+                if (File.Exists(ZipFileToCreate))
+                {
+                    File.Delete(ZipFileToCreate); 
+                }
+
+                // Skapar zip-akrkiv och packar valda filer
+                using (ZipArchive zip = ZipFile.Open(ZipFileToCreate, ZipArchiveMode.Update))
                 {
                     foreach (String file in files)
                     {
-                        ZipEntry e = zip.AddFile(HttpContext.Current.Server.MapPath(file), "");
+                        zip.CreateEntryFromFile(file, file.Substring(file.LastIndexOf('/') + 1));
                     }
-
-                    zip.Comment = String.Format("This zip archive was created by the CreateZip example application on machine '{0}'",
-                       System.Net.Dns.GetHostName());
-
-                    ZipFileToCreate = zipDirectory.Replace("~/", "") + zipFileNamePart.Replace("/", "_") + "-" + DateTime.Now.ToString("yyyyMMddTHHmmss.fff") + ".zip";
-
-                    zip.Save(HttpContext.Current.Server.MapPath(ZipFileToCreate));
-
                 }
 
                 // Kontrollerar tiden det tar att paka filerna. Om kortare tid än i if-satsen fördröjs processen
@@ -53,7 +55,6 @@ namespace Plan.Plandokument
                 }
 
                 return ZipFileToCreate;
-
             }
             catch (System.Exception ex)
             {
