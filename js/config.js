@@ -26,7 +26,7 @@ extend(Lkr, {
             }
         },
         Dokument: {
-            resolvedClientUrl: '~',
+            resolvedClientUrl: '',
             isPlansSearched: false,
             initExpColAll: false,
             planListInfo: null,

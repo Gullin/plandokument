@@ -17,7 +17,11 @@
 
         <!-- Inställningar Klient -->
         <script src='<%=ResolveUrl("js/config.js")%>'></script>
+        <script type="text/javascript">
 
+            Lkr.Plan.Dokument.resolvedClientUrl = "http://" + '<%=Request.Url.Host%>' + '<%=ResolveUrl("~")%>';
+
+        </script>
 
 
         <!-- För haneringar av IE 7 och tidigare samt IE:s modernare version i inställda i kompabilitetsläge -->
