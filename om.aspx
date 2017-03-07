@@ -230,6 +230,21 @@
                     </tr>
                     <tr>
                         <td></td>
+                        <td>kvalitetsprogram</td>
+                        <td>Presenterar resp. plans kvalitetsprogram då ett sådant finns framtaget till planen</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>mkb</td>
+                        <td>Presenterar resp. plans miljökonsekvensbeskrivning (MKB) då en sådan finns framtagen till planen</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>bullerutredning</td>
+                        <td>Presenterar resp. plans bullerutredning då en sådan finns framtagen till planen</td>
+                    </tr>
+                    <tr>
+                        <td></td>
                         <td>ovriga</td>
                         <td>Här under samlas alla övriga dokument som inte direkt ses som en formell planhandling men som ingått i planens framställning. Det kan röra sig om utredningar, konsekvensbeskrivningar, offentliga konversationer, kungörelser m.m.</td>
                     </tr>

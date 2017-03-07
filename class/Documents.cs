@@ -65,7 +65,7 @@ namespace Plan.Plandokument
             string documentSuffix = (string)Session["PlanHandling"];
             
             // Sorterade dokumenttyper, suffix från filernas namnkonvention, inkl. redovisning om planhandling enl. PBL
-            string[,] suffixs = new string[10, 2] {
+            string[,] suffixs = new string[13, 2] {
                                                     { "true", ""},
                                                     { "true", "_best" },
                                                     { "true", "_illu" },
@@ -75,6 +75,9 @@ namespace Plan.Plandokument
                                                     { "true", "_utlat" },
                                                     { "false", "_grk" },
                                                     { "false", "_ff" },
+                                                    { "false", "_kvalprog" },
+                                                    { "false", "_mkb" },
+                                                    { "false", "_buller" },
                                                     { "false", "_ovr" }
                                                  };
             // Vilka dokument söks
@@ -112,6 +115,15 @@ namespace Plan.Plandokument
                         break;
                     case "fastighetsforteckning":
                         documentSuffix = "_ff";
+                        break;
+                    case "kvalitetsprogram":
+                        documentSuffix = "_kvalprog";
+                        break;
+                    case "mkb":
+                        documentSuffix = "_mkb";
+                        break;
+                    case "bullerutredning":
+                        documentSuffix = "_buller";
                         break;
                     case "ovriga":
                         documentSuffix = "_ovr";
@@ -359,6 +371,15 @@ namespace Plan.Plandokument
                             break;
                         case "handling":
                             documentType = "Övriga";
+                            break;
+                        case "kvalprog":
+                            documentType = "Kvalitetsprogram";
+                            break;
+                        case "mkb":
+                            documentType = "Miljökonsekvensbeskrivning";
+                            break;
+                        case "buller":
+                            documentType = "Bullerutredning";
                             break;
                         case "ff":
                             documentType = "Fastighetsförteckning";

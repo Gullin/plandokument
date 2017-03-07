@@ -35,6 +35,9 @@
        "utlatande"              = Endast utlåtande (planhandling)
        "grk"                    = Endast grundkarta om den kommer som separat dokument (övrigt plandokument)
        "fastighetsforteckning"  = Endast fastighetsförteckning om den arkiverats med plan (övrigt plandokument)
+       "kvalitetsprogram"       = Endast kvalitetsprogram
+       "mkb"                    = Endast miljökonsekvensbeskrivning
+       "bullerutredning"        = Endast bullerutredning
        "ovriga"                 = Resterade av dokumenten till plan som ej sorterats eller existerar i separerade dokumenttyper (övriga plandokument) -->
   <add key="UrlParameterDocumentType" value="dokument" />
   <!-- "NYCKEL", "AKT", "AKTTIDIGARE", "AKTEGEN", "FASTIGHET", "FASTIGHETNYCKEL" -->

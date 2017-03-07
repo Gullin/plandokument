@@ -552,6 +552,9 @@ function putPlansDocs($headerPlan, plansDocs) {
                                           ["Karta", 2, true],
                                           ["Samrådsredogörelse", 2, true],
                                           ["Utlåtande", 2, true],
+                                          ["Kvalitetsprogram", 2, false],
+                                          ["Miljökonsekvensbeskrivning", 2, false],
+                                          ["Bullerutredning", 2, false],
                                           ["Övriga", 2, false]];
 
                 var $ul = $("<ul>");
