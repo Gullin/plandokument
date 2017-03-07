@@ -52,8 +52,19 @@
                         <ul>
                             <li>
                                 <ul>
+                                    <li><span>v0.9.7</span> Ytterligare fler typer av plandokument kan hanteras; <br />
+                                        Kvalitetsprogram,  <br />
+                                        Miljökonsekvensbeskrivning (MKB) <br />
+                                        Bullerutredning. <br />
+                                        Läs mer under dokumentation.
+                                    </li>
+                                    <li><span>v0.9.6</span> Kompilerat mott och nytt stöd till MapGuide Open Source version 3.1.</li>
+                                    <li><span>v0.9.5</span> Ändrat till nativt bibliotek för komprimering till zipp-paket av filer som laddas ner. Dokumentation med biblioteket plockas bort senare efter tester.</li>
                                     <li>
                                         <ul>
+                                            <li><span>v0.9.4.6</span> Radering av konfigurationer för testpubliceringar.</li>
+                                            <li><span>v0.9.4.5</span> BUGGRÄTTNING: URL-uppbyggnad på klintsidan fungerade inte. Löst.</li>
+                                            <li><span>v0.9.4.4</span> Uppdaterat dokumentation gällande beroenden till webbapplikationen.</li>
                                             <li><span>v0.9.4.3</span> BUGGRÄTTNING: Vid listning av plandokument för alla planer presenterades filstorleken fel utan avrundning och enhet.</li>
                                             <li><span>v0.9.4.2</span> BUGGRÄTTNING: Endast plankartan som pdf och tiff visades av plandokument vid listning av alla planer.</li>
                                             <li><span>v0.9.4.1</span> BUGGRÄTTNING: Skapa temporär zipkatalog låg fel i kodsekvens. Kontroll efter filer i temp-katalog för ev. radering gjordes innan kontroll om temp-katalogen först fanns. För första körningen uppstod fel eller när temp-katalogen ej existerade.</li>
