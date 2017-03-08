@@ -27,8 +27,9 @@ namespace Plan.Plandokument
                 deleteOldZipFiles();
 
                 // zip-fil med path som skapas som arkiv
+                string zipFile = zipFileNamePart.Replace("/", "_") + "-" + DateTime.Now.ToString("yyyyMMddTHHmmss.fff") + ".zip";
                 string ZipFileToCreate = HttpContext.Current.Server.MapPath(
-                    zipDirectory.Replace("~/", "") + zipFileNamePart.Replace("/", "_") + "-" + DateTime.Now.ToString("yyyyMMddTHHmmss.fff") + ".zip"
+                    zipDirectory.Replace("~/", "") + zipFile
                     );
 
                 // Om filen, mot förmodan, skulle existera raderas den.
@@ -42,7 +43,10 @@ namespace Plan.Plandokument
                 {
                     foreach (String file in files)
                     {
-                        zip.CreateEntryFromFile(file, file.Substring(file.LastIndexOf('/') + 1));
+                        zip.CreateEntryFromFile(
+                            HttpContext.Current.Server.MapPath(file), 
+                            file.Substring(file.LastIndexOf('/') + 1)
+                            );
                     }
                 }
 
@@ -54,7 +58,7 @@ namespace Plan.Plandokument
                     System.Threading.Thread.Sleep(sleepTime);
                 }
 
-                return ZipFileToCreate;
+                return zipDirectory.Replace("~/", "") + zipFile;
             }
             catch (System.Exception ex)
             {
