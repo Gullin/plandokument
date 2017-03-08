@@ -910,9 +910,10 @@ function putMapOfPlan(planID, imageWidth, imageHeight) {
     $animatedMapDiv.append("<img id='getingMap-" + planID + "' src='" + urlBasePath + "pic/animated_windows8_64.GIF' />");
     $animatedMapDiv.append("<br /><br /><span>Kartbild hämtas...</span>");
 
-    $('#map-' + planID).children('div, img').remove();
+    $('#map-' + planID).find('div, img').remove();
     $('#map-' + planID).append($animatedMapDiv);
 
+    var errorMessage = "Kartbild kunde inte hämtas.<br />Uppdatera sidan genom t.ex. knappen F5,<br /> återkommer felet vänd dig till kontakt (se höger e-postikon).";
 
     Lkr.Plan.AjaxCalls.putMapOfPlan = $.ajax({
         type: "POST",
@@ -923,40 +924,49 @@ function putMapOfPlan(planID, imageWidth, imageHeight) {
         success: function (msg) {
             if (msg.d != '') {
                 var imageObject = eval(msg.d);
-                var mapSessionImage = imageObject[0].MAPIMAGEBASE64;
-                var mapSessionImageWidth = imageObject[0].WIDTH;
-                var mapSessionImageHeight = imageObject[0].HEIGHT;
-                var $mapImg = $('<img />');
-                //$mapImg.attr('src', "data:image/png;base64," + mapSessionImage.substring(1).substring(0, mapSessionImage.length - 2));
-                $mapImg.attr('src', "data:image/png;base64," + mapSessionImage);
-                $mapImg.attr('width', mapSessionImageWidth);
-                $mapImg.attr('height', mapSessionImageHeight);
-                // Om kartbild är högre än plattsen med listade dokument eller bredare än avseed plats ska inte absolut positionering göras
-                var docListHeight = $('#doc-' + planID).outerHeight();
-                var mapPlaceholderWidth = $('#map-' + planID).width();
-                if (docListHeight > mapSessionImageHeight && mapPlaceholderWidth > mapSessionImageWidth) {
-                    var topPosition = $('#doc-' + planID).position().top;
-                    var leftPosition = $('#map-' + planID).position().left;
-                    // Mitten på dokumentlistan minus halva kartbildshöjden
-                    var newTopPosition = (topPosition + docListHeight / 2) - (mapSessionImageHeight / 2);
-                    // Mitten på hållaren för kartbild minus halva bredden på kartbild
-                    var newLeftPosition = (leftPosition + mapPlaceholderWidth / 2) - (mapSessionImageWidth / 2);
-                    $mapImg.css({
-                        position: "absolute",
-                        top: newTopPosition + "px",
-                        left: newLeftPosition + "px"
-                    });
-                }
+                if (imageObject)
+                {
+                    var mapSessionImage = imageObject[0].MAPIMAGEBASE64;
+                    var mapSessionImageWidth = imageObject[0].WIDTH;
+                    var mapSessionImageHeight = imageObject[0].HEIGHT;
+                    var $mapImg = $('<img />');
+                    //$mapImg.attr('src', "data:image/png;base64," + mapSessionImage.substring(1).substring(0, mapSessionImage.length - 2));
+                    $mapImg.attr('src', "data:image/png;base64," + mapSessionImage);
+                    $mapImg.attr('width', mapSessionImageWidth);
+                    $mapImg.attr('height', mapSessionImageHeight);
+                    // Om kartbild är högre än plattsen med listade dokument eller bredare än avseed plats ska inte absolut positionering göras
+                    var docListHeight = $('#doc-' + planID).outerHeight();
+                    var mapPlaceholderWidth = $('#map-' + planID).width();
+                    if (docListHeight > mapSessionImageHeight && mapPlaceholderWidth > mapSessionImageWidth) {
+                        var topPosition = $('#doc-' + planID).position().top;
+                        var leftPosition = $('#map-' + planID).position().left;
+                        // Mitten på dokumentlistan minus halva kartbildshöjden
+                        var newTopPosition = (topPosition + docListHeight / 2) - (mapSessionImageHeight / 2);
+                        // Mitten på hållaren för kartbild minus halva bredden på kartbild
+                        var newLeftPosition = (leftPosition + mapPlaceholderWidth / 2) - (mapSessionImageWidth / 2);
+                        $mapImg.css({
+                            position: "absolute",
+                            top: newTopPosition + "px",
+                            left: newLeftPosition + "px"
+                        });
+                    }
 
-                $('#map-' + planID).children('div, img').remove();
-                $('#map-' + planID).append($mapImg);
+                    $('#map-' + planID).children('div, img').remove();
+                    $('#map-' + planID).append($mapImg);
+                }
+                else
+                {
+                    $('#map-' + planID).find('img').attr("src", urlBasePath + "pic/no-image.png");
+                    $('#map-' + planID).find('span').html(errorMessage);
+                }
             }
         },
         error: function (jqxhr, status, error) {
-            alert("Fel: Ingen kartbild.\n\n Uppdatera sidan genom t.ex. knappen F5,\n återkommer felet vänd dig till kontakt (se höger e-postikon)");
+            $('#map-' + planID).find('img').attr("src", urlBasePath + "pic/no-image.png");
+            $('#map-' + planID).find('span').html(errorMessage);
             var err = eval(jqxhr);
-            //console.log(err.status + " " + err.statusText + "\n" +
-            //            err.statusCode);
+            console.log(err.status + " " + err.statusText + "\n" +
+                        err.statusCode);
         },
         complete: function () {
         }

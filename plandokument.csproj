@@ -231,6 +231,7 @@
     <Content Include="pic\mail.png" />
     <Content Include="pic\mdb.png" />
     <Content Include="pic\msg.png" />
+    <Content Include="pic\no-image.png" />
     <Content Include="pic\no03-bw.png" />
     <Content Include="pic\noun_42139_white_16x16.png" />
     <Content Include="pic\noun_4501_16x14_white.png" />
