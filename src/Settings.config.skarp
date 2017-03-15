@@ -65,12 +65,12 @@
   <!-- Kartvyfaktor, MGMapSurfaceFactor multiplicerar sökta objekts utbredning för en förändring av geografiskt presenterat område (skapar marginal mellan kartram och sökt objekt som presenteras i kartan) -->
   <add key="MGMapSurfaceFactor" value="1.1" />
   <!-- Mapagent, initiering av kartserver -->
-  <add key="MGWebTierInit" value="C:\\Program Files\\Autodesk\\Autodesk Infrastructure Web Server Extension 2015\\www\\webconfig.ini" />
+  <add key="MGWebTierInit" value="C:\\Program Files\\Autodesk\\Autodesk Infrastructure Web Server Extension 2016\\www\\webconfig.ini" />
   <add key="MGUserName" value="Administrator" />
   <add key="MGUserPass" value="admin" />
   <!--<add key="MGMapResource" value="Library://Samples/Sheboygan/Maps/Sheboygan.MapDefinition" />-->
   <!-- Resurser, resurs-ID till karta och planytor samt nödvändiga planattribut för filtrering och positionering -->
-  <add key="MGMapResource" value="Library://LANDSKRONA/Kartor/Landskrona_farg.MapDefinition" />
+  <add key="MGMapResource" value="Library://LANDSKRONA/Kartor/Bakgrundskartor/Landskrona_farg.MapDefinition" />
   <add key="MGPlanytorResource" value="Library://LANDSKRONA/Datakallor/oracle/LKR_GIS.FeatureSource" />
   <add key="MGPlanytorClassName" value="GIS_V_PLANYTOR" />
   <add key="MGPlanytorFilterColumn" value="PLAN_ID" />
