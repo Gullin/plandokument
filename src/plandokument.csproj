@@ -43,25 +43,30 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="OSGeo.MapGuide.Foundation, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="OSGeo.MapGuide.Foundation, Version=3.0.1.5301, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.Foundation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="OSGeo.MapGuide.Geometry, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="OSGeo.MapGuide.Geometry, Version=3.0.1.5301, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.Geometry.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="OSGeo.MapGuide.MapGuideCommon, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="OSGeo.MapGuide.MapGuideCommon, Version=3.0.1.5301, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.MapGuideCommon.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="OSGeo.MapGuide.PlatformBase, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="OSGeo.MapGuide.PlatformBase, Version=3.0.1.5301, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.PlatformBase.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="OSGeo.MapGuide.Web, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="OSGeo.MapGuide.Web, Version=3.0.1.5301, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.Web.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.IO.Compression" />
@@ -346,8 +351,7 @@
     <Content Include="js\jtable.2.4.0\themes\landskrona\metro-lightgray\jtable.less" />
     <Content Include="plandokument.ashx" />
     <Content Include="js\jtable.2.4.0\themes\metro\close.png" />
-    <None Include="Properties\PublishProfiles\Plan Lokalt Test.pubxml" />
-    <None Include="Properties\PublishProfiles\Plan Lokalt.pubxml" />
+    <None Include="Properties\PublishProfiles\AIMS2016x64.pubxml" />
     <Content Include="Settings.config.skarp" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
