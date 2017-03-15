@@ -1,3 +1,15 @@
+DEPLOYMENT
+ * Projektet compileras som 64-bitars
+ * Refererade assemblys ska ej kopieras lokalt.
+   References > [resp. assembly] > Properties > Copy Local = False
+ * Ändring på plats i Settings.config kräver en ändring och omsparning av web.config (mellanslag i filen och spara).
+   Annars tas inte ändringen.
+ * Rensa ev. ASP.NET cache under Microsoft .Net Framework
+   För 64-bitars:
+   C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files
+   För 32-bitars
+   C:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files
+
 KONTROL AV KOMPILERAD .NET ASSEMBLY-version 
 Kontrollera kompilerad OS-version för dll-assemblys
 
