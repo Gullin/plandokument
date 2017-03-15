@@ -437,7 +437,6 @@
                     <h4 id="3">Buggar</h4>
                     <div id="bugg">
                         <ul>
-                            <li>BUGG : Om inte plankarteöversikt kan hämtas - plocka bort rörlig GIF</li>
                             <li>BUGG : Ta bort skevhet i kartbilderna som genereras som översikt till vardera plan
                             </li>
                             <li>BUGG : För många översiktsbilder som genereras hinns inte med innan time out.
