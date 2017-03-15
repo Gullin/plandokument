@@ -52,13 +52,15 @@
                         <ul>
                             <li>
                                 <ul>
-                                    <li><span>v0.9.7</span> Ytterligare fler typer av plandokument kan hanteras; <br />
-                                        Kvalitetsprogram,  <br />
-                                        Miljökonsekvensbeskrivning (MKB) <br />
-                                        Bullerutredning. <br />
+                                    <li><span>v0.9.7</span> Ytterligare fler typer av plandokument kan hanteras;
+                                        <ul>
+                                            <li>Kvalitetsprogram,</li>
+                                            <li>Miljökonsekvensbeskrivning (MKB) och</li>
+                                            <li>Bullerutredning.</li>
+                                        </ul>
                                         Läs mer under dokumentation.
                                     </li>
-                                    <li><span>v0.9.6</span> Kompilerat mott och nytt stöd till MapGuide Open Source version 3.1.</li>
+                                    <li><span>v0.9.6</span> Kompilerat mott och nytt stöd till MapGuide Open Source version 3.1 och Autodesk Infrastructure Map Server (AIMS) 2016.</li>
                                     <li><span>v0.9.5</span> Ändrat till nativt bibliotek för komprimering till zipp-paket av filer som laddas ner. Dokumentation med biblioteket plockas bort senare efter tester.</li>
                                     <li>
                                         <ul>
