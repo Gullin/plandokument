@@ -40,7 +40,6 @@
                         </li>
                         <li><a href="#2">vNext</a>
                         </li>
-                        <li><a href="#3">Buggar</a></li>
                     </ul>
                 </div>
 
@@ -427,23 +426,6 @@
                                 <li>integreras i kartbilden ...
                                 </li>
                             </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-
-                    <br />
-
-                    <h4 id="3">Buggar</h4>
-                    <div id="bugg">
-                        <ul>
-                            <li>BUGG : Ta bort skevhet i kartbilderna som genereras som översikt till vardera plan
-                            </li>
-                            <li>BUGG : För många översiktsbilder som genereras hinns inte med innan time out.
-                            </li>
-                            <li>BUGG : planstatistik och sökning ska ej visas om sökning ej görs
-                                <br />
-                                fungerar endast vid start. Session töms aldrig i mellan, vilket gör att minimum den senaste sökningen visas.
                             </li>
                         </ul>
                     </div>
