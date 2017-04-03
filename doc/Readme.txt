@@ -38,9 +38,6 @@ SETUP
     + Inskannade plandokuments virtuella eller fysiska katalognamn skrivs in i applikationens "Settings.config"
       Kan antingen vara fysisk katalog som ligger under applikationsinstallationen eller
       en virtuell katalog under applikationsinstallationen om den fysiska platsen är annan (behöver dock vara åtkomlig från servern)
-    + DotNetZip
-      http://dotnetzip.codeplex.com/
-      Bibliotek för packetering (zip) av plandokument
     + jQuery 1.9
     + jQuery UI 1.9.2
     + JSON 3
