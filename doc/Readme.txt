@@ -32,9 +32,11 @@ SETUP
                 tefat.fir_fastigh
                 tefat.fir_plan_planberor
     + Säkerställ skrivrättigheter för fysiska installationskatalogens underkatalog "log" för IIS-användaren (ApplicationPool som används för webbapplikationen).
-      Skapas först vid första behovet av applikationen om den inte redan finns. Kan skapas manuellt innan.
+      Sök efter användare: IIS AppPool/[namn]
+      Katalogen skapas först vid första behovet av applikationen om den inte redan finns. Kan skapas manuellt innan.
     + Säkerställ skrivrättigheter för fysiska installationskatalogens underkatalog "zipTemp" för IIS-användaren (ApplicationPool som används för webbapplikationen).
-      Skapas först vid första behovet av applikationen om den inte redan finns. Kan skapas manuellt innan.
+      Sök efter användare: IIS AppPool/[namn]
+      Katalogen skapas först vid första behovet av applikationen om den inte redan finns. Kan skapas manuellt innan.
     + Inskannade plandokuments virtuella eller fysiska katalognamn skrivs in i applikationens "Settings.config"
       Kan antingen vara fysisk katalog som ligger under applikationsinstallationen eller
       en virtuell katalog under applikationsinstallationen om den fysiska platsen är annan (behöver dock vara åtkomlig från servern)
