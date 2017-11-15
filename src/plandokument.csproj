@@ -20,6 +20,8 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,30 +45,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="OSGeo.MapGuide.Foundation, Version=3.0.1.5301, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="OSGeo.MapGuide.Foundation, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.Foundation.dll</HintPath>
-      <Private>False</Private>
     </Reference>
-    <Reference Include="OSGeo.MapGuide.Geometry, Version=3.0.1.5301, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="OSGeo.MapGuide.Geometry, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.Geometry.dll</HintPath>
-      <Private>False</Private>
     </Reference>
-    <Reference Include="OSGeo.MapGuide.MapGuideCommon, Version=3.0.1.5301, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="OSGeo.MapGuide.MapGuideCommon, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.MapGuideCommon.dll</HintPath>
-      <Private>False</Private>
     </Reference>
-    <Reference Include="OSGeo.MapGuide.PlatformBase, Version=3.0.1.5301, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="OSGeo.MapGuide.PlatformBase, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.PlatformBase.dll</HintPath>
-      <Private>False</Private>
     </Reference>
-    <Reference Include="OSGeo.MapGuide.Web, Version=3.0.1.5301, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="OSGeo.MapGuide.Web, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.Web.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.IO.Compression" />
@@ -403,7 +400,16 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/app/plan</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
