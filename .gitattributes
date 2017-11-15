@@ -1,4 +1,16 @@
 ###############################################################################
+# Set Linguist behavior
+###############################################################################
+# linguist-vendored
+src/css/jquery-ui-1.10.3-smoothness/* linguist-vendored
+src/js/jtable.2.4.0/* linguist-vendored
+src/js/jquery-1.9.0.min.js linguist-vendored
+src/js/jquery-ui-1.9.2.min.js linguist-vendored
+src/js/json3.min.js linguist-vendored
+# linguist-documentation
+doc/* linguist-documentation
+
+###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
 * text=auto
