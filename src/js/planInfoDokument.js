@@ -544,18 +544,19 @@ function putPlansDocs($headerPlan, plansDocs) {
                 // 2 = Dokumenttyp utan matchande dokument
                 // true = dokumenttyp ses som planhandling
                 var documenttypesArray = [["Beskrivning", 2, true],
-                                          ["Bestämmelser", 2, true],
-                                          ["Fastighetsförteckning", 2, false],
-                                          ["Genomförande", 2, true],
-                                          ["Grundkarta", 2, false],
-                                          ["Illustration", 2, true],
-                                          ["Karta", 2, true],
-                                          ["Samrådsredogörelse", 2, true],
-                                          ["Utlåtande", 2, true],
-                                          ["Kvalitetsprogram", 2, false],
-                                          ["Miljökonsekvensbeskrivning", 2, false],
-                                          ["Bullerutredning", 2, false],
-                                          ["Övriga", 2, false]];
+                    ["Bestämmelser", 2, true],
+                    ["Fastighetsförteckning", 2, false],
+                    ["Genomförande", 2, true],
+                    ["Grundkarta", 2, false],
+                    ["Illustration", 2, true],
+                    ["Karta", 2, true],
+                    ["Samrådsredogörelse", 2, true],
+                    ["Utlåtande", 2, true],
+                    ["Plan- och genomförandebeskrivning", 2, true],
+                    ["Kvalitetsprogram", 2, false],
+                    ["Miljökonsekvensbeskrivning", 2, false],
+                    ["Bullerutredning", 2, false],
+                    ["Övriga", 2, false]];
 
                 var $ul = $("<ul>");
                 var $ulOvrPlandok = $("<ul>");

@@ -65,7 +65,7 @@ namespace Plan.Plandokument
             string documentSuffix = (string)Session["PlanHandling"];
             
             // Sorterade dokumenttyper, suffix från filernas namnkonvention, inkl. redovisning om planhandling enl. PBL
-            string[,] suffixs = new string[13, 2] {
+            string[,] suffixs = new string[14, 2] {
                                                     { "true", ""},
                                                     { "true", "_best" },
                                                     { "true", "_illu" },
@@ -73,6 +73,7 @@ namespace Plan.Plandokument
                                                     { "true", "_genom" },
                                                     { "true", "_samred" },
                                                     { "true", "_utlat" },
+                                                    { "true", "_pgbesk" },
                                                     { "false", "_grk" },
                                                     { "false", "_ff" },
                                                     { "false", "_kvalprog" },
@@ -109,6 +110,9 @@ namespace Plan.Plandokument
                         break;
                     case "utlatande":
                         documentSuffix = "_utlat";
+                        break;
+                    case "planochgenomforandebeskrivning":
+                        documentSuffix = "_pgbesk";
                         break;
                     case "grk":
                         documentSuffix = "_grk";
@@ -392,6 +396,9 @@ namespace Plan.Plandokument
                             break;
                         case "utlat":
                             documentType = "Utlåtande";
+                            break;
+                        case "pgbesk":
+                            documentType = "Plan- och genomförandebeskrivning";
                             break;
                         case "genom":
                             documentType = "Genomförande";
