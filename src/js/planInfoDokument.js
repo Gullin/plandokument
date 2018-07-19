@@ -670,7 +670,7 @@ function putPlansDocs($headerPlan, plansDocs) {
                     $contentPlanDocs.append($("<br />"))
                 }
 
-                $contentPlanDocs.append("Ej tillgängliga dokument");
+                $contentPlanDocs.append("Ej enskilt upprättade dokument");
                 if ($ulNoDoc.children().length > 0) {
                     $contentPlanDocs.append($ulNoDoc);
                 } else {
