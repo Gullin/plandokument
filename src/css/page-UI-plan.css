@@ -129,6 +129,36 @@
 }
 
 
+.docs {
+    cursor: pointer;
+    width: 100%
+}
+
+.docs-collapsed {
+    background-image: url(jquery-ui-1.10.3-smoothness/images/ui-icons_888888_256x240.png);
+    background-position: -32px -16px;
+    width: 16px;
+    height: 16px;
+    /*padding-top: 1em;*/
+}
+
+.docs-collapsed-hover {
+    background-image: url(jquery-ui-1.10.3-smoothness/images/ui-icons_222222_256x240.png);
+}
+
+.docs-expand {
+    background-image: url(jquery-ui-1.10.3-smoothness/images/ui-icons_888888_256x240.png);
+    background-position: -48px -16px;
+    width: 16px;
+    height: 16px;
+}
+
+.docs-expand-hover {
+    background-image: url(jquery-ui-1.10.3-smoothness/images/ui-icons_222222_256x240.png);
+}
+
+
+
 
 .planContent-tools {
     font-size: 0.9em;

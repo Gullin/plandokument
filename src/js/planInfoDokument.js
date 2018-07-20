@@ -638,6 +638,7 @@ function putPlansDocs($headerPlan, plansDocs) {
                     }
                 });
 
+
                 // För varje dokumenttyp
                 $.each(eval(documenttypesArray), function (keyDoctype, valDoctype) {
                     // Om plandokument ej funnen uppdelad på specifik dokumenttyp
@@ -670,13 +671,76 @@ function putPlansDocs($headerPlan, plansDocs) {
                     $contentPlanDocs.append($("<br />"))
                 }
 
-                $contentPlanDocs.append("Ej enskilt upprättade dokument");
+                // Bygger dispositionen för dokumenttyperna utan filer
+                var $noPlanDocsWrapper = $("<div>");
+                var $noPlanDocsHeader = $("<div>");
+                var $noPlanDocsIcon = $("<div>");
+                var $noPlanDocsSpan = $("<span>...</span>");
+                $noPlanDocsHeader.addClass("docs");
+                $noPlanDocsHeader.attr({ "title": "Klicka för att expandera" });
+                $noPlanDocsHeader.append("Ej enskilt upprättade dokument");
+                $noPlanDocsHeader.append("<br />");
+                $noPlanDocsIcon.addClass("docs-collapsed");
+                $noPlanDocsIcon.css({ "margin-left": "0", "display": "inline-block" });
+                $noPlanDocsHeader.append($noPlanDocsIcon);
+                $noPlanDocsHeader.append($noPlanDocsSpan);
+                var $noPlanDocsList = $("<div>");
+                $noPlanDocsList.css({ "margin-left": "1em", "margin-top": "-1em" });
+                $noPlanDocsList.toggle(false);
                 if ($ulNoDoc.children().length > 0) {
-                    $contentPlanDocs.append($ulNoDoc);
+                    $noPlanDocsList.append($ulNoDoc);
                 } else {
-                    $contentPlanDocs.append($("<br />"))
-                    $contentPlanDocs.append("-");
+                    $noPlanDocsList.append($("<br />"));
+                    $noPlanDocsList.append("-");
                 }
+
+                $noPlanDocsWrapper.append($noPlanDocsHeader);
+                $noPlanDocsWrapper.append($noPlanDocsList);
+                $contentPlanDocs.append($noPlanDocsWrapper);
+
+
+
+                // Ansluter event expandering/komprimering av dokumenttyper utan filer
+                $noPlanDocsHeader.hover(
+                    function () {
+                        if ($noPlanDocsList.is(":visible")) {
+                            $noPlanDocsIcon.addClass("docs-expand-hover");
+                        }
+                        else {
+                            $noPlanDocsIcon.addClass("docs-collapsed-hover");
+                        }
+                    }, function () {
+                        if ($noPlanDocsList.is(":visible")) {
+                            $noPlanDocsIcon.removeClass("docs-expand-hover");
+                            $noPlanDocsIcon.addClass("docs-expand");
+                        }
+                        else {
+                            $noPlanDocsIcon.removeClass("docs-collapsed-hover");
+                            $noPlanDocsIcon.addClass("docs-collapsed");
+                        }
+                    }
+                );
+
+
+                $noPlanDocsHeader.click(function () {
+                    $noPlanDocsList.toggle();
+                    if ($noPlanDocsList.is(":visible")) {
+                        $noPlanDocsIcon.removeClass("docs-collapsed");
+                        $noPlanDocsIcon.removeClass("docs-collapsed-hover");
+                        $noPlanDocsIcon.addClass("docs-expand");
+                        $noPlanDocsIcon.addClass("docs-expand-hover");
+                        $noPlanDocsSpan.empty();
+                    }
+                    else {
+                        $noPlanDocsIcon.removeClass("docs-expand");
+                        $noPlanDocsIcon.removeClass("docs-expand-hover");
+                        $noPlanDocsIcon.addClass("docs-collapsed");
+                        $noPlanDocsIcon.addClass("docs-collapsed-hover");
+                        $noPlanDocsSpan.text("...");
+                    }
+                });
+
+
 
                 // Skapa toolbar om dokument existerar
                 if (isDocFound) {
