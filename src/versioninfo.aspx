@@ -51,6 +51,15 @@
                         <ul>
                             <li>
                                 <ul>
+                                    <li><span>v0.9.11</span> Kollapsning och expandering för avsnittet med ej befintliga plandokument ("Ej enskilt upprättande dokument")
+                                    </li>
+                                    <li><span>v0.9.10</span> Hantering för planbetecknings ändrade namnkonvention, ex. 1282K-P17/1 --> 1282K-P2018/1
+                                    </li>
+                                    <li><span>v0.9.9</span> Rubrik för dokumenttyper med ej existerande plandokument ändrad från "Ej tillgängliga dokument" --> "Ej enskilt upprättade dokument".
+                                    </li>
+                                    <li><span>v0.9.8</span> Ny typ av plandokument kan hanteras - Plan- och genomförandebeskrivning. <br />
+                                        <a href="om.aspx#1.2.2">">Läs mer under dokumentation</>
+                                    </li>
                                     <li><span>v0.9.7</span> Ytterligare fler typer av plandokument kan hanteras;
                                         <ul>
                                             <li>Kvalitetsprogram,</li>

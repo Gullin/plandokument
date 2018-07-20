@@ -210,6 +210,11 @@
                     </tr>
                     <tr>
                         <td>*</td>
+                        <td>planochgenomforandebeskrivning</td>
+                        <td>Presenterar resp. plans plan- och genomförandebeskrivning när dessa delar utgörs av ett och samma dokument</td>
+                    </tr>
+                    <tr>
+                        <td>*</td>
                         <td>samradsredogorelse</td>
                         <td>Presenterar resp. plans samrådsredogörelse</td>
                     </tr>
