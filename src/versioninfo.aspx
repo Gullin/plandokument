@@ -49,6 +49,7 @@
                     <h4 id="1">Versionsinformation</h4>
                     <div id="version">
                         <ul>
+                            <li><span>v0.10</span> Stöd för SSL över https.</li>
                             <li>
                                 <ul>
                                     <li><span>v0.9.11</span> Kollapsning och expandering för avsnittet med ej befintliga plandokument ("Ej enskilt upprättande dokument")

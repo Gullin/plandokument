@@ -19,7 +19,13 @@
         <script src='<%=ResolveUrl("js/config.js")%>'></script>
         <script type="text/javascript">
 
-            Lkr.Plan.Dokument.resolvedClientUrl = "http://" + '<%=Request.Url.Host%>' + '<%=ResolveUrl("~")%>';
+			if (location.protocol == 'https:') {
+				Lkr.Plan.Dokument.resolvedClientUrl = "https://" + '<%=Request.Url.Host%>' + '<%=ResolveUrl("~")%>';
+			} else if (location.protocol == 'http:') {
+				Lkr.Plan.Dokument.resolvedClientUrl = "http://" + '<%=Request.Url.Host%>' + '<%=ResolveUrl("~")%>';
+			} else {
+				console.error("Protokoll " + location.protocol + " stöds ej.");
+            }
 
         </script>
 
