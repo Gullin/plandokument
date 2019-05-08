@@ -17,17 +17,8 @@
                     <ul>
                         <li><a href="#1.1">Karta</a>
                             <ul>
-                                <li><a href="#1.1.1">Plan</a>
-                                    <ul>
-                                        <li><a href="#1.1.1.1">Dubbelklick</a></li>
-                                        <li><a href="#1.1.1.2">Rapport</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#1.1.2">Fastighet</a>
-                                    <ul>
-                                        <li><a href="#1.1.2.1">Rapport</a></li>
-                                    </ul>
-                                </li>
+                                <li><a href="#1.1.1">Plan</a></li>
+                                <li><a href="#1.1.2">Fastighet</a></li>
                             </ul>
                         </li>
                         <li><a href="#1.2">Adressfält i webbläsare</a>
@@ -64,73 +55,68 @@
 
                 <h1 id="1">1 Hitta plandokument från</h1>
                 <p>
-                    Plandokumenten har gjorts åtkomliga genom karta eller genom att söka direkt på plan i webbläsarens adressfält.
+                    Plandokumenten är tillgängliga genom karta eller genom att söka direkt på plan i webbläsarens adressfält.
                 </p>
 
 
                 <h2 id="1.1">1.1 Karta</h2>
                 <p>
-                    Plandokumenten är åtkomliga genom GIS-portalens kartvyer ”Planering”, ”Registerkarta” och ”Landskrona” (begränsat i kartvy Landskrona) på flera olika sätt, bl.a. både genom att utgå ifrån plan eller fastighet.
+                    Plandokumenten är åtkomliga genom kartorna ”<a href="https://geodata.landskrona.local">Medarbetarkartan</a>” och ”<a href="https://geodata-handlaggare.landskrona.local">Handläggarkartan</a>” samt ”<a href="https://karta.landskrona.se">Landskronakartan</a>” (begränsas till plandokumenten plankarta, planbeskrivning och genomförandebeskrivning i "Landskronakartan"). Åtkomsten sker antingen genom att utgå ifrån planområdet för gällande planer, fastighet (genom planens berörkrets) eller indirekt genom sökning på planbeteckning.
                 </p>
                 <p>
-                    Nedan möjligheter kan användas när objekt väljs/markeras i kartan. Markering av objekt i kartan kan endast göras om funktionen <img src="<%= ResolveUrl("~/") %>pic/help/mg65_toolbar_arrow.png" alt="Funktionsknapp, pil, i MapGuide" /> är nedtryckt (markerad röd i bild nedan).
+                    Alternativen nedan kan användas när objekt väljs/markeras i kartan. Plandokument tillhörande en plan åt gången går att ladda ner eller öppna.
                 </p>
-                <img src="<%= ResolveUrl("~/") %>pic/help/mg65_kartportal_arrow.png" alt="Kartportal redovisning av placering funktionsknapp pil" />
-
 
                 <h3 id="1.1.1">1.1.1 Plan</h3>
                 <p>
-                    Lagergruppen ”Planer” innehåller lager ”Planytor”. ”Planytor” är ett transparent valbart lager. Lagret påverkar inte kartans utseende utan är endast till för att skapa fler möjligheter som exempelvis nedan.
+                    Lagergruppen ”Planer” innehåller lager ”Gällande planer” (kan ses i nedan exempelbild från "Handläggarkartan"). ”Gällande planer” är ett delvis transparent och valbart lager.
                 </p>
+                <img src="<%= ResolveUrl("~/") %>pic/help/handlaggarkartan-gallande_planer.png" alt="Karta med gällande planer" />
+                <p>För att ladda ner eller öppna plandokumenten gör enligt följande:</p>
+                <ol>
+                    <li>Se till så att lagergruppen "Planer" och lagret "Gällande planer" är ibockat enligt nedan bild samt att planerna visas som i bilden ovan. <br />
+                        <img src="<%= ResolveUrl("~/") %>pic/help/handlaggarkartan-gallande_planer-lager_ibockad.png" alt="Gällande planlager ibockad/tänt" />
+                    </li>
+                    <li>
+                        Flytta kartan (panorera) och närma dig området och planen (zooma in) som är av intresse.
+                    </li>
+                    <li>
+                        Klicka på den lila halvtransparenta planytan. En informationsruta tänds upp och centreras samt plan markeras blå. <br />
+                        <img src="<%= ResolveUrl("~/") %>pic/help/handlaggarkartan-gallande_planer-informationsruta.png" alt="Gällande plans utflaggade informationsruta" />
+                    </li>
+                    <li>
+                        Genom att klicka på länken "Plandokument" under avsnittet "Länk till plandokument" görs ett uppslag av existerande dokument tillhörande markerad plan. Uppslaget öppnas i nytt fönster.
+                    </li>
+                </ol>
 
-
-                <h4 id="1.1.1.1">1.1.1.1 Dubbelklick</h4>
-                <p>
-                    I detta läge kan plandokument presenteras för endast en plan åt gången.
-                </p>
-
-
-                <h5>Tillvägagångssätt</h5>
-                <p>
-                    Bocka i lagergruppen ”Planer”, tänds informationen upp (”Planytor” är påslagna från början), dubbelklicka inom avgränsad plan. Dubbelklickningen kallar på den komponent som tar fram planens plandokument. <br />
-                    När musmarkören antar formen av en hand <img src="<%= ResolveUrl("~/") %>pic/help/mg65_kartportal_hyperlink.png" alt="Funktionsknapp, pil, i MapGuide" /> indikeras att något är länkat.
-                </p>
-
-
-                <h4 id="1.1.1.2">1.1.1.2 Rapport</h4>
-                <p>
-                    I detta läge kan plandokument presenteras för en eller fler planer samtidigt.
-                </p>
-
-                <h5>Tillvägagångssätt</h5>
-                <p>
-                    Markera en eller flera planer genom att klicka inom planens plangräns (lagret ”Planytor” måste vara påslaget). Flera planer kan markeras när knappen ”Shift” hålls nedtryckt medan resp. plan väljs.
-                </p>
-                <p>
-                    Efter att markeringar är gjorda klicka på funktionen <img src="<%= ResolveUrl("~/") %>pic/help/mg65_toolbar_rapport.png" alt="Funktionsknapp, rapport, i MapGuide" />. Tillgängliga rapporter för valda objekt visas. Välj rapport ”Plandokument" och tryck ”Ok”.
-                </p>
-                <img src="<%= ResolveUrl("~/") %>pic/help/mg65_kartportal_rapport.png" alt="Kartportal redovisning av placering funktionsknapp rapport" />
-                <p>
-                    Funktionen kallar på den kompontent som tar fram planens/planernas plandokument.
-                </p>
 
 
                 <h3 id="1.1.2">1.1.2 Fastighet</h3>
                 <p>
-                    Lagergruppen ”Fastighet” innehåller ett lager ”Fastighetsytor” på samma sätt som för planer med planytor ovan. Genom att använda sig av fastighet som ingång till planer väljs plan beroende av vilka fastigheter en plan berör. En plans s.k. berörkrets är registrerad i fastighetsregistret. Fungerar endast med rapportfunktion.
+                    Lagergruppen ”Fastighet mm” innehåller ytterligare en lagergrupp ”Fastigheter” på samma sätt som för gällande planer i lagergrupp planer (se avsnitt ovan). Genom att använda sig av fastighet som ingång till planer väljs plan beroende av vilka fastigheter en plan berör. En plans s.k. berörkrets är registrerad i fastighetsregistret.
                 </p>
+                <p>
+                    Värt att notera är att fastighetens område är klickbar/markerbar i kartans alla skalor. Fastighetsavgränsning visas först från skala 1:30 000 (skalan kan ses i kartfönstrets nedre högra hörn).
+                </p>
+                <img src="<%= ResolveUrl("~/") %>pic/help/handlaggarkartan-fastigheter.png" alt="Karta med gällande planer" />
+                <p>
+                    Om andra lager, exempelvis gällande planer, är tända kan dessa dölja lagret med fastigheter och behöver bockas av/släckas. I annat fall blir inte fastigheterna klickbara/markeringsbara. <br />
+                    För att ladda ner eller öppna plandokumenten genom fastighet (via planens berörkrets) gör enligt följande:
+                </p>
+                
+                <ol>
+                    <li>Se till så att lagergrupperna "Fastigheter mm" och "Fastigheter" är ibockat enligt nedan bild. <br />
+                        <img src="<%= ResolveUrl("~/") %>pic/help/handlaggarkartan-fastigheter-lager_ibockad.png" alt="Gällande plans utflaggade informationsruta" />
+                    </li>
+                    <li>
+                        Sök upp fastigheten. Finns det en osäkerhet var fastigheten är avgränsad, se till så att skalan är större än eller lika med tidigare nämnda 1:30 000 för fastighetsavgränsningen samt större än eller lika med 1:5 000 för fastighetsbeteckningen.
+                    </li>
+                    <li>Klicka på fastigheten. En informationsruta tänds upp och centreras samt fastigheten markeras blå. <br />
+                        <img src="<%= ResolveUrl("~/") %>pic/help/handlaggarkartan-fastigheter-informationsruta.png" alt="Gällande plans utflaggade informationsruta" />
+                    </li>
+                    <li>Genom att klicka på länken "Plandokument från fastighet (berörskrets)" under avsnittet "Plandokument" görs ett uppslag av existerande dokument tillhörande den plan fastigheten blir berörd av. Uppslaget öppnas i nytt fönster.</li>
+                </ol>
 
-
-                <h4 id="1.1.2.1">1.1.2.1 Rapport</h4>
-                <p>
-                    Markera en eller flera fastigheter genom att klicka inom fastighetens fastighetsavgränsning (lagret ”Fastighetsytor” måste vara påslaget). Flera fastigheter kan markeras när knappen ”Shift” hålls nedtryckt medan resp. fastighet väljs.
-                </p>
-                <p>
-                    Efter att markeringar är gjorda klicka på funktionen <img src="<%= ResolveUrl("~/") %>pic/help/mg65_toolbar_rapport.png" alt="Funktionsknapp, rapport, i MapGuide" />. Tillgängliga rapporter för valda objekt visas. Välj rapport ”Plandokument" och tryck ”Ok”.
-                </p>
-                <p>
-                    Funktionen kallar på den kompontent som tar fram planens/planernas plandokument.
-                </p>
 
 
                 <h2 id="1.2">1.2 Adressfält i webbläsare</h2>
@@ -140,8 +126,9 @@
                 <p>
                     Adressen och stommen till webbtillämpningen är:
                 </p>
+                <p>Fungerar endast internt inom Landskrona stad.</p>
                 <div class="adresSearch">
-                    http://geodata/app/plan/dokument
+                    https://geodata.landskrona.local/app/plan/dokument
                 </div>
                 <p>
                     (lägg denna adress förslagvis som favorit i din webbläsare)
@@ -155,14 +142,14 @@
                     Initialt sorteras listan efter beslutsdatum.
                 </p>
                 <div class="adresSearch">
-                    http://geodata/app/plan/dokument/alla
+                    https://geodata.landskrona.local/app/plan/dokument/alla
                 </div>
                 <h3 id="1.2.2">1.2.2 För enskilda</h3>
                 <p>
-                    I detta fall finns tre delar för möjlig specificering:
+                    I detta fall finns det tre delar för specificering:
                 </p>
                 <div class="adresSearch">
-                    http://geodata/app/plan/[1],[2]/[3]
+                    https://geodata.landskrona.local/app/plan/[1],[2]/[3]
                 </div>
                 <p>
                     Del [1]
@@ -259,17 +246,17 @@
                     <p>
                         Följande plan eftersöks genom att den formella aktbeteckning, 1282K-P08/256, är känd.
                     </p>
-                    http://geodata/app/plan/dokument/1282K-P08/256
+                    https://geodata.landskrona.local/app/plan/dokument/1282K-P08/256
                     <p>
                         Alla tillgängliga plandokument presenteras och blir nedladdningsbara.
                     </p>
                     <br />
-                    http://geodata/app/plan/bestammelse/1282K-P08/256
+                    https://geodata.landskrona.local/app/plan/bestammelse/1282K-P08/256
                     <p>
                         Endast bestämmelserna som fristående dokument presenteras och blir nedladdningsbart.
                     </p>
                     <br />
-                    http://geodata/app/plan/handling/1282K-P08/256
+                    https://geodata.landskrona.local/app/plan/handling/1282K-P08/256
                     <p>
                         Dokumenten som ses som en del av planen, formella planhandlingar, presenteras och blir nedladdningsbart.
                     </p>
@@ -298,7 +285,7 @@
                     </tr>
                     <tr>
                         <td>fastighet</td>
-                        <td>indikerar att sökning endast görs efter fastighetsbeteckning. Fastighetsbetecknings registernummerdel har block och enhet separerade av tecknet kolon ":". Tillsammans med s.k. ”ren adress” (teknisk term ”URL Routing”, för fullständig funktion se under avsnitt ”För utvecklare”) hindras tecknet kolon av säkerhetsskäl. Kolon ersätts tecknet "<asp:Label ID="ParcelBlockUnitSign" runat="server"></asp:Label>" vid sökning på fastighet.</td>
+                        <td>indikerar att sökning endast görs efter fastighetsbeteckning. Fastighetsbetecknings registernummerdel har block och enhet separerade av tecknet kolon ":". Tillsammans med s.k. ”ren adress” (teknisk term ”URL Routing”, för fullständig funktion se under avsnitt ”För utvecklare”) hindras tecknet kolon av säkerhetsskäl. Kolon ersätts med tecknet "<asp:Label ID="ParcelBlockUnitSign" runat="server"></asp:Label>" vid sökning på fastighet.</td>
                     </tr>
                     <tr>
                         <td>fastighetnyckel</td>
@@ -416,7 +403,7 @@
 
                 <h2 id="2.2">2.2 För enskilda</h2>
                 <p>
-                    Indexen i bilden nedan hänvisas det till i den förklarande texten. Presentationen av sökt plan görs i en layout liknande bibliotekens gamla kort i kartoteken, i huvudsak enligt ’A’, där ett kort är detsamma som en plan. Vid sökning där fler än en plan presenteras är dessa kort initialt kollapsade till att endast presentera planerna i rubrikform enligt ’a’. Alla sökningar presenteras översiktligt tillsammans med annan information av mer statistisk karaktär enligt ’B’.
+                    Indexen i bilden nedan hänvisas det till i den förklarande texten. Presentationen av sökt plan görs i en layout liknande bibliotekens gamla kort i kartoteken, i huvudsak enligt ’B’, där ett kort är detsamma som en plan. Vid sökning där fler än en plan presenteras är dessa kort initialt kollapsade till att endast presentera planerna i rubrikform enligt ’C’. Alla sökningar presenteras översiktligt tillsammans med annan information av mer statistisk karaktär enligt ’A’.
                     <img src="<%= ResolveUrl("~/") %>pic/LayoutExplanationv2.png" />
                 </p>
 
@@ -496,7 +483,7 @@
 
                 <h1 id="3">3 Om</h1>
                 <p>
-                    Plandokumenten skannas och bearbetas i rutinen för planens lagakrafthantering och i den efterföljande registrering. Alla dokument kopplade till planen skannas och genomgår sortering om vad som bl.a. utgör formell planhandling. Dokumenten är i dagsläget endast åtkomliga inom Landskrona stads organisation och för de som har tillgång till intranätet (det s.k. Arbetsnätet). Det är originalhandlingen, undertecknade dokument, som skannas. Undertecknad handling existerar inte för alla dokument i alla planer då de ej alltid gått att finna.
+                    Plandokumenten skannas och bearbetas i rutinen för planens lagakrafthantering och i den efterföljande registrering. Alla dokument kopplade till planen skannas och genomgår sortering om vad som bl.a. utgör formell planhandling. Dokumenten är åtkomliga inom Landskrona stads organisation och för de som har tillgång till intranätet (det s.k. Arbetsnätet) samt som delmängd på www.landskrona.se. Det är originalhandlingen, undertecknade dokument, som skannas. Undertecknad handling existerar inte för alla dokument i alla planer då de ej alltid gått att finna.
                 </p>
                 <p>
                     Dokumenten är i huvudsak lagrade som pdf-dokument. Plankartan finns digitalt både som pdf-dokument (i dess original arkstorlek/format) och tiff-fil (georefererad bildfil i verklig storlek). Bildfilens georeferering innebär att filen kan hanteras som en vanlig digital bild men även tolkas i verklig storlek (utan skalning) i kartan.
