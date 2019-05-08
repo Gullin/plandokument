@@ -58,7 +58,7 @@
                                     <li><span>v0.9.9</span> Rubrik för dokumenttyper med ej existerande plandokument ändrad från "Ej tillgängliga dokument" --> "Ej enskilt upprättade dokument".
                                     </li>
                                     <li><span>v0.9.8</span> Ny typ av plandokument kan hanteras - Plan- och genomförandebeskrivning. <br />
-                                        <a href="om.aspx#1.2.2">">Läs mer under dokumentation</>
+                                        <a href="om.aspx#1.2.2">Läs mer under dokumentation</a>
                                     </li>
                                     <li><span>v0.9.7</span> Ytterligare fler typer av plandokument kan hanteras;
                                         <ul>
@@ -396,7 +396,7 @@
                                     <li>Cachning av sökbart planregister</li>
                                     <li>
                                         <ul>
-                                            <li>Presentation av senast uppdaterad cach (sökunderlag) </ br>
+                                            <li>Presentation av senast uppdaterad cach (sökunderlag) <br/>
                                                 "Sökning baserad på registerinformation från YYYY-MM-DD"
                                             </li>
                                             <li>Funktion för att reseta applikationscachen för planregistret
