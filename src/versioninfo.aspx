@@ -40,6 +40,8 @@
                         </li>
                         <li><a href="#2">vNext</a>
                         </li>
+                        <li><a href="om.aspx">Dokumentation</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -49,6 +51,15 @@
                     <h4 id="1">Versionsinformation</h4>
                     <div id="version">
                         <ul>
+                            <li>
+                                <ul>
+                                    <li><span>v0.10.2</span>  Korslänkning mellan dokumentation och versionsinformation under menyer.
+                                    </li>
+                                    <li><span>v0.10.1</span>  Ny typ av plandokument kan hanteras - Gestaltningsprogram. <br />
+                                        <a href="om.aspx#1.2.2">Läs mer under dokumentation</a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li><span>v0.10</span> Stöd för SSL över https.</li>
                             <li>
                                 <ul>

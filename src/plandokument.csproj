@@ -15,7 +15,7 @@
     <AssemblyName>Plan.Plandokument</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44361</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -48,22 +48,27 @@
     <Reference Include="OSGeo.MapGuide.Foundation, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.Foundation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="OSGeo.MapGuide.Geometry, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.Geometry.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="OSGeo.MapGuide.MapGuideCommon, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.MapGuideCommon.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="OSGeo.MapGuide.PlatformBase, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.PlatformBase.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="OSGeo.MapGuide.Web, Version=3.1.0.9064, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\OSGeo.MapGuide.Web.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.IO.Compression" />
@@ -216,11 +221,12 @@
     <Content Include="pic\dxf.png" />
     <Content Include="pic\gif.png" />
     <Content Include="pic\help.png" />
-    <Content Include="pic\help\mg65_kartportal_arrow.png" />
-    <Content Include="pic\help\mg65_kartportal_hyperlink.png" />
-    <Content Include="pic\help\mg65_kartportal_rapport.png" />
-    <Content Include="pic\help\mg65_toolbar_arrow.png" />
-    <Content Include="pic\help\mg65_toolbar_rapport.png" />
+    <Content Include="pic\help\handlaggarkartan-fastigheter-informationsruta.png" />
+    <Content Include="pic\help\handlaggarkartan-fastigheter-lager_ibockad.png" />
+    <Content Include="pic\help\handlaggarkartan-fastigheter.png" />
+    <Content Include="pic\help\handlaggarkartan-gallande_planer-informationsruta.png" />
+    <Content Include="pic\help\handlaggarkartan-gallande_planer-lager_ibockad.png" />
+    <Content Include="pic\help\handlaggarkartan-gallande_planer.png" />
     <Content Include="pic\jpg.png" />
     <Content Include="pic\katalog.png" />
     <Content Include="pic\knob-blue.png" />
@@ -402,7 +408,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>61806</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/app/plan</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
