@@ -48,6 +48,7 @@
                     </li>
                     <li><a href="#3">Om</a></li>
                     <li><a href="#4">För utvecklare</a></li>
+                    <li><a href="versioninfo.aspx">Versionsinformation</a></li>
                 </ul>
             </div>
 
@@ -234,6 +235,11 @@
                         <td></td>
                         <td>bullerutredning</td>
                         <td>Presenterar resp. plans bullerutredning då en sådan finns framtagen till planen</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>gestaltningsprogram</td>
+                        <td>Presenterar resp. plans gestaltningsprogram då en sådan finns framtagen till planen</td>
                     </tr>
                     <tr>
                         <td></td>

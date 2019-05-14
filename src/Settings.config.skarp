@@ -38,6 +38,7 @@
        "kvalitetsprogram"       = Endast kvalitetsprogram
        "mkb"                    = Endast miljökonsekvensbeskrivning
        "bullerutredning"        = Endast bullerutredning
+       "gestaltningsprogram"    = Endast gestaltningsprogram
        "ovriga"                 = Resterade av dokumenten till plan som ej sorterats eller existerar i separerade dokumenttyper (övriga plandokument) -->
   <add key="UrlParameterDocumentType" value="dokument" />
   <!-- "NYCKEL", "AKT", "AKTTIDIGARE", "AKTEGEN", "FASTIGHET", "FASTIGHETNYCKEL" -->

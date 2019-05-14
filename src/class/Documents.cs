@@ -65,7 +65,7 @@ namespace Plan.Plandokument
             string documentSuffix = (string)Session["PlanHandling"];
             
             // Sorterade dokumenttyper, suffix från filernas namnkonvention, inkl. redovisning om planhandling enl. PBL
-            string[,] suffixs = new string[14, 2] {
+            string[,] suffixs = new string[15, 2] {
                                                     { "true", ""},
                                                     { "true", "_best" },
                                                     { "true", "_illu" },
@@ -79,6 +79,7 @@ namespace Plan.Plandokument
                                                     { "false", "_kvalprog" },
                                                     { "false", "_mkb" },
                                                     { "false", "_buller" },
+                                                    { "false", "_gestaltprog" },
                                                     { "false", "_ovr" }
                                                  };
             // Vilka dokument söks
@@ -128,6 +129,9 @@ namespace Plan.Plandokument
                         break;
                     case "bullerutredning":
                         documentSuffix = "_buller";
+                        break;
+                    case "gestaltningsprogram":
+                        documentSuffix = "_gestaltprog";
                         break;
                     case "ovriga":
                         documentSuffix = "_ovr";
@@ -375,6 +379,9 @@ namespace Plan.Plandokument
                             break;
                         case "handling":
                             documentType = "Övriga";
+                            break;
+                        case "gestaltprog":
+                            documentType = "Gestaltningsprogram";
                             break;
                         case "kvalprog":
                             documentType = "Kvalitetsprogram";

@@ -556,6 +556,7 @@ function putPlansDocs($headerPlan, plansDocs) {
                     ["Kvalitetsprogram", 2, false],
                     ["Miljökonsekvensbeskrivning", 2, false],
                     ["Bullerutredning", 2, false],
+                    ["Gestaltningsprogram", 2, false],
                     ["Övriga", 2, false]];
 
                 var $ul = $("<ul>");
