@@ -10,8 +10,14 @@ using System.Web.Services;
 
 namespace Plan.Plandokument
 {
+    /// <summary>
+    /// Klassen är behållare för dokument från filserver som är hittade efter sökta planer
+    /// </summary>
     public class Documents : System.Web.Services.WebService
 	{
+        /// <summary>
+        /// Egenskap 
+        /// </summary>
         public DataTable SearchedPlansDocuments { get; private set; }
 
 
@@ -21,6 +27,11 @@ namespace Plan.Plandokument
         }
 
 
+        /// <summary>
+        /// Söker planers tillhörande dokument
+        /// </summary>
+        /// <param name="planIds">Lista med plannyckelsobjekt</param>
+        /// <returns>Tabell med funna dokument för egna tidigare beteckning och formell aktbeteckning</returns>
         private DataTable plansDocs(List<object> planIds)
         {
             // Alla planer från cach
@@ -205,7 +216,7 @@ namespace Plan.Plandokument
             #endregion
 
 
-            // Rensa bort de sökta planer som dokument hittats efter formell planbeteckning
+            // Rensa bort de sökta planer som dokument hittats för efter formell planbeteckning
             foreach (DataRow dr in dtFileResult.Rows)
             {
                 foreach (DataRow drDelete in dtSearchedPlans.Select("nyckel = '" + dr["PLAN_ID"].ToString() + "'"))
@@ -271,7 +282,13 @@ namespace Plan.Plandokument
         }
 
 
-        // Funktion för att både söka på akt och tidigareakt (fastighetsregistrets kommunala)
+        /// <summary>
+        /// Funktion för att både söka på akt och tidigareakt (fastighetsregistrets kommunala) 
+        /// </summary>
+        /// <param name="rotes">Vektor med kataloger/sökvägar som sökta filer kan existera i</param>
+        /// <param name="searchedFile">Sökt filnamn (utan filändelse)</param>
+        /// <param name="planId">Plannyckel som referens till sökt plan</param>
+        /// <param name="dtFileResult">Resultattabell att fylla på med hittade filer</param>
         private void findFile(string[] rotes, string searchedFile, string planId, DataTable dtFileResult)
         {
             foreach (string rote in rotes)
@@ -283,7 +300,14 @@ namespace Plan.Plandokument
         }
 
 
-        // Metod för att rekursivt söka efter fil
+        /// <summary>
+        /// Metod för att rekursivt söka efter fil
+        /// </summary>
+        /// <param name="root">Rotkatalog av ramverket löst</param>
+        /// <param name="rote">Katalog/sökväg som sökta filer kan existera i</param>
+        /// <param name="searchedFile">Sökt filnamn (utan filändelse)</param>
+        /// <param name="planId">Plannyckel som referens till sökt plan</param>
+        /// <param name="dtFileResult">Resultattabell att fylla på med hittade filer</param>
         private void getFileToDataTable(DirectoryInfo root, string rote, string searchedFile, string planId, DataTable dtFileResult)
         {
             List<FileInfo> files = null;
