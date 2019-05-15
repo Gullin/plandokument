@@ -191,6 +191,7 @@ namespace Plan.Plandokument
                 else if (documentSuffix == "*")
                 {
                     // för varje "rad" (par av dokumenttyp och logiskt värde)
+                    // alla komibinationer av alla dokumentsuffix/dokumenttyp
                     for (int i = 0; i < suffixs.GetLength(0); i += 1)
                     {
                         string searchedFile = documentPrefix + documentAkt + suffixs[i, 1];
