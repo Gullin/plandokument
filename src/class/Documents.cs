@@ -343,7 +343,7 @@ namespace Plan.Plandokument
             }
 
             // Om hittade filer
-            if (files != null)
+            if (files != null && files.Count > 0)
             {
                 // ser till så att kataloger slutar med slash
                 string rotePathEnd = rote.Substring(rote.Length - 1, 1);
@@ -441,28 +441,33 @@ namespace Plan.Plandokument
                     dtFileResult.Rows.Add(drFile);
                 }
 
-                // Val genom applikationsinställningarna (AppSettings) om underkataloger ska genomsökas
-                bool subDirCrawl = true;
-                string appSetSubDirCrawl = ConfigurationManager.AppSettings["subDirectoryCrawl"].ToString();
-                if (appSetSubDirCrawl == "true" || appSetSubDirCrawl == "false")
-                {
-                    subDirCrawl = Convert.ToBoolean(appSetSubDirCrawl);
-                }
+            }
 
-                // Genomsöker underkataloger
-                if (subDirCrawl)
-                {
-                    // Alla underkataloger i gällande sökt katalog
-                    subDirs = root.GetDirectories();
 
-                    foreach (DirectoryInfo dirInfo in subDirs)
-                    {
-                        // Rekursivt sök i alla underkataloger
-                        getFileToDataTable(dirInfo, rote + dirInfo.Name, searchedFile, planId, dtFileResult);
-                    }
+            // Val genom applikationsinställningarna (AppSettings) om underkataloger ska genomsökas
+            bool subDirCrawl = true;
+            string appSetSubDirCrawl = ConfigurationManager.AppSettings["subDirectoryCrawl"].ToString();
+            if (appSetSubDirCrawl == "true" || appSetSubDirCrawl == "false")
+            {
+                subDirCrawl = Convert.ToBoolean(appSetSubDirCrawl);
+            }
+
+            // Genomsöker underkataloger
+            if (subDirCrawl)
+            {
+                // Alla underkataloger i gällande sökt katalog
+                subDirs = root.GetDirectories();
+
+                foreach (DirectoryInfo dirInfo in subDirs)
+                {
+                    // Rekursivt sök i alla underkataloger
+                    getFileToDataTable(dirInfo, rote + "/" + dirInfo.Name, searchedFile, planId, dtFileResult);
                 }
             }
+
+
+
         }
 
-	}
+    }
 }
