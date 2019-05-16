@@ -10,6 +10,19 @@ using System.Web.Services;
 
 namespace Plan.Plandokument
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class FindTypes
+    {
+        internal static string Exact { get; } = "Exact";
+        internal static string IsPart { get; } = "IsPart";
+        internal static string Unmanaged { get; } = "Unmanaged";
+    }
+
+
+
     /// <summary>
     /// Klassen är behållare för dokument från filserver som är hittade efter sökta planer
     /// </summary>
@@ -68,6 +81,10 @@ namespace Plan.Plandokument
             cl = new DataColumn("PLAN_ID", System.Type.GetType("System.String"));
             dtFileResult.Columns.Add(cl);
             cl = new DataColumn("DOCUMENTTYPE", System.Type.GetType("System.String"));
+            dtFileResult.Columns.Add(cl);
+            cl = new DataColumn("FINDTYPE", System.Type.GetType("System.String"));
+            dtFileResult.Columns.Add(cl);
+            cl = new DataColumn("DOCUMENTPART", System.Type.GetType("System.String"));
             dtFileResult.Columns.Add(cl);
 
             string[] rotes = ConfigurationManager.AppSettings["filesRotDirectory"].ToString().Split(',');
@@ -323,25 +340,28 @@ namespace Plan.Plandokument
                 if (searchedFileExtentions == null || string.IsNullOrWhiteSpace(searchedFileExtentions[0]))
                 {
                     files = root.EnumerateFiles(searchedFile + ".*").ToList();
+                    files.AddRange(root.EnumerateFiles(searchedFile + ",*.*").ToList());
                 }
                 else
                 {
                     foreach (string ext in searchedFileExtentions)
                     {
-                        IEnumerable<FileInfo> tmpFiles = root.EnumerateFiles(searchedFile + ext);
+                        List<FileInfo> filesFoundExact = root.EnumerateFiles(searchedFile + ext).ToList();
 
                         if (files != null)
                         {
-                            foreach (FileInfo f in tmpFiles)
-                            {
-                                files.Add(f);
-                            }
+                            files.AddRange(filesFoundExact);
                         }
                         else
                         {
-                            files = (from f in tmpFiles
+                            files = (from f in filesFoundExact
                                      select f).ToList();
                         }
+
+                        List<FileInfo> filesFoundPart = root.EnumerateFiles(searchedFile + ",*" + ext).ToList();
+                        files.AddRange(filesFoundPart);
+
+
                     }
                 }
             }
@@ -384,20 +404,77 @@ namespace Plan.Plandokument
                     string[] fileNameParts = fi.Name.Split('_');
 
                     // Väljer ut sista delen av delad textsträng
-                    string part = fileNameParts[fileNameParts.Length - 1];
+                    string lasFileNamePart = fileNameParts[fileNameParts.Length - 1];
                     string documentType = string.Empty;
 
-                    // Vänder på textsträng för att klippa bort filändelsen samt vänder tillbaka för jämförelsen
-                    string tmpPart = new string(part.ToCharArray()
+                    // Klipper bort filändelsen genom att vända på textsträng samt vänder tillbaka för jämförelsen
+                    string potentialDocumentType = new string(lasFileNamePart.ToCharArray()
                                                     .Reverse()
                                                     .ToArray())
                                                     .Substring(
                                                                 (fi.Extension.Length),
-                                                                (part.Length - fi.Extension.Length));
-                    tmpPart = new string(tmpPart.ToCharArray().Reverse().ToArray());
+                                                                (lasFileNamePart.Length - fi.Extension.Length));
+                    potentialDocumentType = new string(potentialDocumentType.ToCharArray().Reverse().ToArray());
+
+
+
+                    // Hanterar och kontrollerar för flera dokumentdelar
+                    string findtype = string.Empty;
+                    string findtypePart = string.Empty;
+                    try
+                    {
+                        if (potentialDocumentType.Contains(","))
+                        {
+                            string[] findtypeParts = potentialDocumentType.Split(',');
+
+                            // Följer ej namnkonventionen, för många möjligheter till dokumentdelar
+                            if (findtypeParts.Length > 2)
+                            {
+                                findtype = FindTypes.Unmanaged;
+                                throw new Exception("För många signaler om dokumentdelar. Kommatecken får utelämnas eller endast förekomma en gång.");
+                            }
+                            else if (findtypeParts.Length == 2) {
+                                if (string.IsNullOrWhiteSpace(findtypeParts[1]))
+                                {
+                                    findtype = FindTypes.IsPart;
+                                }
+                                else if (int.TryParse(findtypeParts[1], out int findtypePartResult))
+                                {
+                                    findtypePart = findtypePartResult.ToString();
+                                    findtype = FindTypes.IsPart;
+                                }
+                                else
+                                {
+                                    findtype = FindTypes.Unmanaged;
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception("Innehåller kommatecken som signal om dokumentdelar, men kan inte hantera formen.");
+                            }
+
+                            potentialDocumentType = findtypeParts[0];
+                        }
+                        else
+                        {
+                            findtype = FindTypes.Exact;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        // Klassens namn för loggning
+                        string className = this.GetType().Name;
+                        // Metod i klassen som används
+                        string methodName = MethodBase.GetCurrentMethod().Name;
+
+                        UtilityException.LogException(ex, className + " : " + methodName, true);
+                    }
+
+
 
                     // Typ av dokument
-                    switch (tmpPart.ToLower())
+                    switch (potentialDocumentType.ToLower())
                     {
                         case "ovr":
                             documentType = "Övriga";
@@ -449,6 +526,7 @@ namespace Plan.Plandokument
                             break;
                     };
 
+
                     // We only access the existing FileInfo object. If we 
                     // want to open, delete or modify the file, then 
                     // a try-catch block is required here to handle the case 
@@ -463,6 +541,8 @@ namespace Plan.Plandokument
                     drFile["SIZE"] = fi.Length;
                     drFile["PLAN_ID"] = planId;
                     drFile["DOCUMENTTYPE"] = documentType;
+                    drFile["FINDTYPE"] = findtype;
+                    drFile["DOCUMENTPART"] = findtypePart;
                     dtFileResult.Rows.Add(drFile);
                 }
 
