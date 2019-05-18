@@ -157,7 +157,7 @@ namespace Plan.Plandokument
                 drResult["ANTAL"] = dt.Rows[0][1]; ;
             }
 
-            return getDatatableAsJson(getTableSorted(dtResult, "PLANFK", "ASC"));
+            return getObjectAsJson(getTableSorted(dtResult, "PLANFK", "ASC"));
         }
 
 
@@ -535,7 +535,7 @@ namespace Plan.Plandokument
 
             UtilityRequest.LogRequestStatsAsync(dtRequestLog);
 
-            return getDatatableAsJson(getTableSorted(dtResultDistinct, "AKT", "ASC", "BEGREPP", "ASC"));
+            return getObjectAsJson(getTableSorted(dtResultDistinct, "AKT", "ASC", "BEGREPP", "ASC"));
         }
 
 
@@ -565,7 +565,18 @@ namespace Plan.Plandokument
         {
             Documents planDocs = new Documents(planIds);
 
-            return getDatatableAsJson(getTableSorted(planDocs.SearchedPlansDocuments, "EXTENTION", "ASC", "DOCUMENTTYPE", "ASC"));
+            return getObjectAsJson(getTableSorted(planDocs.SearchedPlansDocuments, "EXTENTION", "ASC", "DOCUMENTTYPE", "ASC"));
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string getDokumenttyper()
+        {
+            Documenttypes dt = new Documenttypes();
+            List<Documenttype> lista = dt.GetDocumenttypes; 
+
+            return getObjectAsJson(lista);
         }
 
 
@@ -970,7 +981,7 @@ namespace Plan.Plandokument
                 //JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
                 //return jsonSerializer.Serialize(imageBase64String);
 
-                return getDatatableAsJson(dtResult);
+                return getObjectAsJson(dtResult);
             }
             catch (System.Exception ex)
             {
@@ -1024,7 +1035,7 @@ namespace Plan.Plandokument
         /// <returns>
         /// JSON-serialiserad string.
         /// </returns>
-        private string getDatatableAsJson(DataTable dataTable)
+        private string getObjectAsJson(DataTable dataTable)
         {
             List<Dictionary<string, Object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, Object> row = new Dictionary<string, object>();
@@ -1036,6 +1047,26 @@ namespace Plan.Plandokument
                 {
                     row.Add(col.ColumnName, dr[col]);
                 }
+                rows.Add(row);
+            }
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(rows);
+        }
+
+        private string getObjectAsJson(List<Documenttype> list)
+        {
+            List<Dictionary<string, Object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, Object> row = new Dictionary<string, object>();
+
+            foreach (var dt in list)
+            {
+                row = new Dictionary<string, object>();
+                row.Add("Type", dt.Type);
+                row.Add("UrlFilter", dt.UrlFilter);
+                row.Add("Suffix", dt.Suffix);
+                row.Add("Description", dt.Description);
+                row.Add("IsPlanhandling", dt.IsPlanhandling);
                 rows.Add(row);
             }
 
