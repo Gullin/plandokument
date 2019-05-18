@@ -275,6 +275,7 @@
       <DependentUpon>checkFileaccess.aspx</DependentUpon>
     </Compile>
     <Compile Include="class\ApplicationAssemblyUtility.cs" />
+    <Compile Include="class\Documenttypes.cs" />
     <Compile Include="class\jTable.cs" />
     <Compile Include="class\Documents.cs">
       <SubType>Component</SubType>
@@ -354,6 +355,7 @@
     <Content Include="js\jtable.2.4.0\themes\landskrona\metro-lightgray\jtable.less" />
     <Content Include="plandokument.ashx" />
     <Content Include="js\jtable.2.4.0\themes\metro\close.png" />
+    <Content Include="dokumenttyper.csv" />
     <None Include="Properties\PublishProfiles\AIMS2016x64.pubxml" />
     <Content Include="Settings.config.skarp" />
     <None Include="Web.Debug.config">
