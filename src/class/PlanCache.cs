@@ -11,7 +11,6 @@ namespace Plan.Plandokument
 {
     public class PlanCache
     {
-        //TODO: DOKUMENTTYP: Cacha dokumenttyper från domänfil
         public static void isPlandocumenttypesCache()
         {
             List<Documenttype> cachedDocumenttypes = (List<Documenttype>)HttpRuntime.Cache["Documenttypes"];

@@ -573,10 +573,12 @@ namespace Plan.Plandokument
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string getDokumenttyper()
         {
-            Documenttypes dt = new Documenttypes();
-            List<Documenttype> lista = dt.GetDocumenttypes; 
+            //TODO: DOKUMENTTYP: Hämta domän från Dokumenttyp-cache
+            // Hämtar alla dokumenttyper från cache
+            Cache cache = HttpRuntime.Cache;
+            List<Documenttype> listDocumenttyper = (List<Documenttype>)cache["Documenttypes"];
 
-            return getObjectAsJson(lista);
+            return getObjectAsJson(listDocumenttyper);
         }
 
 
