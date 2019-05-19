@@ -538,6 +538,9 @@ function putPlansDocs($headerPlan, plansDocs) {
             // [4].PATH,
             // [5].DOCUMENTTYPE
             if (plansDocs) {
+
+                //TODO: DOKUMENTTYP: Hämta från domän
+
                 // Dokumenttyper samt indikering om respektive dokumenttyp är hittad bland dokument
                 // 0 = Planhandling
                 // 1 = Övrigt plandokument
