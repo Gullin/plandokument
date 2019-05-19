@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Services;
 
 namespace Plan.Plandokument
@@ -63,26 +64,11 @@ namespace Plan.Plandokument
 
             string documentPrefix = "DP";
             string documentSuffix = (string)Session["PlanHandling"];
-            
-            //TODO: DOKUMENTTYP: Hämta från domän
-            // Sorterade dokumenttyper, suffix från filernas namnkonvention, inkl. redovisning om planhandling enl. PBL
-            string[,] suffixs = new string[15, 2] {
-                                                    { "true", ""},
-                                                    { "true", "_best" },
-                                                    { "true", "_illu" },
-                                                    { "true", "_besk" },
-                                                    { "true", "_genom" },
-                                                    { "true", "_samred" },
-                                                    { "true", "_utlat" },
-                                                    { "true", "_pgbesk" },
-                                                    { "false", "_grk" },
-                                                    { "false", "_ff" },
-                                                    { "false", "_kvalprog" },
-                                                    { "false", "_mkb" },
-                                                    { "false", "_buller" },
-                                                    { "false", "_gestaltprog" },
-                                                    { "false", "_ovr" }
-                                                 };
+
+            // Hämtar alla dokumenttyper från cache
+            Cache cache = HttpRuntime.Cache;
+            List<Documenttype> listDocumenttyper = (List<Documenttype>)cache["Documenttypes"];
+
 
             //TODO: DOKUMENTTYP: Hämta från domän
             // Vilka dokument söks
@@ -164,13 +150,13 @@ namespace Plan.Plandokument
                 // Om begrepp "handling" itereras alla dokumenttyper igenom som ses som planhandling enligt vektorn ovan
                 if (isPlanHandlingSearched)
                 {
-                    // för varje "rad" (par av dokumenttyp och logiskt värde)
-                    for (int i = 0; i < suffixs.GetLength(0); i += 1)
+                    foreach (var item in listDocumenttyper)
                     {
                         // kontrollera om filsuffix är planhandling
-                        if (Convert.ToBoolean(suffixs[i, 0]))
+                        if (Convert.ToBoolean(item.IsPlanhandling))
                         {
-                            string searchedFile = documentPrefix + documentAkt + suffixs[i, 1];
+                            string suffix = String.IsNullOrEmpty(item.Suffix) ? item.Suffix : "_" + item.Suffix;
+                            string searchedFile = documentPrefix + documentAkt + suffix;
 
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
@@ -182,10 +168,10 @@ namespace Plan.Plandokument
                 }
                 else if (documentSuffix == "*")
                 {
-                    // för varje "rad" (par av dokumenttyp och logiskt värde)
-                    for (int i = 0; i < suffixs.GetLength(0); i += 1)
+                    foreach (var item in listDocumenttyper)
                     {
-                        string searchedFile = documentPrefix + documentAkt + suffixs[i, 1];
+                        string suffix = String.IsNullOrEmpty(item.Suffix) ? item.Suffix : "_" + item.Suffix;
+                        string searchedFile = documentPrefix + documentAkt + suffix;
 
                         // Om sökt begrepp inte är tomt
                         if (!string.IsNullOrWhiteSpace(documentAkt))
@@ -227,13 +213,13 @@ namespace Plan.Plandokument
                 // Om begrepp "handling" sökt för itereras igenom alla dokumenttyper som ses som planhandling enligt vektorn ovan
                 if (isPlanHandlingSearched)
                 {
-                    // för varje "rad" (par av dokumenttyp och logiskt värde)
-                    for (int i = 0; i < suffixs.GetLength(0); i += 1)
+                    foreach (var item in listDocumenttyper)
                     {
                         // kontrollera om filsuffix är planhandling
-                        if (Convert.ToBoolean(suffixs[i, 0]))
+                        if (Convert.ToBoolean(item.IsPlanhandling))
                         {
-                            string searchedFile = documentPrefix + documentAkt + suffixs[i, 1];
+                            string suffix = String.IsNullOrEmpty(item.Suffix) ? item.Suffix : "_" + item.Suffix;
+                            string searchedFile = documentPrefix + documentAkt + suffix;
 
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
@@ -245,10 +231,10 @@ namespace Plan.Plandokument
                 }
                 else if (documentSuffix == "*")
                 {
-                    // för varje "rad" (par av dokumenttyp och logiskt värde)
-                    for (int i = 0; i < suffixs.GetLength(0); i += 1)
+                    foreach (var item in listDocumenttyper)
                     {
-                        string searchedFile = documentPrefix + documentAkt + suffixs[i, 1];
+                        string suffix = String.IsNullOrEmpty(item.Suffix) ? item.Suffix : "_" + item.Suffix;
+                        string searchedFile = documentPrefix + documentAkt + suffix;
 
                         // Om sökt begrepp inte är tomt
                         if (!string.IsNullOrWhiteSpace(documentAkt))
