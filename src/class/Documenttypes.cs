@@ -22,11 +22,6 @@ namespace Plan.Plandokument
         {
             List<Documenttype> documenttypes = new List<Documenttype>();
 
-            #region TODO: Hämta dokumenttyper från fil
-            //Documenttype documenttype = new Documenttype();
-            //documenttypes.Add(documenttype);
-            #endregion
-
             string domainFileDocumenttypes = HttpContext.Current.Server.MapPath(
                     "~/dokumenttyper.csv".Replace("~/", "")
                     );
@@ -37,6 +32,7 @@ namespace Plan.Plandokument
                     string[] lines = File.ReadAllLines(domainFileDocumenttypes);
 
                     List<int> felrader = new List<int>();
+                    List<int> felraderLogiskDatatyp = new List<int>();
                     for (int i = 0; i < lines.Length; i++)
                     {
                         string[] lineParts = lines[i].Split(';');
@@ -44,24 +40,32 @@ namespace Plan.Plandokument
                         {
                             felrader.Add(i);
                         }
-
-                        //TODO: Kontrollera datatypen för resp. kolumn
-                        bool _isPlanhandling;
-                        Boolean.TryParse(lineParts[4].Trim(), out _isPlanhandling);
-                        Documenttype documenttype = new Documenttype() {
-                            Type = lineParts[0].Trim(),
-                            UrlFilter = lineParts[1].Trim(),
-                            Suffix = lineParts[2].Trim(),
-                            Description = lineParts[3].Trim(),
-                            IsPlanhandling = _isPlanhandling
-                        };
-
-                        documenttypes.Add(documenttype);
+                        else
+                        {
+                            bool _isPlanhandling;
+                            if (!Boolean.TryParse(lineParts[4].Trim(), out _isPlanhandling))
+                            {
+                                felraderLogiskDatatyp.Add(i);
+                            }
+                            Documenttype documenttype = new Documenttype()
+                            {
+                                Type = lineParts[0].ToString().Trim(),
+                                UrlFilter = lineParts[1].ToString().Trim(),
+                                Suffix = lineParts[2].ToString().Trim(),
+                                Description = lineParts[3].ToString().Trim(),
+                                IsPlanhandling = _isPlanhandling
+                            };
+                            documenttypes.Add(documenttype);
+                        }
                     }
 
                     if (felrader.Count > 0)
                     {
                         throw new Exception("Domänvärden dokumenttyp fel antal", new Exception("Antalet kolumner är fel för raderna (" + String.Join(", ", felrader) + ")."));
+                    }
+                    if (felraderLogiskDatatyp.Count > 0)
+                    {
+                        throw new Exception("Dokumenttyps domänvärde från 5:e kolumnen är inte av logiskt (boolean) datatyp.", new Exception("Kolumner är fel för raderna (" + String.Join(", ", felraderLogiskDatatyp) + ")."));
                     }
 
                 }
