@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
@@ -10,6 +11,23 @@ namespace Plan.Plandokument
 {
     public class PlanCache
     {
+        //TODO: DOKUMENTTYP: Cacha dokumenttyper från domänfil
+        public static void isPlandocumenttypesCache()
+        {
+            List<Documenttype> cachedDocumenttypes = (List<Documenttype>)HttpRuntime.Cache["Documenttypes"];
+
+            if (cachedDocumenttypes != null)
+            {
+                HttpRuntime.Cache.Remove("Documenttypes");
+                setDocumenttypesCache();
+            }
+            else
+            {
+                setDocumenttypesCache();
+            }
+        }
+
+
         // Kontrollera om grundplaninformationen 
         public static void isPlanBasisCache()
         {
@@ -26,6 +44,7 @@ namespace Plan.Plandokument
             }
         }
 
+
         // Kontrollera om information om vilka planer fastighet berör 
         public static void isPlanBerorFastighetCache()
         {
@@ -40,6 +59,21 @@ namespace Plan.Plandokument
             {
                 setPlanBerorFastighetCache();
             }
+        }
+
+
+
+        // Cacha plandokumenttyper från domänfil
+        private static void setDocumenttypesCache()
+        {
+            DateTime cacheExpiration = setCacheExpiration();
+
+            Documenttypes documenttypes = new Documenttypes();
+            List<Documenttype> listOfDocumenttypes = documenttypes.GetDocumenttypes;
+
+            // Skapa cach av alla planer
+            Cache cache = HttpRuntime.Cache;
+            cache.Insert("Documenttypes", listOfDocumenttypes, null, cacheExpiration, Cache.NoSlidingExpiration);
         }
 
 
