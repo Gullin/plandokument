@@ -64,6 +64,7 @@ namespace Plan.Plandokument
             string documentPrefix = "DP";
             string documentSuffix = (string)Session["PlanHandling"];
             
+            //TODO: DOKUMENTTYP: Hämta från domän
             // Sorterade dokumenttyper, suffix från filernas namnkonvention, inkl. redovisning om planhandling enl. PBL
             string[,] suffixs = new string[15, 2] {
                                                     { "true", ""},
@@ -82,6 +83,8 @@ namespace Plan.Plandokument
                                                     { "false", "_gestaltprog" },
                                                     { "false", "_ovr" }
                                                  };
+
+            //TODO: DOKUMENTTYP: Hämta från domän
             // Vilka dokument söks
             bool isPlanHandlingSearched = false;
             if (documentSuffix != "handling")
@@ -322,9 +325,6 @@ namespace Plan.Plandokument
             }
             catch (UnauthorizedAccessException ex)
             {
-                //StackTrace st = new StackTrace ();
-                //StackFrame sf = st.GetFrame (0);
-
                 // Klassens namn för loggning
                 string className = this.GetType().Name;
                 // Metod i klassen som används
@@ -371,6 +371,7 @@ namespace Plan.Plandokument
                                                                 (part.Length - fi.Extension.Length));
                     tmpPart = new string(tmpPart.ToCharArray().Reverse().ToArray());
 
+                    //TODO: DOKUMENTTYP: Hämta från domän
                     // Typ av dokument
                     switch (tmpPart.ToLower())
                     {
