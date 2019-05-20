@@ -509,9 +509,54 @@ function getPlansDocs(planIds, callback) {
 
 
 
+
+// Dokumenttyper
+function getDocumenttypes(callback) {
+    $.ajax({
+        type: "POST",
+        url: urlBasePath + 'plandokument.asmx/getDokumenttyper',
+        contentType: "application/json; charset=UTF-8",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.d != '') {
+                Lkr.Plan.Dokument.Dokumenttyper = JSON.parse(msg.d);
+                callback(Lkr.Plan.Dokument.Dokumenttyper);
+
+            } else {
+                callback(Lkr.Plan.Dokument.Dokumenttyper);
+
+                //Visa något vid inga dokumettyper
+
+            }
+        },
+        error: function () {
+            alert("Fel!\ngetDokumenttyper");
+        }
+    })
+};
+
+
+
 // Listar plandokumenten i var listad plans dokumenthållaren
 // Skicka in parameter som vektor med plan-ID
 function putPlansDocs($headerPlan, plansDocs) {
+    //getDocumenttypes(function (documenttypes) {
+
+    var documenttyper;
+    if (Lkr.Plan.Dokument.Dokumenttyper) {
+        documenttyper = Lkr.Plan.Dokument.Dokumenttyper;
+    }
+    else {
+        console.err("Dokumenttyper saknas.");
+    }
+
+    // Adderar signal om vilket avsnitt dokumentypen ska hamna under, planhandling, övriga plandokument eller inga plandokument
+    // 0 = Planhandling
+    // 1 = Övrigt plandokument
+    // 2 = Dokumenttyp utan matchande dokument
+    documenttyper.forEach((object => { object.Avsnitt = 2; }));
+
+
     // För varje sökt plan
     $.each(Lkr.Plan.Dokument.planListInfo, function (planKey, planVal) {
         // Om plannyckel finns (träff på sökning, sökparameter har träff när värde finns för bl.a. nyckel. Alla sökparametrar returneras för presentation av ev. brister i sökningen)
@@ -539,29 +584,6 @@ function putPlansDocs($headerPlan, plansDocs) {
             // [5].DOCUMENTTYPE
             if (plansDocs) {
 
-                //TODO: DOKUMENTTYP: Hämta från domän
-
-                // Dokumenttyper samt indikering om respektive dokumenttyp är hittad bland dokument
-                // 0 = Planhandling
-                // 1 = Övrigt plandokument
-                // 2 = Dokumenttyp utan matchande dokument
-                // true = dokumenttyp ses som planhandling
-                var documenttypesArray = [["Beskrivning", 2, true],
-                    ["Bestämmelser", 2, true],
-                    ["Fastighetsförteckning", 2, false],
-                    ["Genomförande", 2, true],
-                    ["Grundkarta", 2, false],
-                    ["Illustration", 2, true],
-                    ["Karta", 2, true],
-                    ["Samrådsredogörelse", 2, true],
-                    ["Utlåtande", 2, true],
-                    ["Plan- och genomförandebeskrivning", 2, true],
-                    ["Kvalitetsprogram", 2, false],
-                    ["Miljökonsekvensbeskrivning", 2, false],
-                    ["Bullerutredning", 2, false],
-                    ["Gestaltningsprogram", 2, false],
-                    ["Övriga", 2, false]];
-
                 var $ul = $("<ul>");
                 var $ulOvrPlandok = $("<ul>");
                 $ulOvrPlandok.addClass("ovrPlandok");
@@ -574,16 +596,17 @@ function putPlansDocs($headerPlan, plansDocs) {
                         isDocFound = true;
                         // Sätter indikering för om dokumenttyp finns, förutsättning för lista med saknade dokumenttyper
                         // För varje dokumenttyp
-                        $.each(eval(documenttypesArray), function (keyDoctype, valDoctype) {
+                        documenttyper.forEach(function (valDoctype) {
+
                             // Indikering att dokumenttyp finns
-                            if (valDoctype[0] == val[5]) {
+                            if (valDoctype.Type == val[5]) {
                                 // Lista med dokumenttyper
                                 var $li = $("<li>");
                                 $li.addClass(val[2].substring(1, val[2].length) + "-file");
 
                                 // Valbarhet för varje dokument genom kryssruta
                                 var $checkbox = $("<input />",
-                                                  { type: 'checkbox' });
+                                    { type: 'checkbox' });
                                 // Hantera markering och flyout-texter för dokumentens kryssrutor och den globala kryssrutan
                                 $checkbox.change(function () {
                                     $checkboxes = $('#doc-' + planid + ' ul input');
@@ -608,7 +631,7 @@ function putPlansDocs($headerPlan, plansDocs) {
                                     } else {
                                         // indeterminate
                                         $('#allCheck-' + planVal.NYCKEL).prop('indeterminate', true);
-                                        if (this.checked){
+                                        if (this.checked) {
                                             $('#allCheck-' + planVal.NYCKEL).prop('title', 'Markera alla dokument');
                                         } else {
                                             $('#allCheck-' + planVal.NYCKEL).prop('title', 'Avmarkera alla dokument');
@@ -630,11 +653,11 @@ function putPlansDocs($headerPlan, plansDocs) {
                                 $li.append($docLink);
 
                                 // Placerar resp. dokument beroende på vilken rubrik de hamnar under (planhandling eller övriga)
-                                if (valDoctype[2]) {
+                                if (valDoctype.IsPlanhandling) {
                                     $ul.append($li);
-                                    valDoctype[1] = 0;
+                                    valDoctype.Avsnitt = 0;
                                 } else {
-                                    valDoctype[1] = 1;
+                                    valDoctype.Avsnitt = 1;
                                     $ulOvrPlandok.append($li);
                                 }
                             }
@@ -644,12 +667,12 @@ function putPlansDocs($headerPlan, plansDocs) {
 
 
                 // För varje dokumenttyp
-                $.each(eval(documenttypesArray), function (keyDoctype, valDoctype) {
+                documenttyper.forEach(function (valDoctype) {
                     // Om plandokument ej funnen uppdelad på specifik dokumenttyp
-                    if (valDoctype[1] == 2) {
+                    if (valDoctype.Avsnitt == 2) {
                         var $li = $("<li>");
                         $li.addClass("no-file");
-                        $li.text(valDoctype[0]);
+                        $li.text(valDoctype.Type);
                         $ulNoDoc.append($li);
                     }
                 });
@@ -818,6 +841,7 @@ function putPlansDocs($headerPlan, plansDocs) {
             }
         }
     });
+
 
 }; // SLUT putPlansDocs
 

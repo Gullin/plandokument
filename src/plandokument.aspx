@@ -60,15 +60,19 @@
 
                 nbrOfSearchedPlans(Lkr.Plan.Dokument.isPlansSearched, function (isPlansSearched) {
                     if (isPlansSearched) {
-                        documentConditionOfSearchedPlans();
-                        columnConditionOfSearchedPlans();
-                        searchedPlans();
+                        getDocumenttypes(function (Dokumenttyper) {
+                            if (Dokumenttyper) {
+                                documentConditionOfSearchedPlans();
+                                columnConditionOfSearchedPlans();
+                                searchedPlans();
 
-                        getStatTotNbrPlans()
-                        getStatNbrPlanTypes();
-                        getStatNbrPlanImplement();
+                                getStatTotNbrPlans()
+                                getStatNbrPlanTypes();
+                                getStatNbrPlanImplement();
 
-                        getSearchedPlans();
+                                getSearchedPlans();
+                            }
+                        });
                     }
                 });
 
