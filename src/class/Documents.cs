@@ -93,7 +93,7 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), dtFileResult);
+                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -108,7 +108,7 @@ namespace Plan.Plandokument
                         // Om sökt begrepp inte är tomt
                         if (!string.IsNullOrWhiteSpace(documentAkt))
                         {
-                            findFile(rotes, searchedFile, dr["nyckel"].ToString(), dtFileResult);
+                            findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                         }
                     }
                 }
@@ -128,7 +128,7 @@ namespace Plan.Plandokument
                     // Om sökt begrepp inte är tomt
                     if (!string.IsNullOrWhiteSpace(documentAkt))
                     {
-                        findFile(rotes, searchedFile, dr["nyckel"].ToString(), dtFileResult);
+                        findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                     }
                 }
             }
@@ -165,7 +165,7 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), dtFileResult);
+                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -180,7 +180,7 @@ namespace Plan.Plandokument
                         // Om sökt begrepp inte är tomt
                         if (!string.IsNullOrWhiteSpace(documentAkt))
                         {
-                            findFile(rotes, searchedFile, dr["nyckel"].ToString(), dtFileResult);
+                            findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                         }
                     }
                 }
@@ -200,7 +200,7 @@ namespace Plan.Plandokument
                     // Om sökt begrepp inte är tomt
                     if (!string.IsNullOrWhiteSpace(documentAkt))
                     {
-                        findFile(rotes, searchedFile, dr["nyckel"].ToString(), dtFileResult);
+                        findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                     }
                 }
             }
@@ -211,19 +211,19 @@ namespace Plan.Plandokument
 
 
         // Funktion för att både söka på akt och tidigareakt (fastighetsregistrets kommunala)
-        private void findFile(string[] rotes, string searchedFile, string planId, DataTable dtFileResult)
+        private void findFile(string[] rotes, string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
         {
             foreach (string rote in rotes)
             {
                 DirectoryInfo di = new DirectoryInfo(Server.MapPath(@rote));
                 //DirectoryInfo di = new DirectoryInfo(rote); 
-                getFileToDataTable(di, rote, searchedFile, planId, dtFileResult);
+                getFileToDataTable(di, rote, searchedFile, planId, dokumentAkt, dtFileResult);
             }
         }
 
 
         // Metod för att rekursivt söka efter fil
-        private void getFileToDataTable(DirectoryInfo root, string rote, string searchedFile, string planId, DataTable dtFileResult)
+        private void getFileToDataTable(DirectoryInfo root, string rote, string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
         {
             List<FileInfo> files = null;
             DirectoryInfo[] subDirs = null;
@@ -292,7 +292,7 @@ namespace Plan.Plandokument
                 // För varje fil lagra information i publik datatabell
                 foreach (FileInfo fi in files)
                 {
-                    string[] fileNameParts = fi.Name.Split('_');
+                    string[] fileNameParts = fi.Name.Replace(dokumentAkt, "").Split('_');
 
                     // Väljer ut sista delen av delad textsträng
                     string part = fileNameParts[fileNameParts.Length - 1];
@@ -315,21 +315,27 @@ namespace Plan.Plandokument
 
                     // Jämför mot alla suffix i dokumenttypdomänen
                     // Två filnamnssuffix ovr och handling är för samling av bl.a. ej sorterade dokument och arv
-                    foreach (var item in listDocumenttyper)
+                    if (tmpPart == "")
                     {
-                        if (tmpPart == item.Suffix)
-                        {
-                            documentType = item.Type;
-                        }
+                        documentType = "Karta";
                     }
-                    if (tmpPart == "ovr" || tmpPart == "handling")
+                    else
                     {
-                        documentType = "Övriga";
+                        foreach (var item in listDocumenttyper)
+                        {
+                            if (tmpPart == item.Suffix)
+                            {
+                                documentType = item.Type;
+                            }
+                        }
+                        if (tmpPart == "ovr" || tmpPart == "handling")
+                        {
+                            documentType = "Övriga";
+                        }
                     }
                     if (string.IsNullOrEmpty(documentType))
                     {
-                        //TODO: DOKUMENTTYP: Tolkning av fil till dokumenttyp, "resten" kan inte ses som dokumenttyp karta. Bättre textsträngsklippning behövs.
-                        documentType = "Karta";
+                        //TODO: DOKUMENTTYP: Vad händer om dokumenttyp inte kan fastställas vid sökträff
                     }
 
                     //TODO: DOKUMENTTYP: Hämta från domän
@@ -423,7 +429,7 @@ namespace Plan.Plandokument
                 foreach (DirectoryInfo dirInfo in subDirs)
                 {
                     // Rekursivt sök i alla underkataloger
-                    getFileToDataTable(dirInfo, rote + "/" + dirInfo.Name, searchedFile, planId, dtFileResult);
+                    getFileToDataTable(dirInfo, rote + "/" + dirInfo.Name, searchedFile, planId, dokumentAkt, dtFileResult);
                 }
             }
 
