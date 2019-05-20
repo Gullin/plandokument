@@ -29,8 +29,9 @@ namespace Plan.Plandokument
             {
                 if (File.Exists(domainFileDocumenttypes))
                 {
-                    string[] lines = File.ReadAllLines(domainFileDocumenttypes);
+                    string[] lines = File.ReadAllLines(domainFileDocumenttypes, System.Text.Encoding.GetEncoding("Windows-1252"));
 
+                    //TODO: DOKUMENTTYP: Kontrollera att kolumner innehåller värde
                     List<int> felrader = new List<int>();
                     List<int> felraderLogiskDatatyp = new List<int>();
                     for (int i = 0; i < lines.Length; i++)
