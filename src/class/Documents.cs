@@ -338,59 +338,7 @@ namespace Plan.Plandokument
                         //TODO: DOKUMENTTYP: Vad händer om dokumenttyp inte kan fastställas vid sökträff
                     }
 
-                    //TODO: DOKUMENTTYP: Hämta från domän
-                    // Typ av dokument
-                    //switch (tmpPart.ToLower())
-                    //{
-                    //    case "ovr":
-                    //        documentType = "Övriga";
-                    //        break;
-                    //    case "handling":
-                    //        documentType = "Övriga";
-                    //        break;
-                    //    case "gestaltprog":
-                    //        documentType = "Gestaltningsprogram";
-                    //        break;
-                    //    case "kvalprog":
-                    //        documentType = "Kvalitetsprogram";
-                    //        break;
-                    //    case "mkb":
-                    //        documentType = "Miljökonsekvensbeskrivning";
-                    //        break;
-                    //    case "buller":
-                    //        documentType = "Bullerutredning";
-                    //        break;
-                    //    case "ff":
-                    //        documentType = "Fastighetsförteckning";
-                    //        break;
-                    //    case "grk":
-                    //        documentType = "Grundkarta";
-                    //        break;
-                    //    case "samred":
-                    //        documentType = "Samrådsredogörelse";
-                    //        break;
-                    //    case "utlat":
-                    //        documentType = "Utlåtande";
-                    //        break;
-                    //    case "pgbesk":
-                    //        documentType = "Plan- och genomförandebeskrivning";
-                    //        break;
-                    //    case "genom":
-                    //        documentType = "Genomförande";
-                    //        break;
-                    //    case "besk":
-                    //        documentType = "Beskrivning";
-                    //        break;
-                    //    case "illu":
-                    //        documentType = "Illustration";
-                    //        break;
-                    //    case "best":
-                    //        documentType = "Bestämmelser";
-                    //        break;
-                    //    default:
-                    //        documentType = "Karta";
-                    //        break;
-                    //};
+
 
                     // We only access the existing FileInfo object. If we 
                     // want to open, delete or modify the file, then 
