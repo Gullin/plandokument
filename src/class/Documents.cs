@@ -119,7 +119,7 @@ namespace Plan.Plandokument
                     {
                         if (documentSuffix == item.UrlFilter)
                         {
-                            suffix = "_" + item.Suffix;
+                            suffix = String.IsNullOrEmpty(item.Suffix) ? item.Suffix : "_" + item.Suffix;
                             break;
                         }
                     }
@@ -191,7 +191,7 @@ namespace Plan.Plandokument
                     {
                         if (documentSuffix == item.UrlFilter)
                         {
-                            suffix = "_" + item.Suffix;
+                            suffix = String.IsNullOrEmpty(item.Suffix) ? item.Suffix : "_" + item.Suffix;
                             break;
                         }
                     }
