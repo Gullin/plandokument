@@ -326,7 +326,7 @@ namespace Plan.Plandokument
                     {
                         documentType = "Övriga";
                     }
-                    else
+                    if (string.IsNullOrEmpty(documentType))
                     {
                         //TODO: DOKUMENTTYP: Tolkning av fil till dokumenttyp, "resten" kan inte ses som dokumenttyp karta. Bättre textsträngsklippning behövs.
                         documentType = "Karta";
