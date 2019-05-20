@@ -305,61 +305,86 @@ namespace Plan.Plandokument
                                                     .Substring(
                                                                 (fi.Extension.Length),
                                                                 (part.Length - fi.Extension.Length));
-                    tmpPart = new string(tmpPart.ToCharArray().Reverse().ToArray());
+                    tmpPart = new string(tmpPart.ToCharArray().Reverse().ToArray()).ToLower();
+
+
+                    // Hämtar alla dokumenttyper från cache
+                    Cache cache = HttpRuntime.Cache;
+                    List<Documenttype> listDocumenttyper = (List<Documenttype>)cache["Documenttypes"];
+
+
+                    // Jämför mot alla suffix i dokumenttypdomänen
+                    // Två filnamnssuffix ovr och handling är för samling av bl.a. ej sorterade dokument och arv
+                    foreach (var item in listDocumenttyper)
+                    {
+                        if (tmpPart == item.Suffix)
+                        {
+                            documentType = item.Type;
+                        }
+                    }
+                    if (tmpPart == "ovr" || tmpPart == "handling")
+                    {
+                        documentType = "Övriga";
+                    }
+                    else
+                    {
+                        //TODO: DOKUMENTTYP: Tolkning av fil till dokumenttyp, "resten" kan inte ses som dokumenttyp karta. Bättre textsträngsklippning behövs.
+                        documentType = "Karta";
+                    }
 
                     //TODO: DOKUMENTTYP: Hämta från domän
                     // Typ av dokument
-                    switch (tmpPart.ToLower())
-                    {
-                        case "ovr":
-                            documentType = "Övriga";
-                            break;
-                        case "handling":
-                            documentType = "Övriga";
-                            break;
-                        case "gestaltprog":
-                            documentType = "Gestaltningsprogram";
-                            break;
-                        case "kvalprog":
-                            documentType = "Kvalitetsprogram";
-                            break;
-                        case "mkb":
-                            documentType = "Miljökonsekvensbeskrivning";
-                            break;
-                        case "buller":
-                            documentType = "Bullerutredning";
-                            break;
-                        case "ff":
-                            documentType = "Fastighetsförteckning";
-                            break;
-                        case "grk":
-                            documentType = "Grundkarta";
-                            break;
-                        case "samred":
-                            documentType = "Samrådsredogörelse";
-                            break;
-                        case "utlat":
-                            documentType = "Utlåtande";
-                            break;
-                        case "pgbesk":
-                            documentType = "Plan- och genomförandebeskrivning";
-                            break;
-                        case "genom":
-                            documentType = "Genomförande";
-                            break;
-                        case "besk":
-                            documentType = "Beskrivning";
-                            break;
-                        case "illu":
-                            documentType = "Illustration";
-                            break;
-                        case "best":
-                            documentType = "Bestämmelser";
-                            break;
-                        default:
-                            documentType = "Karta";
-                            break;
-                    };
+                    //switch (tmpPart.ToLower())
+                    //{
+                    //    case "ovr":
+                    //        documentType = "Övriga";
+                    //        break;
+                    //    case "handling":
+                    //        documentType = "Övriga";
+                    //        break;
+                    //    case "gestaltprog":
+                    //        documentType = "Gestaltningsprogram";
+                    //        break;
+                    //    case "kvalprog":
+                    //        documentType = "Kvalitetsprogram";
+                    //        break;
+                    //    case "mkb":
+                    //        documentType = "Miljökonsekvensbeskrivning";
+                    //        break;
+                    //    case "buller":
+                    //        documentType = "Bullerutredning";
+                    //        break;
+                    //    case "ff":
+                    //        documentType = "Fastighetsförteckning";
+                    //        break;
+                    //    case "grk":
+                    //        documentType = "Grundkarta";
+                    //        break;
+                    //    case "samred":
+                    //        documentType = "Samrådsredogörelse";
+                    //        break;
+                    //    case "utlat":
+                    //        documentType = "Utlåtande";
+                    //        break;
+                    //    case "pgbesk":
+                    //        documentType = "Plan- och genomförandebeskrivning";
+                    //        break;
+                    //    case "genom":
+                    //        documentType = "Genomförande";
+                    //        break;
+                    //    case "besk":
+                    //        documentType = "Beskrivning";
+                    //        break;
+                    //    case "illu":
+                    //        documentType = "Illustration";
+                    //        break;
+                    //    case "best":
+                    //        documentType = "Bestämmelser";
+                    //        break;
+                    //    default:
+                    //        documentType = "Karta";
+                    //        break;
+                    //};
 
                     // We only access the existing FileInfo object. If we 
                     // want to open, delete or modify the file, then 
