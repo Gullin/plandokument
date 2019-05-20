@@ -1,3 +1,5 @@
+;dokument;;Listar alla plandokument;
+;handling;;Listar alla planhandlingar;
 Karta;karta;;Plankarta;true
 Bestämmelser;bestammelse;best;Planbestämmelser då dessa inte existerar på plankartan;true
 Illustration;illustration;illu;Planillustration;true

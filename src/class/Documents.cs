@@ -70,74 +70,6 @@ namespace Plan.Plandokument
             List<Documenttype> listDocumenttyper = (List<Documenttype>)cache["Documenttypes"];
 
 
-            //TODO: DOKUMENTTYP: Hämta från domän
-            // Vilka dokument söks
-            bool isPlanHandlingSearched = false;
-            if (documentSuffix != "handling")
-            {
-                switch (documentSuffix)
-                {
-                    case "dokument":
-                        documentSuffix = "*";
-                        break;
-                    case "karta":
-                        documentSuffix = "";
-                        break;
-                    case "bestammelse":
-                        documentSuffix = "_best";
-                        break;
-                    case "illustration":
-                        documentSuffix = "_illu";
-                        break;
-                    case "beskrivning":
-                        documentSuffix = "_besk";
-                        break;
-                    case "genomforande":
-                        documentSuffix = "_genom";
-                        break;
-                    case "samradsredogorelse":
-                        documentSuffix = "_samred";
-                        break;
-                    case "utlatande":
-                        documentSuffix = "_utlat";
-                        break;
-                    case "planochgenomforandebeskrivning":
-                        documentSuffix = "_pgbesk";
-                        break;
-                    case "grk":
-                        documentSuffix = "_grk";
-                        break;
-                    case "fastighetsforteckning":
-                        documentSuffix = "_ff";
-                        break;
-                    case "kvalitetsprogram":
-                        documentSuffix = "_kvalprog";
-                        break;
-                    case "mkb":
-                        documentSuffix = "_mkb";
-                        break;
-                    case "bullerutredning":
-                        documentSuffix = "_buller";
-                        break;
-                    case "gestaltningsprogram":
-                        documentSuffix = "_gestaltprog";
-                        break;
-                    case "ovriga":
-                        documentSuffix = "_ovr";
-                        break;
-                    // handling
-                    default:
-                        // informera om att dokumenttypen ej är sökbar separat och åtkomligt för sig själv.
-                        // visa alla dokument (istället för inget) då det troligen finns i det sammansatta skannade dokumentet
-                        break;
-                };
-            }
-            else
-            {
-                isPlanHandlingSearched = true;
-            }
-
-
             // Sökning av filnamn sker efter två olika namnkonventioner,
             // ena grundar sig på formell aktbeteckning (yngre dokument) och andra på nummerserie (äldre dokument).
             // Prioritering görs i ordningen formell aktbeteckning och nummerserie.
@@ -148,7 +80,7 @@ namespace Plan.Plandokument
                 string documentAkt = dr["akt"].ToString().Replace('/', '_');
 
                 // Om begrepp "handling" itereras alla dokumenttyper igenom som ses som planhandling enligt vektorn ovan
-                if (isPlanHandlingSearched)
+                if (documentSuffix == "handling")
                 {
                     foreach (var item in listDocumenttyper)
                     {
@@ -166,7 +98,7 @@ namespace Plan.Plandokument
                         }
                     }
                 }
-                else if (documentSuffix == "*")
+                else if (documentSuffix == "dokument")
                 {
                     foreach (var item in listDocumenttyper)
                     {
@@ -182,7 +114,16 @@ namespace Plan.Plandokument
                 }
                 else
                 {
-                    string searchedFile = documentPrefix + documentAkt + documentSuffix;
+                    string suffix = string.Empty;
+                    foreach (var item in listDocumenttyper)
+                    {
+                        if (documentSuffix == item.UrlFilter)
+                        {
+                            suffix = "_" + item.Suffix;
+                            break;
+                        }
+                    }
+                    string searchedFile = documentPrefix + documentAkt + suffix;
 
                     // Om sökt begrepp inte är tomt
                     if (!string.IsNullOrWhiteSpace(documentAkt))
@@ -211,7 +152,7 @@ namespace Plan.Plandokument
                 string documentAkt = dr["akttidigare"].ToString().Replace("1282K-", "");
 
                 // Om begrepp "handling" sökt för itereras igenom alla dokumenttyper som ses som planhandling enligt vektorn ovan
-                if (isPlanHandlingSearched)
+                if (documentSuffix == "handling")
                 {
                     foreach (var item in listDocumenttyper)
                     {
@@ -229,7 +170,7 @@ namespace Plan.Plandokument
                         }
                     }
                 }
-                else if (documentSuffix == "*")
+                else if (documentSuffix == "dokument")
                 {
                     foreach (var item in listDocumenttyper)
                     {
@@ -245,7 +186,16 @@ namespace Plan.Plandokument
                 }
                 else
                 {
-                    string searchedFile = documentPrefix + documentAkt + documentSuffix;
+                    string suffix = string.Empty;
+                    foreach (var item in listDocumenttyper)
+                    {
+                        if (documentSuffix == item.UrlFilter)
+                        {
+                            suffix = "_" + item.Suffix;
+                            break;
+                        }
+                    }
+                    string searchedFile = documentPrefix + documentAkt + suffix;
 
                     // Om sökt begrepp inte är tomt
                     if (!string.IsNullOrWhiteSpace(documentAkt))
