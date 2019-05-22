@@ -359,12 +359,6 @@
                     <div id="vnext">
                         <ul>
                             <li>Rubrik "Kartöversikt" ändras till "Kartöversikt - gällande planområde"</li>
-                            <li>Flera plankartor som dokument (existerar delar)
-                                <ul>
-                                    <li>Suffix i filnamn</li>
-                                    <li>Uppdatera specifikationsdokument för namnkonvention</li>
-                                </ul>
-                            </li>
                             <li>Sökvillkor NYCKEL i kod, ändras till plannyckel för konsekvens jmfr. FASTIGHETNYCKEL</li>
                             <li>Kartbild
                             <ul>
@@ -439,8 +433,6 @@
                                 </ul>
                             </li>
                             <li>Maxbredd på container för planerna
-                            </li>
-                            <li>Enumeration, Skapa klass för enumeration av plandokumentstyper och tillhörande dokument suffix i namnkonventionen. För att enklare administrera som domän.
                             </li>
                             <li>Integrera bilden på plankartan
                             <ul>
