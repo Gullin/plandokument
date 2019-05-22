@@ -277,9 +277,7 @@
     <Compile Include="class\ApplicationAssemblyUtility.cs" />
     <Compile Include="class\Documenttypes.cs" />
     <Compile Include="class\jTable.cs" />
-    <Compile Include="class\Documents.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="class\Documents.cs" />
     <Compile Include="class\PackagingZip.cs" />
     <Compile Include="class\UtilityDatabase.cs" />
     <Compile Include="class\UtilityException.cs" />
