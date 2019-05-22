@@ -442,16 +442,24 @@ function putPlanContentHolder($contentPlan, planid) {
     $contentPlanHeader.addClass("planContent-header");
     $contentPlan.append($contentPlanHeader);
 
+    var $avsnittPlanhandling = $("<span></span>")
+    $avsnittPlanhandling.addClass("planContent-avsnitt");
+    $avsnittPlanhandling.text("Planhandlingar");
+
     var $contentPlanDocs = $("<div></div>");
     $contentPlanDocs.attr("id", "doc-" + planid)
     $contentPlanDocs.addClass("planContent-left");
-    $contentPlanDocs.text("Planhandlingar");
+    $contentPlanDocs.append($avsnittPlanhandling);
     $contentPlan.append($contentPlanDocs);
+
+    var $avsnittPlanMap = $("<span></span>")
+    $avsnittPlanMap.addClass("planContent-avsnitt");
+    $avsnittPlanMap.text("Kartöversikt");
 
     var $contentPlanMap = $("<div></div>");
     $contentPlanMap.attr("id", "map-" + planid)
     $contentPlanMap.addClass("planContent-right");
-    $contentPlanMap.text("Kartöversikt");
+    $contentPlanMap.append($avsnittPlanMap);
     $contentPlan.append($contentPlanMap);
 
     var $contentPlanDummy = $("<div></div>");
@@ -511,9 +519,61 @@ function getPlansDocs(planIds, callback) {
 
 
 
+
+// Dokumenttyper
+function getDocumenttypes(callback) {
+    $.ajax({
+        type: "POST",
+        url: urlBasePath + 'plandokument.asmx/getDokumenttyper',
+        contentType: "application/json; charset=UTF-8",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.d != '') {
+                Lkr.Plan.Dokument.Dokumenttyper = JSON.parse(msg.d);
+                callback(Lkr.Plan.Dokument.Dokumenttyper);
+
+            } else {
+                callback(Lkr.Plan.Dokument.Dokumenttyper);
+
+                //Visa något vid inga dokumettyper
+
+            }
+        },
+        error: function () {
+            alert("Fel!\ngetDokumenttyper");
+        }
+    })
+};
+
+
+
 // Listar plandokumenten i var listad plans dokumenthållaren
 // Skicka in parameter som vektor med plan-ID
 function putPlansDocs($headerPlan, plansDocs) {
+
+    var documenttyper;
+    if (Lkr.Plan.Dokument.Dokumenttyper) {
+        documenttyper = Lkr.Plan.Dokument.Dokumenttyper;
+    }
+    else {
+        console.err("Dokumenttyper saknas.");
+    }
+
+
+    // Adderar signal om vilket avsnitt dokumentypen ska hamna under, planhandling, övriga plandokument eller inga plandokument
+    // 0 = Planhandling
+    // 1 = Övrigt plandokument
+    // 2 = Dokumenttyp utan matchande dokument
+    documenttyper.forEach((object => { object.Avsnitt = 2; }));
+    //  Ska renderas som dokumenttyp med flera dokument som dokumenttypsgrupp (default false)
+    //    true = finns fler än 1 dokument av samma dokumenttyp trotts namnkonvention som indikerar dokumentdelar
+    documenttyper.forEach((object => { object.Dokumenttypsgrupp = false; }));
+    // Antal deldokument (default 0)
+    documenttyper.forEach((object => { object.DokumenttypsdelarAntal = 0; }));
+    // Dokumenttyp förekommer både som delat dokument och odelat
+    documenttyper.forEach((object => { object.DokumenttypDelatOdelat = false; }));
+
+
     // För varje sökt plan
     $.each(Lkr.Plan.Dokument.planListInfo, function (planKey, valuePlan) {
         // Om plannyckel finns (träff på sökning, sökparameter har träff när värde finns för bl.a. nyckel. Alla sökparametrar returneras för presentation av ev. brister i sökningen)
@@ -577,44 +637,42 @@ function putPlansDocs($headerPlan, plansDocs) {
                     // Om dokument tillhör specifikt sökt plan
                     if (valuePlan.NYCKEL == valueDoc[0]) {
 
-                        documenttypesArray.forEach(function (itemDoctype, idxDoctype, theDocumenttypesArray) {
-                            // Räknar antalet deldokument enl. matchning backend för resp. dokumenttyp
-                            if (valueDoc[6] == "IsPart" && valueDoc[5] == itemDoctype[0]) {
-                                theDocumenttypesArray[idxDoctype][4] += 1;
+                        documenttyper.forEach(function (valueDoctype) {
+                            if (valueDoc[6] == "IsPart" && valueDoc[5] == valueDoctype.Type) {
+                                valueDoctype.DokumenttypsdelarAntal += 1;
                             }
                         });
 
                     }
                 });
-                documenttypesArray.forEach(function (itemDoctype, idxDoctype, theDocumenttypesArray) {
+                documenttyper.forEach(function (valueDoctype) {
 
                     // Markera om dokumenttypen ska renderas som grupp
-                    if (itemDoctype[4] > 1) {
-                        theDocumenttypesArray[idxDoctype][3] = true;
+                    if (valueDoctype.DokumenttypsdelarAntal > 1) {
+                        valueDoctype.Dokumenttypsgrupp = true;
                     }
-
 
                     // Förekommer dokument under flera matchningstyper (FINDTYPE)
                     // Markera för bristvarning i webbklient
                     var isIsPart = false, isExact = false;
-                    plansDocs.forEach(function (itemDoc) {
+                    plansDocs.forEach(function (valueDoc) {
                         // Om dokument tillhör specifikt sökt plan
-                        if (valuePlan.NYCKEL == itemDoc[0]) {
+                        if (valuePlan.NYCKEL == valueDoc[0]) {
 
                             // Om dokumentets dokumenttyp stämmer med vektorns dokumenttyp
-                            if (itemDoctype[0] == itemDoc[5]) {
-                                if (itemDoc[6] == "IsPart") {
+                            if (valueDoctype.Type == valueDoc[5]) {
+                                if (valueDoc[6] == "IsPart") {
                                     isIsPart = true;
                                 }
-                                if (itemDoc[6] == "Exact") {
+                                if (valueDoc[6] == "Exact") {
                                     isExact = true;
                                 }
                             }
                         }
                     });
                     if (isIsPart && isExact) {
-                        theDocumenttypesArray[idxDoctype][5] = true;
-                        console.warn("Plandokumenten redovisas ologiskt för plan " + valuePlan.AKT + " och bryter mot namnkonvetion.\nDokumenttypen " + itemDoctype[0] + " har dokument som matchat på exakt söksträng men även dokumentdelar. Är ej tillåtet enl. namnkonvention.\nDokumentobjekt:", plansDocs);
+                        valueDoctype.DokumenttypDelatOdelat = true;
+                        console.warn("Plandokumenten redovisas ologiskt för plan " + valuePlan.AKT + " och bryter mot namnkonvetion.\nDokumenttypen " + valueDoctype.Type + " har dokument som matchat på exakt söksträng men även dokumentdelar. Är ej tillåtet enl. namnkonvention.\nDokumentobjekt:", plansDocs);
                     }
 
                 });
@@ -634,39 +692,31 @@ function putPlansDocs($headerPlan, plansDocs) {
                 //#region Bygger dokumentlistobjekt
                 // För varje dokument
                 $.each(eval(plansDocs), function (key, valueDoc) {
-
-
-                    // Om dokument tillhör specifikt sökt plan
+                    // Om dokument tillhör specifik sökt plan
                     if (valuePlan.NYCKEL == valueDoc[0]) {
-                        if (valueDoc[6] != "Unmanaged") {
-                            isDocFound = true;
+                        isDocFound = true;
+                        // Sätter indikering för om dokumenttyp finns, förutsättning för lista med saknade dokumenttyper
+                        // För varje dokumenttyp
+                        documenttyper.forEach(function (valueDoctype) {
 
+                            // Indikering att dokumenttyp finns
+                            if (valueDoctype.Type == valueDoc[5]) {
+                                // Lista med dokumenttyper
+                                var $li = $("<li>");
+                                $li.addClass(valueDoc[2].substring(1, valueDoc[2].length) + "-file");
 
-                            // Bygger lista för planhandlingar och övriga plandokument
-                            // Sätter indikering för om dokumenttyp finns, förutsättning för lista med saknade dokumenttyper
-                            // För varje dokumenttyp
-                            $.each(eval(documenttypesArray), function (keyDoctype, valueDoctype) {
-                                // Indikering att dokumenttyp finns
-                                if (valueDoctype[0] == valueDoc[5]) {
-
-                                    // Listobjekt med dokumenttyp
-                                    var $li = $("<li>");
-                                    $li.addClass(valueDoc[2].substring(1, valueDoc[2].length) + "-file");
-
-                                    // Valbarhet för varje dokument genom kryssruta
-                                    var $checkbox = $("<input />",
-                                        { type: 'checkbox' });
-                                    // Hantera markering och flyout-texter för dokumentens kryssrutor och den globala kryssrutan
-                                    $checkbox.change(function () {
-                                        $checkboxes = $('#doc-' + planid + ' ul input');
-                                        var nbrCheckedBoxes = 0;
-                                        $checkboxes.each(function () {
-                                            var $inputCheck = $(this);
-                                            if ($inputCheck.is(':checked')) {
-                                                nbrCheckedBoxes++;
-                                            }
-                                        });
-
+                                // Valbarhet för varje dokument genom kryssruta
+                                var $checkbox = $("<input />",
+                                    { type: 'checkbox' });
+                                // Hantera markering och flyout-texter för dokumentens kryssrutor och den globala kryssrutan
+                                $checkbox.change(function () {
+                                    $checkboxes = $('#doc-' + planid + ' ul input');
+                                    var nbrCheckedBoxes = 0;
+                                    $checkboxes.each(function () {
+                                        var $inputCheck = $(this);
+                                        if ($inputCheck.is(':checked')) {
+                                            nbrCheckedBoxes++;
+                                        }
                                         if (nbrCheckedBoxes >= $checkboxes.length) {
                                             // kryssas
                                             $('#allCheck-' + valuePlan.NYCKEL).prop('indeterminate', false);
@@ -687,115 +737,133 @@ function putPlansDocs($headerPlan, plansDocs) {
                                             }
                                         }
 
-
                                     });
+                                });
 
-                                    // Skapa dokumentlänk
-                                    var $docLink = $("<a>");
-                                    var href = urlBasePath + valueDoc[4] + valueDoc[1];
-                                    $docLink.attr("href", href);
-                                    $docLink.attr("target", "_blank");
-                                    $docLink.attr("title", valueDoc[1]);
-                                    $docLink.attr("relhref", valueDoc[4] + valueDoc[1]);
-                                    if (valueDoctype[3]) {
-                                        if (valueDoc[7] == "") {
-                                            $docLink.text("[SAKNAS DELTEXT] (" + bytesToSize(valueDoc[3]) + ")");
-                                        }
-                                        else
-                                        {
-                                            $docLink.text(valueDoc[7] + " (" + bytesToSize(valueDoc[3]) + ")");
-                                        }
+                                // Skapa dokumentlänk
+                                var $docLink = $("<a>");
+                                var href = urlBasePath + valueDoc[4] + valueDoc[1];
+                                $docLink.attr("href", href);
+                                $docLink.attr("target", "_blank");
+                                $docLink.attr("title", valueDoc[1]);
+                                $docLink.attr("relhref", valueDoc[4] + valueDoc[1]);
+                                if (valueDoctype.Dokumenttypsgrupp) {
+                                    if (valueDoc[7] == "") {
+                                        $docLink.text("[SAKNAS DELTEXT] (" + bytesToSize(valueDoc[3]) + ")");
                                     }
                                     else {
-                                        $docLink.text(valueDoc[5] + " (" + bytesToSize(valueDoc[3]) + ")");
+                                        $docLink.text(valueDoc[7] + " (" + bytesToSize(valueDoc[3]) + ")");
                                     }
+                                }
+                                else {
+                                    $docLink.text(valueDoc[5] + " (" + bytesToSize(valueDoc[3]) + ")");
+                                }
 
 
-                                    $li.append($checkbox);
-                                    $li.append($docLink);
+                                $li.append($checkbox);
+                                $li.append($docLink);
 
 
 
-                                    var Doctype = {};
-                                    Doctype.LiItem = [];
+                                var Doctype = {};
+                                Doctype.LiItem = [];
 
-                                    // Om planhandling eller övrigt plandokument
-                                    if (valueDoctype[2]) {
-                                        valueDoctype[1] = 0;
+                                // Om planhandling eller övrigt plandokument
+                                if (valueDoctype.IsPlanhandling) {
+                                    valueDoctype.Avsnitt = 0;
 
-                                        // Skapar upp 1:a objektet, därefter fylls på
-                                        if (arrayPlanhandlingItems.length == 0) {
-                                            Doctype.Name = valueDoctype[0]
+                                    // Skapar upp 1:a objektet, därefter fylls på
+                                    if (arrayPlanhandlingItems.length == 0) {
+                                        Doctype.Name = valueDoctype.Type
+                                        Doctype.LiItem.push($li);
+                                        arrayPlanhandlingItems.push({ Doctype: Doctype });
+                                    }
+                                    else {
+                                        // Indikerar om dokumentet inte har hanterats som dokumenttypsdel. Läggs till senare som "vanligt" dokument i så fall.
+                                        var isLiAdded = false;
+
+                                        // Om dokumentet ska renderas som dokumenttypsdel enl. backend matchning efter namnkonvention
+                                        if (valueDoctype.Dokumenttypsgrupp) {
+                                            // Itterera igenom alla tidigare dokument för gruppering tillsammans efter dokumenttyp
+                                            arrayPlanhandlingItems.forEach(function (item, index, theArray) {
+                                                if (item.Doctype.Name == valueDoctype.Type) {
+                                                    item.Doctype.LiItem.push($li);
+                                                    isLiAdded = true;
+                                                }
+                                            });
+                                        }
+
+                                        // Adderar dokument som ej tidigare adderats
+                                        if (!isLiAdded) {
+                                            Doctype.Name = valueDoctype.Type;
                                             Doctype.LiItem.push($li);
                                             arrayPlanhandlingItems.push({ Doctype: Doctype });
                                         }
-                                        else {
-                                            // Indikerar om dokumentet inte har hanterats som dokumenttypsdel. Läggs till senare som "vanligt" dokument i så fall.
-                                            var isLiAdded = false;
-
-                                            // Om dokumentet ska renderas som dokumenttypsdel enl. backend matchning efter namnkonvention
-                                            if (valueDoctype[3]) {
-                                                // Itterera igenom alla tidigare dokument för gruppering tillsammans efter dokumenttyp
-                                                arrayPlanhandlingItems.forEach(function (item, index, theArray) {
-                                                    if (item.Doctype.Name == valueDoctype[0]) {
-                                                        item.Doctype.LiItem.push($li);
-                                                        isLiAdded = true;
-                                                    }
-                                                });
-                                            }
-
-                                            // Adderar dokument som ej tidigare adderats
-                                            if (!isLiAdded) {
-                                                Doctype.Name = valueDoctype[0];
-                                                Doctype.LiItem.push($li);
-                                                arrayPlanhandlingItems.push({ Doctype: Doctype });
-                                            }
-                                        }
-
-
-                                    } else {
-                                        valueDoctype[1] = 1;
-
-                                        // Skapar upp 1:a objektet, därefter fylls på
-                                        if (arrayOvrPlandokItems.length == 0) {
-                                            Doctype.Name = valueDoctype[0]
-                                            Doctype.LiItem.push($li);
-                                            arrayOvrPlandokItems.push({ Doctype: Doctype });
-                                        }
-                                        else {
-                                            // Indikerar om dokumentet inte har hanterats som dokumenttypsdel. Läggs till senare som "vanligt" dokument i så fall.
-                                            var isLiAdded = false;
-
-                                            // Om dokumentet ska renderas som dokumenttypsdel enl. backend matchning efter namnkonvention
-                                            if (valueDoctype[3]) {
-                                                // Itterera igenom alla tidigare dokument för gruppering tillsammans efter dokumenttyp
-                                                arrayOvrPlandokItems.forEach(function (item, index, theArray) {
-                                                    if (item.Doctype.Name == valueDoctype[0]) {
-                                                        item.Doctype.LiItem.push($li);
-                                                        isLiAdded = true;
-                                                    }
-                                                });
-                                            }
-
-                                            // Adderar dokument som ej tidigare adderats
-                                            if (!isLiAdded) {
-                                                Doctype.Name = valueDoctype[0];
-                                                Doctype.LiItem.push($li);
-                                                arrayOvrPlandokItems.push({ Doctype: Doctype });
-                                            }
-                                        }
-
                                     }
 
 
+                                } else {
+                                    valueDoctype.Avsnitt = 1;
+
+                                    // Skapar upp 1:a objektet, därefter fylls på
+                                    if (arrayOvrPlandokItems.length == 0) {
+                                        Doctype.Name = valueDoctype.Type
+                                        Doctype.LiItem.push($li);
+                                        arrayOvrPlandokItems.push({ Doctype: Doctype });
+                                    }
+                                    else {
+                                        // Indikerar om dokumentet inte har hanterats som dokumenttypsdel. Läggs till senare som "vanligt" dokument i så fall.
+                                        var isLiAdded = false;
+
+                                        // Om dokumentet ska renderas som dokumenttypsdel enl. backend matchning efter namnkonvention
+                                        if (valueDoctype.Dokumenttypsgrupp) {
+                                            // Itterera igenom alla tidigare dokument för gruppering tillsammans efter dokumenttyp
+                                            arrayOvrPlandokItems.forEach(function (item, index, theArray) {
+                                                if (item.Doctype.Name == valueDoctype.Type) {
+                                                    item.Doctype.LiItem.push($li);
+                                                    isLiAdded = true;
+                                                }
+                                            });
+                                        }
+
+                                        // Adderar dokument som ej tidigare adderats
+                                        if (!isLiAdded) {
+                                            Doctype.Name = valueDoctype.Type;
+                                            Doctype.LiItem.push($li);
+                                            arrayOvrPlandokItems.push({ Doctype: Doctype });
+                                        }
+                                    }
+
                                 }
-                            });
 
 
-                        }
-                        else {
-                            console.warn("Ohanterat dokument men sökträff för plan " + valuePlan.AKT + ".\nDokumentobjekt: ", valueDoc);
-                        }
+
+                                // Skapa dokumentlänk
+                                var $docLink = $("<a>");
+                                var href = urlBasePath + valueDoc[4] + valueDoc[1];
+                                $docLink.attr("href", href);
+                                $docLink.attr("target", "_blank");
+                                $docLink.attr("title", valueDoc[1]);
+                                $docLink.attr("relhref", valueDoc[4] + valueDoc[1]);
+                                $docLink.text(valueDoc[5] + " (" + bytesToSize(valueDoc[3]) + ")");
+                                $li.append($checkbox);
+                                $li.append($docLink);
+
+                                // Placerar resp. dokument beroende på vilken rubrik de hamnar under (planhandling eller övriga)
+                                if (valueDoctype.IsPlanhandling) {
+                                    valueDoctype.Avsnitt = 0;
+                                    $ulPlanhandlingar.append($li);
+                                } else {
+                                    valueDoctype.Avsnitt = 1;
+                                    $ulOvrPlandok.append($li);
+                                }
+                            }
+                        });
+
+
+                    }
+                    else {
+                        console.warn("Ohanterat dokument men sökträff för plan " + valuePlan.AKT + ".\nDokumentobjekt: ", valueDoc);
                     }
 
 
@@ -833,9 +901,15 @@ function putPlansDocs($headerPlan, plansDocs) {
                     // Om flera listobjekt, gruppera dessa under dokumenttypsrubrik, annars addera direkt till lista
                     if (item.Doctype.LiItem.length > 1) {
                         var $liDoctypeGroup = $("<li>");
+                        $liDoctypeGroup.css({
+                            "padding": "0"
+                        });
                         $liDoctypeGroup.text(item.Doctype.Name + " (dokumenttyp flera)");
                         var $olDoctypeGroup = $("<ol>");
-
+                        $olDoctypeGroup.css({
+                            "padding-left": "24px"
+                        });
++
                         // Bygg grupplista för alla listobjekt av dokumenttypen
                         item.Doctype.LiItem.forEach(function (liItem) {
                             $olDoctypeGroup.append(liItem);
@@ -850,14 +924,13 @@ function putPlansDocs($headerPlan, plansDocs) {
                 //#endregion
 
 
-
-                // För varje dokumenttyp som ej hade något dokument, skapar avsnitt med ej funna dokumenttyper
-                $.each(eval(documenttypesArray), function (keyDoctype, valDoctype) {
+                // För varje dokumenttyp
+                documenttyper.forEach(function (valDoctype) {
                     // Om plandokument ej funnen uppdelad på specifik dokumenttyp
-                    if (valDoctype[1] == 2) {
+                    if (valDoctype.Avsnitt == 2) {
                         var $li = $("<li>");
                         $li.addClass("no-file");
-                        $li.text(valDoctype[0]);
+                        $li.text(valDoctype.Type);
                         $ulNoDoc.append($li);
                     }
                 });
@@ -876,7 +949,11 @@ function putPlansDocs($headerPlan, plansDocs) {
                 }
 
                 // GUI om övriga plandokument inte har dokument
-                $contentPlanDocs.append("Övriga plandokument");
+                var $avsnittPlanOvrPlandok = $("<span></span>")
+                $avsnittPlanOvrPlandok.addClass("planContent-avsnitt");
+                $avsnittPlanOvrPlandok.text("Övriga plandokument");
+
+                $contentPlanDocs.append($avsnittPlanOvrPlandok);
                 if ($ulOvrPlandok.children().length > 0) {
                     $contentPlanDocs.append($ulOvrPlandok);
                 } else {
@@ -887,13 +964,16 @@ function putPlansDocs($headerPlan, plansDocs) {
                 }
 
                 // Bygger dispositionen för dokumenttyperna utan plandokument
+                var $avsnittEjDokument = $("<span></span>")
+                $avsnittEjDokument.addClass("planContent-avsnitt");
+                $avsnittEjDokument.text("Ej enskilt upprättade dokument");
                 var $noPlanDocsWrapper = $("<div>");
                 var $noPlanDocsHeader = $("<div>");
                 var $noPlanDocsIcon = $("<div>");
                 var $noPlanDocsSpan = $("<span>...</span>");
                 $noPlanDocsHeader.addClass("docs");
                 $noPlanDocsHeader.attr({ "title": "Klicka för att expandera" });
-                $noPlanDocsHeader.append("Ej enskilt upprättade dokument");
+                $noPlanDocsHeader.append($avsnittEjDokument);
                 $noPlanDocsHeader.append("<br />");
                 $noPlanDocsIcon.addClass("docs-collapsed");
                 $noPlanDocsIcon.css({ "margin-left": "0", "display": "inline-block" });
@@ -1033,6 +1113,7 @@ function putPlansDocs($headerPlan, plansDocs) {
             }
         }
     });
+
 
 }; // SLUT putPlansDocs
 
