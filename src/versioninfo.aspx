@@ -51,6 +51,8 @@
                     <h4 id="1">Versionsinformation</h4>
                     <div id="version">
                         <ul>
+                            <li><span>v0.12</span> Dokumenttyperna är domändrivna där domänvärdena sätts i filen dokumenttyper.csv.</li>
+                            <li><span>v0.11</span> Dokumenttyperna kan bestå av flera delar och grupperas då i gränssnittet.</li>
                             <li>
                                 <ul>
                                     <li><span>v0.10.2</span>  Korslänkning mellan dokumentation och versionsinformation under menyer.
