@@ -731,7 +731,6 @@ function putPlansDocs($headerPlan, plansDocs) {
                                     $docLink.text(valueDoc[5] + " (" + bytesToSize(valueDoc[3]) + ")");
                                 }
 
-
                                 $li.append($checkbox);
                                 $li.append($docLink);
 
@@ -808,18 +807,6 @@ function putPlansDocs($headerPlan, plansDocs) {
 
                                 }
 
-
-
-                                // Skapa dokumentlänk
-                                var $docLink = $("<a>");
-                                var href = urlBasePath + valueDoc[4] + valueDoc[1];
-                                $docLink.attr("href", href);
-                                $docLink.attr("target", "_blank");
-                                $docLink.attr("title", valueDoc[1]);
-                                $docLink.attr("relhref", valueDoc[4] + valueDoc[1]);
-                                $docLink.text(valueDoc[5] + " (" + bytesToSize(valueDoc[3]) + ")");
-                                $li.append($checkbox);
-                                $li.append($docLink);
 
                                 // Placerar resp. dokument beroende på vilken rubrik de hamnar under (planhandling eller övriga)
                                 if (valueDoctype.IsPlanhandling) {
