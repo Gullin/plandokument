@@ -10,6 +10,7 @@ namespace Plan.Plandokument
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            Plan.Plandokument.PlanCache.isPlandocumenttypesCache();
             Plan.Plandokument.PlanCache.isPlanBasisCache();
             Plan.Plandokument.PlanCache.isPlanBerorFastighetCache();
             
@@ -18,6 +19,7 @@ namespace Plan.Plandokument
 
         protected void Session_Start(object sender, EventArgs e)
         {
+            Plan.Plandokument.PlanCache.isPlandocumenttypesCache();
             Plan.Plandokument.PlanCache.isPlanBasisCache();
             Plan.Plandokument.PlanCache.isPlanBerorFastighetCache();
         }
