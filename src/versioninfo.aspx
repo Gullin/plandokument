@@ -40,7 +40,7 @@
                         </li>
                         <li><a href="#2">vNext</a>
                         </li>
-                        <li><a href="om.aspx">Dokumentation</a>
+                        <li><a href="<%=ResolveUrl("~")%>om.aspx">Dokumentation</a>
                         </li>
                     </ul>
                 </div>
