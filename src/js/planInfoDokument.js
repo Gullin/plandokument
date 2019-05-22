@@ -603,34 +603,6 @@ function putPlansDocs($headerPlan, plansDocs) {
             // [7].DOCUMENTPART
             if (plansDocs) {
 
-                // Dokumenttyper samt indikering om respektive dokumenttyp är hittad bland dokument
-                // [0] Dokumenttyp
-                // [1] Dokumentplacering rubrik (default 2)
-                //      0 = Planhandling
-                //      1 = Övrigt plandokument
-                //      2 = Dokumenttyp utan matchande dokument
-                // [2] Planhandling eller övrigt plandokument
-                //      true = dokumenttyp ses som planhandling
-                // [3] Ska renderas som dokumenttyp med flera dokument som dokumenttypsgrupp (default false)
-                //      true = finns fler än 1 dokument av samma dokumenttyp trotts namnkonvention som indikerar dokumentdelar
-                // [4] Antal deldokument (default 0)
-                // [5] Dokumenttyp förekommer både som delat dokument och odelat
-                var documenttypesArray = [["Beskrivning", 2, true, false, 0, false],
-                    ["Bestämmelser", 2, true, false, 0, false],
-                    ["Fastighetsförteckning", 2, false, false, 0, false],
-                    ["Genomförande", 2, true, false, 0, false],
-                    ["Grundkarta", 2, false, false, 0, false],
-                    ["Illustration", 2, true, false, 0, false],
-                    ["Karta", 2, true, false, 0, false],
-                    ["Samrådsredogörelse", 2, true, false, 0, false],
-                    ["Utlåtande", 2, true, false, 0, false],
-                    ["Plan- och genomförandebeskrivning", 2, true, false, 0, false],
-                    ["Kvalitetsprogram", 2, false, false, 0, false],
-                    ["Miljökonsekvensbeskrivning", 2, false, false, 0, false],
-                    ["Bullerutredning", 2, false, false, 0, false],
-                    ["Gestaltningsprogram", 2, false, false, 0, false],
-                    ["Övriga", 2, false, false, 0, false]];
-
 
                 //#region För varje dokument, räknar dokumentdelar för resp. dokumenttyp samt signalerar om dokumenttypen ska renderas som grupp
                 $.each(eval(plansDocs), function (key, valueDoc) {
