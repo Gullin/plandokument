@@ -107,7 +107,7 @@ namespace Plan.Plandokument
         {
             // Hämtar alla planer från cache
             Cache cache = HttpRuntime.Cache;
-            DataTable dtPlans = (DataTable)cache["Plans"];
+            DataTable dtPlans = PlanCache.GetPlanBasisCache();
 
             int nbrPlans = (from p in dtPlans.AsEnumerable()
                             select p).Count();
@@ -124,7 +124,7 @@ namespace Plan.Plandokument
         {
             // Hämtar alla planer från cache
             Cache cache = HttpRuntime.Cache;
-            DataTable dtPlans = (DataTable)cache["Plans"];
+            DataTable dtPlans = PlanCache.GetPlanBasisCache();
 
             DataTable dt = new DataTable();
             dt.Columns.Add("PLANFK", typeof(string));
@@ -209,7 +209,7 @@ namespace Plan.Plandokument
 
             // Hämtar alla planer från cache
             Cache cache = HttpRuntime.Cache;
-            DataTable dtPlans = (DataTable)cache["Plans"];
+            DataTable dtPlans = PlanCache.GetPlanBasisCache();
 
             // Hämtar berörda fastigheter från cache om sökning görs på fastighet (begrepp)
             // Hämtas endast från cache när inget begrepp eller sökt specifikt på fastighetsnyckel eller fastighetsbeteckning
@@ -218,7 +218,7 @@ namespace Plan.Plandokument
             if (string.IsNullOrWhiteSpace(begrepp) || begrepp.ToUpper() == "FASTIGHET" || begrepp.ToUpper() == "FASTIGHETNYCKEL")
             {
                 parcelBlockUnitSearchSign = ConfigurationManager.AppSettings["URLParcelBlockUnitSign"].ToString();
-                dtPlanBerorFastighet = (DataTable)cache["PlanBerorFastighet"];
+                dtPlanBerorFastighet = PlanCache.GetPlanBerorFastighetCache();
             }
 
             // Datatabell för resultat av sökning
@@ -575,7 +575,7 @@ namespace Plan.Plandokument
         {
             // Hämtar alla dokumenttyper från cache
             Cache cache = HttpRuntime.Cache;
-            List<Documenttype> listDocumenttyper = (List<Documenttype>)cache["Documenttypes"];
+            List<Documenttype> listDocumenttyper = PlanCache.GetPlandocumenttypesCache();
 
             return getObjectAsJson(listDocumenttyper);
         }
@@ -1002,6 +1002,87 @@ namespace Plan.Plandokument
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
             return jsonSerializer.Serialize(zipFileNamePath);
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsPlanBasis()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlanBasis());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsPlanBerorFastighet()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlanBerorFastighet());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsPlandocumenttypes()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlandocumenttypes());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsAll()
+        {
+            bool planBasis = PlanCache.CacheExistsPlanBasis();
+            bool planBerorFastighet = PlanCache.CacheExistsPlanBerorFastighet();
+            bool planDocumenttypes = PlanCache.CacheExistsPlandocumenttypes();
+            bool exists = false;
+
+            if (planBasis && planBerorFastighet && planDocumenttypes)
+            {
+                exists = true;
+            }
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(exists);
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheTimeDuration()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheDuration());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheTimeElapsed()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheElapsed());
 
         }
 

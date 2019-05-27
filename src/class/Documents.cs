@@ -49,7 +49,7 @@ namespace Plan.Plandokument
         private DataTable plansDocs(List<object> planIds)
         {
             // Alla planer från cach
-            DataTable cachedPlans = (DataTable)HttpRuntime.Cache["Plans"];
+            DataTable cachedPlans = PlanCache.GetPlanBasisCache();
 
             // Tabell för filtrerad sökta planinformationen för vidare sökning
             DataTable dtSearchedPlans = cachedPlans.Clone();
@@ -95,7 +95,7 @@ namespace Plan.Plandokument
 
             // Hämtar alla dokumenttyper från cache
             Cache cache = HttpRuntime.Cache;
-            List<Documenttype> listDocumenttyper = (List<Documenttype>)cache["Documenttypes"];
+            List<Documenttype> listDocumenttyper = PlanCache.GetPlandocumenttypesCache();
 
 
             // Sökning av filnamn sker efter två olika namnkonventioner,
@@ -418,7 +418,7 @@ namespace Plan.Plandokument
 
                     // Hämtar alla dokumenttyper från cache
                     Cache cache = HttpRuntime.Cache;
-                    List<Documenttype> listDocumenttyper = (List<Documenttype>)cache["Documenttypes"];
+                    List<Documenttype> listDocumenttyper = PlanCache.GetPlandocumenttypesCache();
 
 
                     // Jämför mot alla suffix i dokumenttypdomänen

@@ -22,7 +22,7 @@ namespace Plan.Plandokument.jTable
         {
             // Hämtar alla planer från cache
             Cache cache = HttpRuntime.Cache;
-            DataTable dtPlans = (DataTable)cache["Plans"];
+            DataTable dtPlans = PlanCache.GetPlanBasisCache();
 
             Records = buildListOfPlans(dtPlans, checkPlanHasDocument);
         }
