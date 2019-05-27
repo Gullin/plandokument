@@ -11,6 +11,10 @@ namespace Plan.Plandokument
 {
     public static class PlanCache
     {
+        /// <summary>
+        /// Returnerar plandokumenttyperna från cache. Existerar cachen ej skapas den.
+        /// </summary>
+        /// <returns></returns>
         public static List<Documenttype> GetPlandocumenttypesCache()
         {
             List<Documenttype> cachedDocumenttypes = (List<Documenttype>)HttpRuntime.Cache["Documenttypes"];
@@ -27,7 +31,10 @@ namespace Plan.Plandokument
         }
 
 
-        // Kontrollera om grundplaninformationen 
+        /// <summary>
+        /// Returnerar basinformationen för planern från cache. Existerar cachen ej skapas den.
+        /// </summary>
+        /// <returns></returns>
         public static DataTable GetPlanBasisCache()
         {
             DataTable cachedPlans = (DataTable)HttpRuntime.Cache["Plans"];
@@ -44,7 +51,10 @@ namespace Plan.Plandokument
         }
 
 
-        // Kontrollera om information om vilka planer fastighet berör 
+        /// <summary>
+        /// Returnerar plan och fastigheter som berör varandra från cache. Existerar cachen ej skapas den.
+        /// </summary>
+        /// <returns></returns>
         public static DataTable GetPlanBerorFastighetCache()
         {
             DataTable cachedPlanBerorFastighet = (DataTable)HttpRuntime.Cache["PlanBerorFastighet"];
@@ -62,7 +72,174 @@ namespace Plan.Plandokument
 
 
 
-        // Cacha plandokumenttyper från domänfil
+
+        /// <summary>
+        /// Kontrollerar om grundplaninformationen är cachad
+        /// </summary>
+        /// <returns></returns>
+        public static bool CacheExistsPlanBasis()
+        {
+            DataTable cache = (DataTable)HttpRuntime.Cache["Plans"];
+
+            if (cache != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        
+        /// <summary>
+        /// Kontrollerar om dokumenttyperna är cachade 
+        /// </summary>
+        /// <returns></returns>
+        public static bool CacheExistsPlandocumenttypes()
+        {
+            DataTable cache = (DataTable)HttpRuntime.Cache["Documenttypes"];
+
+            if (cache != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Kontrollerar om dokumenttyperna är cachade 
+        /// </summary>
+        /// <returns></returns>
+        public static bool CacheExistsPlanBerorFastighet()
+        {
+            DataTable cache = (DataTable)HttpRuntime.Cache["PlanBerorFastighet"];
+
+            if (cache != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+
+        
+        /// <summary>
+        /// Förfluten tid från inställt cache-intervall
+        /// </summary>
+        /// <returns>Tidsspan</returns>
+        public static TimeSpan CacheElapsed()
+        {
+            return CacheTime("elapsed");
+        }
+
+
+        /// <summary>
+        /// Kvarvarande tid för inställt cache-intervall
+        /// </summary>
+        /// <returns>Tidsspan</returns>
+        public static TimeSpan CacheDuration()
+        {
+            return CacheTime("duration");
+        }
+
+
+        /// <summary>
+        /// Basfuktion för cache-intervallets kvarvarande eller förfluten tid
+        /// </summary>
+        /// <param name="elapsedOrDuration">Antar elapsed eller duration som växlar</param>
+        /// <returns>Tidsspan</returns>
+        private static TimeSpan CacheTime(string elapsedOrDuration)
+        {
+            // Kontrollerar om värde är datatyp int annars sätts antal dagar till noll
+            string cacheDaysInConfig = ConfigurationManager.AppSettings["CacheNbrOfDays"].ToString();
+            Int64 cacheDays;
+            if (!Int64.TryParse(cacheDaysInConfig, out cacheDays))
+            {
+                cacheDays = 0;
+            }
+            else
+            {
+                cacheDays = Convert.ToInt64(cacheDaysInConfig);
+            }
+
+            // Kontrollerar om värde uppfyller formatet hh:mi:ss, om inte eller tomt sätts tillfället för cachning som standardtid
+            string cacheTimeInConfig = ConfigurationManager.AppSettings["CacheTime"].ToString();
+            DateTime cacheTime;
+            if (!DateTime.TryParseExact(cacheTimeInConfig, "HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out cacheTime))
+            {
+                throw new Exception("Cache utgångstid fel format/värde i inställningar.");
+            }
+            else
+            {
+                cacheTime = DateTime.ParseExact(cacheTimeInConfig, "HH:mm:ss", CultureInfo.CurrentCulture);
+            }
+
+            DateTime dateTimeNow = DateTime.Now;
+
+
+
+            switch (elapsedOrDuration)
+            {
+                case "elapsed":
+
+                    #region Starttid
+                    DateTime DateTimeTemp = dateTimeNow;
+
+                    if (cacheDays > 0 && dateTimeNow.TimeOfDay <= cacheTime.TimeOfDay)
+                    {
+                        DateTimeTemp = dateTimeNow.AddDays(-cacheDays);
+                    }
+
+                    
+                    DateTime cacheStart = new DateTime(DateTimeTemp.Year,
+                        DateTimeTemp.Month,
+                        DateTimeTemp.Day,
+                        cacheTime.Hour,
+                        cacheTime.Minute,
+                        cacheTime.Second);
+
+                    return dateTimeNow.Subtract(cacheStart);
+
+                #endregion
+
+                case "duration":
+                    #region Sluttid
+                    //if (cacheDays > 0 && dateTimeNow.TimeOfDay < cacheTime.TimeOfDay)
+                    //{
+                    //    cacheDays += 1;
+                    //}
+
+                    DateTimeTemp = dateTimeNow.AddDays(cacheDays);
+
+                    DateTime cacheEnd = new DateTime(DateTimeTemp.Year,
+                        DateTimeTemp.Month,
+                        DateTimeTemp.Day,
+                        cacheTime.Hour,
+                        cacheTime.Minute,
+                        cacheTime.Second);
+
+                    return cacheEnd.Subtract(dateTimeNow);
+                    #endregion
+                default:
+                    throw new Exception("Ohanterat värde som inparameter");
+            }
+        }
+
+
+        
+
+        /// <summary>
+        /// Skapa cache för plandokumenttyper
+        /// </summary>
         private static void setDocumenttypesCache()
         {
             DateTime cacheExpiration = setCacheExpiration();
@@ -75,8 +252,9 @@ namespace Plan.Plandokument
             cache.Insert("Documenttypes", listOfDocumenttypes, null, cacheExpiration, Cache.NoSlidingExpiration);
         }
 
-
-        // Cacha begränsad information för alla planer
+        /// <summary>
+        /// Skapar cache för basinformationen till planer
+        /// </summary>
         public static void setPlanCache()
         {
             //string conStr = ConfigurationManager.AppSettings["OracleOleDBConString"].ToString();
@@ -123,6 +301,9 @@ namespace Plan.Plandokument
             con.Dispose();
         }
 
+        /// <summary>
+        /// Skapar cache med fastigheter som berörs av resp. plan
+        /// </summary>
         public static void setPlanBerorFastighetCache()
         {
             //string conStr = ConfigurationManager.AppSettings["OracleOleDBConString"].ToString();
@@ -156,6 +337,11 @@ namespace Plan.Plandokument
             con.Dispose();
         }
 
+
+        /// <summary>
+        /// Sätter utgångstid till cachar baserat på inställningar
+        /// </summary>
+        /// <returns>DateTime objekt för när cache går ut</returns>
         private static DateTime setCacheExpiration()
         {
             DateTime toDay = DateTime.Now;

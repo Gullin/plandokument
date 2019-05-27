@@ -1006,6 +1006,87 @@ namespace Plan.Plandokument
         }
 
 
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsPlanBasis()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlanBasis());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsPlanBerorFastighet()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlanBerorFastighet());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsPlandocumenttypes()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlandocumenttypes());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsAll()
+        {
+            bool planBasis = PlanCache.CacheExistsPlanBasis();
+            bool planBerorFastighet = PlanCache.CacheExistsPlanBerorFastighet();
+            bool planDocumenttypes = PlanCache.CacheExistsPlandocumenttypes();
+            bool exists = false;
+
+            if (planBasis && planBerorFastighet && planDocumenttypes)
+            {
+                exists = true;
+            }
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(exists);
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheTimeDuration()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheDuration());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheTimeElapsed()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheElapsed());
+
+        }
+
+
         private string convertRgbsToHexColor(string rgba)
         {
             string hex = string.Empty;
