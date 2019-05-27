@@ -9,54 +9,54 @@ using System.Web.Caching;
 
 namespace Plan.Plandokument
 {
-    public class PlanCache
+    public static class PlanCache
     {
-        public static void isPlandocumenttypesCache()
+        public static List<Documenttype> GetPlandocumenttypesCache()
         {
             List<Documenttype> cachedDocumenttypes = (List<Documenttype>)HttpRuntime.Cache["Documenttypes"];
 
             if (cachedDocumenttypes != null)
             {
-                HttpRuntime.Cache.Remove("Documenttypes");
-                setDocumenttypesCache();
+                return cachedDocumenttypes;
             }
             else
             {
                 setDocumenttypesCache();
+                return (List<Documenttype>)HttpRuntime.Cache["Documenttypes"];
             }
         }
 
 
         // Kontrollera om grundplaninformationen 
-        public static void isPlanBasisCache()
+        public static DataTable GetPlanBasisCache()
         {
             DataTable cachedPlans = (DataTable)HttpRuntime.Cache["Plans"];
 
             if (cachedPlans != null)
             {
-                HttpRuntime.Cache.Remove("Plans");
-                setPlanCache();
+                return cachedPlans;
             }
             else
             {
                 setPlanCache();
+                return (DataTable)HttpRuntime.Cache["Plans"];
             }
         }
 
 
         // Kontrollera om information om vilka planer fastighet berör 
-        public static void isPlanBerorFastighetCache()
+        public static DataTable GetPlanBerorFastighetCache()
         {
             DataTable cachedPlanBerorFastighet = (DataTable)HttpRuntime.Cache["PlanBerorFastighet"];
 
             if (cachedPlanBerorFastighet != null)
             {
-                HttpRuntime.Cache.Remove("PlanBerorFastighet");
-                setPlanBerorFastighetCache();
+                return cachedPlanBerorFastighet;
             }
             else
             {
                 setPlanBerorFastighetCache();
+                return (DataTable)HttpRuntime.Cache["PlanBerorFastighet"];
             }
         }
 
