@@ -642,6 +642,7 @@ function putPlansDocs($headerPlan, plansDocs) {
                             }
                         }
                     });
+
                     if (isIsPart && isExact) {
                         valueDoctype.DokumenttypDelatOdelat = true;
                         console.warn("Plandokumenten redovisas ologiskt för plan " + valuePlan.AKT + " och bryter mot namnkonvetion.\nDokumenttypen " + valueDoctype.Type + " har dokument som matchat på exakt söksträng men även dokumentdelar. Är ej tillåtet enl. namnkonvention.\nDokumentobjekt:", plansDocs);
@@ -821,10 +822,6 @@ function putPlansDocs($headerPlan, plansDocs) {
 
 
                     }
-                    else {
-                        console.warn("Ohanterat dokument men sökträff för plan " + valuePlan.AKT + ".\nDokumentobjekt: ", valueDoc);
-                    }
-
 
                 });
                 //#endregion
