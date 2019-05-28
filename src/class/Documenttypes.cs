@@ -23,7 +23,7 @@ namespace Plan.Plandokument
             List<Documenttype> documenttypes = new List<Documenttype>();
 
             string domainFileDocumenttypes = HttpContext.Current.Server.MapPath(
-                    "~/dokumenttyper.csv".Replace("~/", "")
+                    "~/dokumenttyper.csv"
                     );
             try
             {
@@ -72,7 +72,7 @@ namespace Plan.Plandokument
                 }
                 else
                 {
-                    throw new FileNotFoundException();
+                    throw new FileNotFoundException("Kunde ej hitta sökt fil", new Exception("Sökt fil " + domainFileDocumenttypes + " med domänvärde för dokumenttyper."));
                 }
             }
             catch (Exception ex)
