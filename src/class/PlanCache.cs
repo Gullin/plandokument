@@ -365,13 +365,13 @@ namespace Plan.Plandokument
             // Kontrollerar om värde uppfyller formatet hh:mi:ss, om inte eller tomt sätts tillfället för cachning som standardtid
             string cachTimeInConfig = ConfigurationManager.AppSettings["CacheTime"].ToString();
             DateTime cachTime;
-            if (!DateTime.TryParseExact(cachTimeInConfig, "hh:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out cachTime))
+            if (!DateTime.TryParseExact(cachTimeInConfig, "HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out cachTime))
             {
                 cachTime = DateTime.Now;
             }
             else
             {
-                cachTime = DateTime.ParseExact(cachTimeInConfig, "hh:mm:ss", CultureInfo.CurrentCulture);
+                cachTime = DateTime.ParseExact(cachTimeInConfig, "HH:mm:ss", CultureInfo.CurrentCulture);
             }
 
             DateTime expirationDate = toDay.AddDays(Convert.ToDouble(cachDays));
