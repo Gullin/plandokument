@@ -7,12 +7,19 @@
     <head runat="server">
         <title>Plandokument</title>
         <link href="css/jquery-ui-1.10.3-smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
+        <link href="lib/bootstrap-4.1.2-dist/css/bootstrap.min.css" rel="stylesheet" />
         <link href="css/reset.css" rel="stylesheet" />
         <link href="css/page-UI-core.css" rel="stylesheet" />
         <link href="css/page-UI-plan.css" rel="stylesheet" />
         <link href="css/file-images-li.css" rel="stylesheet" />
         <style type="text/css">
-
+            .btn-group > .btn, .btn-xs {
+                padding: .25rem .4rem;
+                /*font-size: .875rem;*/
+                font-size: 1em;
+                /*line-height: .5;*/
+                border-radius: .2rem;
+            }
         </style>
 
         <!-- Inställningar Klient -->
@@ -33,6 +40,7 @@
         <!-- För haneringar av IE 7 och tidigare samt IE:s modernare version i inställda i kompabilitetsläge -->
         <script src='<%#ResolveClientUrl("~/js/json3.min.js")%>' type="text/javascript"></script>
         <script src='<%#ResolveClientUrl("~/js/jquery-3.4.1.min.js")%>' type="text/javascript"></script>
+    	<script src='<%#ResolveClientUrl("~/lib/bootstrap-4.1.2-dist/js/bootstrap.bundle.min.js")%>'></script>
         <script src='<%#ResolveClientUrl("~/js/utility.js")%>' type="text/javascript"></script>
         <!-- Används vid utveckling -->
         <script src='<%#ResolveClientUrl("~/js/planInfoDokument.js")%>' type="text/javascript"></script>
@@ -163,6 +171,7 @@
     <body>
         <form id="form1" runat="server">
             <asp:Label ID="logg" runat="server"></asp:Label>
+
             <div>
                 <div id="planLista">
                 </div>
