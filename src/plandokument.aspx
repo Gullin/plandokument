@@ -32,7 +32,7 @@
 
         <!-- För haneringar av IE 7 och tidigare samt IE:s modernare version i inställda i kompabilitetsläge -->
         <script src='<%#ResolveClientUrl("~/js/json3.min.js")%>' type="text/javascript"></script>
-        <script src='<%#ResolveClientUrl("~/js/jquery-1.9.0.min.js")%>' type="text/javascript"></script>
+        <script src='<%#ResolveClientUrl("~/js/jquery-3.4.1.min.js")%>' type="text/javascript"></script>
         <script src='<%#ResolveClientUrl("~/js/utility.js")%>' type="text/javascript"></script>
         <!-- Används vid utveckling -->
         <script src='<%#ResolveClientUrl("~/js/planInfoDokument.js")%>' type="text/javascript"></script>
