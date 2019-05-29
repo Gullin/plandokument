@@ -1044,14 +1044,27 @@ namespace Plan.Plandokument
 
         [WebMethod(EnableSession = true)]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsPlanBerorPlan()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlanBerorPlan());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string cacheExistsAll()
         {
             bool planBasis = PlanCache.CacheExistsPlanBasis();
             bool planBerorFastighet = PlanCache.CacheExistsPlanBerorFastighet();
             bool planDocumenttypes = PlanCache.CacheExistsPlandocumenttypes();
+            bool planBerorPlan = PlanCache.CacheExistsPlanBerorPlan();
             bool exists = false;
 
-            if (planBasis && planBerorFastighet && planDocumenttypes)
+            if (planBasis && planBerorFastighet && planDocumenttypes && planBerorPlan)
             {
                 exists = true;
             }
