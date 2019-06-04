@@ -280,6 +280,9 @@
     <Compile Include="class\jTable.cs" />
     <Compile Include="class\Documents.cs" />
     <Compile Include="class\PackagingZip.cs" />
+    <Compile Include="class\PlanBerorPlan.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="class\UtilityDatabase.cs" />
     <Compile Include="class\UtilityException.cs" />
     <Compile Include="class\LayerDefinitionFactory.cs" />
