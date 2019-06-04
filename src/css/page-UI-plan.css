@@ -28,6 +28,7 @@
     border-top: 0;
     color: #222222;
     line-height: 1.3;
+    position: relative;
 }
 
 .planLista-header-default {
@@ -198,6 +199,15 @@
     margin-right: 3px;
 }
 
+
+.planContent-affected {
+    font-size: 0.9em;
+    position: absolute;
+    right: 15px;
+    white-space: nowrap;
+}
+
+
 .hand {
     cursor: pointer;
 }
@@ -239,6 +249,7 @@
 
 .planContent-avsnitt {
     font-weight: bold;
+    display: block;
 }
 
 .planContent-left {
@@ -275,6 +286,12 @@
     margin-top: 0.5em;
     /*border: 1px solid black;*/
 }
+
+    .planContent-right img {
+        margin-top: 1em;
+        margin-left: 1em;
+        margin-bottom: 1em;
+    }
 
 .planContent-dummy {
     clear: both;

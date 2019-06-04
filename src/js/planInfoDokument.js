@@ -294,6 +294,10 @@ function getSearchedPlans() {
                             $icon.addClass("planLista-header-default-icon");
                         } else {
                             $contentPlan = putPlanContentHolder($contentPlan, planid);
+                            getPlansBerorPlans([planid], function (planAffected) {
+                                putPlanAffected(planid, planAffected);
+                                console.log(planAffected);
+                            });
                             $contentPlan.show();
                             $headerPlan.removeClass("planLista-header-default");
                             $headerPlan.removeClass("planLista-corner-all");
@@ -393,6 +397,12 @@ function getSearchedPlans() {
                 var $contentDiv = putPlanContentHolder($contentDiv, planid);
 
                 $contentDiv.show();
+
+                getPlansBerorPlans([planid], function (planAffected) {
+                    putPlanAffected(planid, planAffected);
+                    console.log(planAffected);
+                });
+
                 var $icon = $headerPlan.find('.planLista-header-icon');;
                 $headerPlan.removeClass("planLista-header-default");
                 $headerPlan.removeClass("planLista-corner-all");
@@ -438,6 +448,11 @@ function putPlanContentHolder($contentPlan, planid) {
     $contentPlan.append($contentPlanHeader);
 
     var $contentPlanHeader = $("<div></div>");
+    $contentPlanHeader.attr("id", "affected-" + planid)
+    $contentPlanHeader.addClass("planContent-affected");
+    $contentPlan.append($contentPlanHeader);
+
+    var $contentPlanHeader = $("<div></div>");
     $contentPlanHeader.attr("id", "head-" + planid)
     $contentPlanHeader.addClass("planContent-header");
     $contentPlan.append($contentPlanHeader);
@@ -469,6 +484,59 @@ function putPlanContentHolder($contentPlan, planid) {
     return $contentPlan;
 
 }; // SLUT putPlanContentHolder
+
+
+
+function putPlanAffected(planid, planAffected) {
+
+    //#region Berörda planer
+    // Planer som meny-item
+    var $aAffected = $('<a>');
+    $aAffected.addClass('dropdown-item');
+    $aAffected.attr('href', '#');
+    $aAffected.text('PLAN');
+    var $aAffectedHeader1 = $('<h6>');
+    $aAffectedHeader1.addClass('dropdown-header');
+    $aAffectedHeader1.text("Beslutade");
+    var $aAffectedHeader2 = $('<h6>');
+    $aAffectedHeader2.addClass('dropdown-header');
+    $aAffectedHeader2.text("Ej beslutade");
+    var $aAffectedDivider = $('<div>');
+    $aAffectedDivider.addClass('dropdown-divider');
+
+    // Grupp med berörda planer som drop down
+    var $divAffectedDropDown = $('<div>');
+    $divAffectedDropDown.addClass('dropdown-menu dropdown-menu-right');
+    $divAffectedDropDown.attr('aria-labelledby', 'affected-btn-' + planid);
+
+    var $btnAffectedGroup = $('<button>');
+    $btnAffectedGroup.attr({
+        id: 'affected-btn-' + planid,
+        type: 'button',
+        'data-toggle': 'dropdown',
+        'aria-haspopup': true,
+        'aria-expanded': false,
+        title: 'Andra planer som berör samma område'
+    });
+    $btnAffectedGroup.addClass(
+        'btn btn-secondary dropdown-toggle btn-danger btn-xs'
+    );
+    $btnAffectedGroup.text('Berörda planer');
+
+    var $divAffectedBtnGroup = $('<div>');
+    $divAffectedBtnGroup.addClass('btn-group');
+    $divAffectedBtnGroup.attr('role', 'group');
+
+    $divAffectedDropDown.append($aAffectedHeader1);
+    $divAffectedDropDown.append($aAffected);
+    $divAffectedDropDown.append($aAffectedDivider);
+    $divAffectedDropDown.append($aAffectedHeader2);
+    $divAffectedBtnGroup.append($btnAffectedGroup);
+    $divAffectedBtnGroup.append($divAffectedDropDown);
+    $('#affected-' + planid).append($divAffectedBtnGroup);
+    //#endregion
+
+}; // SLUT putPlanAffected
 
 
 
@@ -520,6 +588,54 @@ function getPlansDocs(planIds, callback) {
 
 
 
+// Hämtar planernas berörsrelationer till andra planer
+function getPlansBerorPlans(planIds, callback) {
+    Lkr.Plan.AjaxCalls.getPlansBerorPlans = $.ajax({
+        type: "POST",
+        url: urlBasePath + 'plandokument.asmx/getPlansBerorPlans',
+        contentType: "application/json; charset=UTF-8",
+        dataType: "json",
+        data: JSON.stringify({ planIds: planIds }),
+        success: function (msg) {
+            if (msg.d != '') {
+                var jsonData = $.parseJSON(msg.d);
+                // Initiering av vektor för planers dokument
+                //var plans = new Array(jsonData.length);
+                //for (i = 0; i < jsonData.length; i++) {
+                //    plans[i] = new Array(6);
+                //}
+                //// Fyll vektor med plandokument
+                //var arrayItemPlace = 0;
+                //$.each(eval(msg.d), function (key, val) {
+                //    plans[arrayItemPlace] = [
+                //        val.PLAN_ID,
+                //        val.NAME,
+                //        val.EXTENTION,
+                //        val.SIZE,
+                //        val.PATH,
+                //        val.DOCUMENTTYPE,
+                //        val.FINDTYPE,
+                //        val.DOCUMENTPART
+                //    ];
+                //    arrayItemPlace++;
+                //});
+                // Returnera plandokument med dess plan-ID
+                callback(jsonData);
+            } else {
+                callback(false);
+            }
+        },
+        error: function () {
+            alert("Fel: Systemfel (metod getPlansDocs i Landskrona.App.Plan.Dokument.Ws.WsPlanhandling), kontakta gis@landskrona.se vid upprepande fel.");
+        }
+    })
+
+}; // SLUT getPlansBerorPlans
+
+
+
+
+
 // Dokumenttyper
 function getDocumenttypes(callback) {
     $.ajax({
@@ -543,7 +659,7 @@ function getDocumenttypes(callback) {
             alert("Fel!\ngetDokumenttyper");
         }
     })
-};
+}; // SLUT getDocumenttypes
 
 
 
@@ -1181,6 +1297,10 @@ function initialExpandCollapsAll() {
                 var $contentDiv = $(this);
                 var planid = $contentDiv.prev().attr("planid");
                 putPlanContentHolder($contentDiv, planid);
+                getPlansBerorPlans([planid], function (planAffected) {
+                    putPlanAffected(planid, planAffected);
+                    console.log(planAffected);
+                });
             });
             $contentDivs.show();
             $planHeaders.removeClass("planLista-header-default planLista-corner-all");
