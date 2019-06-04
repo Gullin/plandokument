@@ -571,6 +571,16 @@ namespace Plan.Plandokument
 
         [WebMethod(EnableSession = true)]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string getPlansBerorPlans(List<object> planIds)
+        {
+            PlanBerorPlan plansBerorPlans = new PlanBerorPlan(planIds);
+
+            return getObjectAsJson(plansBerorPlans.BerordaPlaner);
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string getDokumenttyper()
         {
             // Hämtar alla dokumenttyper från cache
