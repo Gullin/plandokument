@@ -16,9 +16,20 @@
             .btn-group > .btn, .btn-xs {
                 padding: .25rem .4rem;
                 /*font-size: .875rem;*/
-                font-size: 1em;
+                font-size: 1.2em;
                 /*line-height: .5;*/
                 border-radius: .2rem;
+            }
+            .dropdown-header {
+                padding: 0.5em 1em;
+            }
+            .dropdown-item {
+                font-size: 0.8em;
+                text-decoration: none;
+                color: inherit;
+            }
+            .btn-outline-warning, .btn-outline-danger {
+                background-color: white;
             }
         </style>
 

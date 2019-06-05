@@ -257,6 +257,7 @@
     <Content Include="pic\tif-bw.png" />
     <Content Include="pic\tif.png" />
     <Content Include="pic\txt.png" />
+    <Content Include="pic\warning.png" />
     <Content Include="pic\xls.png" />
     <Content Include="pic\xlsx.png" />
     <Content Include="plandokument.asmx" />

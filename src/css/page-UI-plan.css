@@ -207,6 +207,12 @@
     white-space: nowrap;
 }
 
+.planContent-affected-warning {
+    background-image: url('../pic/warning.png');
+    background-repeat: no-repeat;
+    background-position-y: center;
+}
+
 
 .hand {
     cursor: pointer;
