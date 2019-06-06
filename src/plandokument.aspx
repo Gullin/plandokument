@@ -13,6 +13,9 @@
         <link href="css/page-UI-plan.css" rel="stylesheet" />
         <link href="css/file-images-li.css" rel="stylesheet" />
         <style type="text/css">
+
+            /* Planers relationer till andra planer och beslut */
+
             .btn-group > .btn, .btn-xs {
                 padding: .25rem .4rem;
                 /*font-size: .875rem;*/
@@ -31,6 +34,9 @@
             .btn-outline-warning, .btn-outline-danger {
                 background-color: white;
             }
+
+            /* ######################################## */
+
         </style>
 
         <!-- Inställningar Klient -->
