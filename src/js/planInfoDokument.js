@@ -498,6 +498,11 @@ function putPlanAffected(planid, planAffected) {
     var aAffectedDivider = '<div class="dropdown-divider">'
 
 
+    var $spanLinkNewWindow = $('<span>');
+    $spanLinkNewWindow.addClass('linkNewWindow');
+    $spanLinkNewWindow.html('');
+
+
     // Bygger lista för länk till alla planer som har relation till sökt plan
     var planidsAffected
     planAffected.forEach(function (itemAffected) {
@@ -520,6 +525,7 @@ function putPlanAffected(planid, planAffected) {
         'title': 'Öppnar ny sida och listar alla nedan planer som existerar i fastighetsregistrets bestämmelsedel (Planregistret)'
     });
     $menuItem.text('Lista alla');
+    $menuItem.append($spanLinkNewWindow);
     $divAffectedDropDown.append($menuItem);
     $divAffectedDropDown.append(aAffectedDivider);
 
@@ -549,6 +555,7 @@ function putPlanAffected(planid, planAffected) {
                 'target': '_blank'
             });
             $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+            $menuItem.append($spanLinkNewWindow.clone());
 
             $divAffectedDropDown.append($menuItem);
         }
@@ -580,6 +587,7 @@ function putPlanAffected(planid, planAffected) {
                 'target': '_blank'
             });
             $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+            $menuItem.append($spanLinkNewWindow.clone());
 
             $divAffectedDropDown.append($menuItem);
         }

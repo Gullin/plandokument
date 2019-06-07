@@ -28,11 +28,24 @@
             }
             .dropdown-item {
                 font-size: 0.8em;
+            }
+            .dropdown-item:visited {
                 text-decoration: none;
-                color: inherit;
+                color: black;
             }
             .btn-outline-warning, .btn-outline-danger {
                 background-color: white;
+            }
+
+            .linkNewWindow {
+                display: inline-block;
+                background-image: url(<%=ResolveUrl("css/jquery-ui-1.10.3-smoothness/images/ui-icons_222222_256x240.png")%>);
+                background-position: -32px -80px;
+                width: 16px;
+                height: 16px;
+                position: relative;
+                top: -2px;
+                left: 2px;
             }
 
             /* ######################################## */
