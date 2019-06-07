@@ -204,24 +204,26 @@
                 <div id="planLista">
                 </div>
                 <div id="planSideWrapper">
-                    <h4>Sökparametrar</h4>
-                    <div id="planSearch">
-                        <span id="searchResultNbr"></span>
-                        <span id="searchCriteria"></span>
-                        <span id="searchDocs"></span>
-                        <span id="searchString"></span>
-                    </div>
-                    <h4>Sökresultat</h4>
-                    <div id="planSearchResult">
-                        <span id="statNbrPlanHits"></span>
-                        <span id="statNbrPlanBoms"></span>
-                        <span id="Span3"></span>
-                    </div>
-                    <h4>Allmän planstatistik</h4>
-                    <div id="planAllm">
-                        <span id="statNbrPlans"></span>
-                        <span id="statNbrPlanTypes"></span>
-                        <span id="statNbrPlanImpImplement"></span>
+                    <div id="planSideWrapperStats">
+                        <h4>Sökparametrar</h4>
+                        <div id="planSearch">
+                            <span id="searchResultNbr"></span>
+                            <span id="searchCriteria"></span>
+                            <span id="searchDocs"></span>
+                            <span id="searchString"></span>
+                        </div>
+                        <h4>Sökresultat</h4>
+                        <div id="planSearchResult">
+                            <span id="statNbrPlanHits"></span>
+                            <span id="statNbrPlanBoms"></span>
+                            <span id="Span3"></span>
+                        </div>
+                        <h4>Allmän planstatistik</h4>
+                        <div id="planAllm">
+                            <span id="statNbrPlans"></span>
+                            <span id="statNbrPlanTypes"></span>
+                            <span id="statNbrPlanImpImplement"></span>
+                        </div>
                     </div>
                 </div>
             </div>

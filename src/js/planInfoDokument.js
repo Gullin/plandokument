@@ -1130,7 +1130,7 @@ function getFilesZipped(files, zipFileNamePart) {
 
 // Instantiera knappen för "global kollapps/expandering" av planlistan
 function initialExpandCollapsAll() {
-    var newDivExpCol = $("<div id='expcol'></div>");
+    var newDivExpCol = $('<button id="expcol" type="button" class="btn btn-outline-dark btn-sm">');
     var isVisible = false;
     $("#planLista").children('div').each(function () {
         if ($(this).is(':visible')) {
