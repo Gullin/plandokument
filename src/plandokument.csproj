@@ -221,6 +221,7 @@
     <Content Include="pic\dwg.png" />
     <Content Include="pic\dxf.png" />
     <Content Include="pic\gif.png" />
+    <Content Include="pic\help-invers.png" />
     <Content Include="pic\help.png" />
     <Content Include="pic\help\handlaggarkartan-fastigheter-informationsruta.png" />
     <Content Include="pic\help\handlaggarkartan-fastigheter-lager_ibockad.png" />
@@ -237,6 +238,9 @@
     <Content Include="pic\LayoutExplanationAlla.png" />
     <Content Include="pic\LayoutExplanationv2.png" />
     <Content Include="pic\list-style-8x8.png" />
+    <Content Include="pic\list_all_planes-invers.png" />
+    <Content Include="pic\list_all_planes.png" />
+    <Content Include="pic\mail-invers.png" />
     <Content Include="pic\mail.png" />
     <Content Include="pic\mdb.png" />
     <Content Include="pic\msg.png" />

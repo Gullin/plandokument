@@ -165,6 +165,34 @@
 
             }); // SLUT $(document).ready
 
+
+            function hover(element) {
+
+                var filePathPart = splitFilePath(element.getAttribute('src'));
+
+                element.setAttribute('src', window.location.protocol + '//' + window.location.hostname + '/app/plan/pic/' + filePathPart[1] + '-invers.' + filePathPart[2]);
+
+            }
+
+            function unhover(element) {
+
+                var filePathPart = splitFilePath(element.getAttribute('src'));
+                var fileName = filePathPart[1].substring(0, filePathPart[1].lastIndexOf('-'));
+
+                element.setAttribute('src', filePathPart[0] + '/' + fileName + '.' + filePathPart[2]);
+
+            }
+
+            function splitFilePath(filePath) {
+                var fullFilePath = filePath;
+                var path = fullFilePath.substring(0, fullFilePath.lastIndexOf('/'));
+                var fullFileName = fullFilePath.substring(fullFilePath.lastIndexOf('/') + 1);
+                var fileName = fullFileName.substring(0, fullFileName.lastIndexOf('.'));
+                var fileExtension = fullFileName.substring(fullFileName.lastIndexOf('.') + 1);
+
+                return [path, fileName, fileExtension]
+            }
+
         </script>
     </head>
 
@@ -207,10 +235,12 @@
             </div>
 
             <div id="feedback">
-                <a href="<%= ResolveUrl("~/") %>om.aspx" title="Beskrivning av funktionalitet och utseende">
-                    <img src="<%= ResolveUrl("~/") %>pic/help.png" /></a>
+                <a href="<%= ResolveUrl("~/") %>dokument/alla" title="Lista alla planer från Planregistret">
+                    <img id="listAllPlanes" src="<%= ResolveUrl("~/") %>pic/list_all_planes.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
+                <a href="<%= ResolveUrl("~/") %>dokument/om" title="Beskrivning av funktionalitet och utseende">
+                    <img id="help" src="<%= ResolveUrl("~/") %>pic/help.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
                 <a href="mailto:gis@landskrona.se?Subject=Webbapplikation Plandokumentation" title="Lämna synpunkter eller rapportera fel">
-                    <img src="<%= ResolveUrl("~/") %>pic/mail.png" /></a>
+                    <img id="mail" src="<%= ResolveUrl("~/") %>pic/mail.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
             </div>
 
             <div id="copyrightWrapper">
