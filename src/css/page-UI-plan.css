@@ -301,20 +301,27 @@
 
     line-height: 1.3em;
     font-size: 1.1em;
+
+    text-align: center;
 }
 
     #planSideWrapper span {
         display: block;
     }
 
+#planSideWrapperStats {
+    text-align: left;
+}
+
 #expcol {
-    color: blue;
+    /*color: blue;
     font-weight: bold;
     text-decoration: underline;
     text-align: center;
     cursor: pointer;
-	margin-top: 2.5em;
-    margin-bottom: 2.5em;
+    margin-top: 2.5em;
+    margin-bottom: 2.5em;*/
+    font-size: 1em;
 }
 
 h4 {
