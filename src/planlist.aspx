@@ -21,16 +21,16 @@
     <script src='<%#ResolveClientUrl("~/js/json3.min.js")%>' type="text/javascript"></script>
 
     <!-- jQuery -->
-    <script src='<%=ResolveUrl("~/js/jquery-1.9.0.min.js")%>' type="text/javascript"></script>
-    <script src='<%=ResolveUrl("js/jquery-ui-1.9.2.min.js")%>'></script>
+    <script src='<%#ResolveClientUrl("~/js/jquery-3.4.1.min.js")%>' type="text/javascript"></script>
+    <script src='<%#ResolveClientUrl("~/js/jquery-ui-1.9.2.min.js")%>'></script>
 
     <!-- Misc -->
-    <script src='<%=ResolveClientUrl("~/js/utility.js")%>' type="text/javascript"></script>
+    <script src='<%#ResolveClientUrl("~/js/utility.js")%>' type="text/javascript"></script>
 
     <!-- jTable -->
-    <script src='<%=ResolveUrl("js/jtable.2.4.0/jquery.jtable.min.js")%>'></script>    
-    <script src='<%=ResolveUrl("js/jtable.2.4.0/extensions/jquery.jtable.aspnetpagemethods.min.js")%>'></script>
-    <script src='<%=ResolveUrl("js/jtable.2.4.0/localization/jquery.jtable.se.js")%>'></script>
+    <script src='<%#ResolveClientUrl("~/js/jtable.2.4.0/jquery.jtable.min.js")%>'></script>    
+    <script src='<%#ResolveClientUrl("~/js/jtable.2.4.0/extensions/jquery.jtable.aspnetpagemethods.min.js")%>'></script>
+    <script src='<%#ResolveClientUrl("~/js/jtable.2.4.0/localization/jquery.jtable.se.js")%>'></script>
 
     <script type="text/javascript">
 
@@ -225,6 +225,34 @@
             })
         }; // SLUT getFilesZipped
 
+
+        function hover(element) {
+
+            var filePathPart = splitFilePath(element.getAttribute('src'));
+
+            element.setAttribute('src', window.location.protocol + '//' + window.location.hostname + '/app/plan/pic/' + filePathPart[1] + '-invers.' + filePathPart[2]);
+
+        }
+
+        function unhover(element) {
+
+            var filePathPart = splitFilePath(element.getAttribute('src'));
+            var fileName = filePathPart[1].substring(0, filePathPart[1].lastIndexOf('-'));
+
+            element.setAttribute('src', filePathPart[0] + '/' + fileName + '.' + filePathPart[2]);
+
+        }
+
+        function splitFilePath(filePath) {
+            var fullFilePath = filePath;
+            var path = fullFilePath.substring(0, fullFilePath.lastIndexOf('/'));
+            var fullFileName = fullFilePath.substring(fullFilePath.lastIndexOf('/') + 1);
+            var fileName = fullFileName.substring(0, fullFileName.lastIndexOf('.'));
+            var fileExtension = fullFileName.substring(fullFileName.lastIndexOf('.') + 1);
+
+            return [path, fileName, fileExtension]
+        }
+
     </script>
 
 </head>
@@ -246,10 +274,10 @@
         </div>
 
         <div id="feedback">
-            <a href="<%= ResolveUrl("~/") %>om.aspx" title="Beskrivning av funktionalitet och utseende">
-                <img src="<%= ResolveUrl("~/") %>pic/help.png" /></a>
+            <a href="<%= ResolveUrl("~/") %>dokument/om" title="Beskrivning av funktionalitet och utseende">
+                <img id="help" src="<%= ResolveUrl("~/") %>pic/help.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
             <a href="mailto:gis@landskrona.se?Subject=Webbapplikation Plandokumentation" title="Lämna synpunkter eller rapportera fel">
-                <img src="<%= ResolveUrl("~/") %>pic/mail.png" /></a>
+                <img id="mail" src="<%= ResolveUrl("~/") %>pic/mail.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
         </div>
 
         <div id="copyrightWrapper">
