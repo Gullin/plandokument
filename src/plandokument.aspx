@@ -16,7 +16,7 @@
 
             /* Planers relationer till andra planer och beslut */
 
-            .btn-group > .btn, .btn-xs {
+            .btn, .btn-xs {
                 padding: .25rem .4rem;
                 /*font-size: .875rem;*/
                 font-size: 1.2em;
