@@ -1379,6 +1379,9 @@ function initialExpandCollapsAll() {
             if (Lkr.Plan.AjaxCalls.getPlansDocs != null) {
                 Lkr.Plan.AjaxCalls.getPlansDocs.abort();
             }
+            if (Lkr.Plan.AjaxCalls.getPlansBerorPlans != null) {
+                Lkr.Plan.AjaxCalls.getPlansBerorPlans.abort();
+            }
 
 
             $contentDivs.each(function () {
