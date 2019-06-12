@@ -218,6 +218,14 @@
     cursor: pointer;
 }
 
+.cursor-disabled {
+    cursor: not-allowed;
+}
+
+.cursor-redirect {
+    cursor: alias;
+}
+
 .checkboxPlanDokument {
     margin-left: 10px;
 }

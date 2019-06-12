@@ -547,18 +547,25 @@ function putPlanAffected(planid, planAffected) {
                     isFirstBeslut = false;
                 }
                 // Item
-                var $menuItem = $('<a>');
-                $menuItem.addClass('dropdown-item');
-                if (itemAffected.BESKRIVNING == 'ingår i' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'består av') {
-                    $menuItem.addClass('planContent-affected-warning');
-                    $menuItem.attr('title', 'Bör kontrolleras vad som påverkas');
+                if (itemAffected.NYCKEL_PAVARKAN) {
+                    var $menuItem = $('<a>');
+                    $menuItem.addClass('dropdown-item');
+                    if (itemAffected.BESKRIVNING == 'ingår i' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'består av') {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Bör kontrolleras vad som påverkas');
+                    }
+                    $menuItem.attr({
+                        'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
+                        'target': '_blank'
+                    });
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.append($spanLinkNewWindow.clone());
                 }
-                $menuItem.attr({
-                    'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
-                    'target': '_blank'
-                });
-                $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
-                $menuItem.append($spanLinkNewWindow.clone());
+                else {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                }
 
                 $divAffectedDropDown.append($menuItem);
             }
@@ -583,14 +590,21 @@ function putPlanAffected(planid, planAffected) {
                     isFirstEjBeslut = false;
                 }
                 // Item
-                var $menuItem = $('<a>');
-                $menuItem.addClass('dropdown-item');
-                $menuItem.attr({
-                    'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
-                    'target': '_blank'
-                });
-                $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
-                $menuItem.append($spanLinkNewWindow.clone());
+                if (itemAffected.NYCKEL_PAVARKAN) {
+                    var $menuItem = $('<a>');
+                    $menuItem.addClass('dropdown-item');
+                    $menuItem.attr({
+                        'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
+                        'target': '_blank'
+                    });
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.append($spanLinkNewWindow.clone());
+                }
+                else {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                }
 
                 $divAffectedDropDown.append($menuItem);
             }
