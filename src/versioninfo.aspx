@@ -51,10 +51,32 @@
                     <h4 id="1">Versionsinformation</h4>
                     <div id="version">
                         <ul>
+                            <li><span>v0.16</span> Infört redovisning av planers påverkan på varandra som meny under specifik listad plan. Menyn-UI kommer från Bootstrap.
+                            </li>
+                            <li>
+                                <ul>
+                                    <li><span>v0.15.5</span> Tydliggjort avsnittsindelningen av "Planhandlingar", "Övriga plandokument" och "Ej enskilt upprättade dokument".
+                                    </li>
+                                    <li><span>v0.15.4</span> Utökat marginal till webbläsarfönstret för knapp som expanderar och kollapsar alla planer.
+                                    </li>
+                                    <li><span>v0.15.3</span> Funktion för expandera och kollapsa alla planer ändrad till Bootstrap-knapp.
+                                    </li>
+                                    <li><span>v0.15.2</span> Tydliggjort funktionsknapparna (alla planer, hjälp och e-post) för sida som listar specifika planer.
+                                    </li>
+                                    <li><span>v0.15.1</span> Adderat länk till listning av alla planer och dess dokument.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><span>v0.15</span> UI-förbättringar.</li>
+                            <li><span>v0.14</span> Uppgraderat ramverket jQuery från v1.9.0 till v3.4.1.</li>
+                            <li><span>v0.13</span> Adderat <a href="https://getbootstrap.com" target="_blank">Bootstrap</a> som UI-komponent.</li>
                             <li><span>v0.12</span> Dokumenttyperna är domändrivna där domänvärdena sätts i filen dokumenttyper.csv.</li>
                             <li><span>v0.11</span> Dokumenttyperna kan bestå av flera delar och grupperas då i gränssnittet.</li>
                             <li>
                                 <ul>
+                                    <li><span>v0.10.3</span> BUGGRÄTTNING: Cachening av information på servern. <br />
+                                        <i>Cachening gjordes på nytt vid varje nystartad session, vilket upplevdes långsamt och motverkade anledningen till cachening. Cachening sker nu endast vid första sessionen som startar applikationen sedan utgången av cache.</i>
+                                    </li>
                                     <li><span>v0.10.2</span>  Korslänkning mellan dokumentation och versionsinformation under menyer.
                                     </li>
                                     <li><span>v0.10.1</span>  Ny typ av plandokument kan hanteras - Gestaltningsprogram. <br />
@@ -80,7 +102,7 @@
                                             <li>Miljökonsekvensbeskrivning (MKB) och</li>
                                             <li>Bullerutredning.</li>
                                         </ul>
-                                        Läs mer under dokumentation.
+                                        <a href="om.aspx#1.2.2">Läs mer under dokumentation.</a>
                                     </li>
                                     <li><span>v0.9.6</span> Kompilerat mott och nytt stöd till MapGuide Open Source version 3.1 och Autodesk Infrastructure Map Server (AIMS) 2016.</li>
                                     <li><span>v0.9.5</span> Ändrat till nativt bibliotek för komprimering till zipp-paket av filer som laddas ner. Dokumentation med biblioteket plockas bort senare efter tester.</li>
