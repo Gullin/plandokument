@@ -200,6 +200,9 @@
 }
 
 
+
+/* Planers relationer till andra planer och beslut */
+
 .planContent-affected {
     font-size: 0.9em;
     position: absolute;
@@ -212,6 +215,55 @@
     background-repeat: no-repeat;
     background-position-y: center;
 }
+
+.btn, .btn-xs {
+    padding: .25rem .4rem;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: .2rem;
+}
+
+.dropdown-header {
+    padding: 0.5em 1em;
+    color: #222222;
+    font-size: 0.69em;
+    font-weight: bold;
+}
+
+a.dropdown-item {
+    font-size: 0.69em;
+    color: blue;
+}
+
+    a.dropdown-item:visited {
+        text-decoration: none;
+        color: blue;
+    }
+
+    a.dropdown-item:hover {
+        text-decoration: underline;
+        color: blue;
+        background-color: #f3f6f8;
+    }
+
+.btn-outline-warning, .btn-outline-danger {
+    background-color: white;
+}
+
+.linkNewWindow {
+    display: inline-block;
+    /*background-image: url(<%=ResolveUrl("css/jquery-ui-1.10.3-smoothness/images/ui-icons_222222_256x240.png")%>);*/
+    background-image: url('../css/jquery-ui-1.10.3-smoothness/images/ui-icons_222222_256x240.png');
+    background-position: -32px -80px;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    top: -2px;
+    left: 2px;
+}
+
+/* ######################################## */
+
 
 
 .hand {

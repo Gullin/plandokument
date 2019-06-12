@@ -14,41 +14,9 @@
         <link href="css/file-images-li.css" rel="stylesheet" />
         <style type="text/css">
 
-            /* Planers relationer till andra planer och beslut */
 
-            .btn, .btn-xs {
-                padding: .25rem .4rem;
-                /*font-size: .875rem;*/
-                font-size: 1.2em;
-                /*line-height: .5;*/
-                border-radius: .2rem;
-            }
-            .dropdown-header {
-                padding: 0.5em 1em;
-            }
-            .dropdown-item {
-                font-size: 0.8em;
-            }
-            .dropdown-item:visited {
-                text-decoration: none;
-                color: black;
-            }
-            .btn-outline-warning, .btn-outline-danger {
-                background-color: white;
-            }
 
-            .linkNewWindow {
-                display: inline-block;
-                background-image: url(<%=ResolveUrl("css/jquery-ui-1.10.3-smoothness/images/ui-icons_222222_256x240.png")%>);
-                background-position: -32px -80px;
-                width: 16px;
-                height: 16px;
-                position: relative;
-                top: -2px;
-                left: 2px;
-            }
 
-            /* ######################################## */
 
         </style>
 
