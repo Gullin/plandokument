@@ -501,6 +501,7 @@ function putPlanAffected(planid, planAffected) {
 
         var $spanLinkNewWindow = $('<span>');
         $spanLinkNewWindow.addClass('linkNewWindow');
+        $spanLinkNewWindow.attr('title', 'Öppnar länk i nytt webbläsarfönster');
         $spanLinkNewWindow.html('');
 
 
@@ -550,6 +551,7 @@ function putPlanAffected(planid, planAffected) {
                 $menuItem.addClass('dropdown-item');
                 if (itemAffected.BESKRIVNING == 'ingår i' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'består av') {
                     $menuItem.addClass('planContent-affected-warning');
+                    $menuItem.attr('title', 'Bör kontrolleras vad som påverkas');
                 }
                 $menuItem.attr({
                     'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
