@@ -531,6 +531,15 @@ function putPlanAffected(planid, planAffected) {
         $divAffectedDropDown.append($menuItem);
         $divAffectedDropDown.append(aAffectedDivider);
 
+
+        var statusPlan = [
+            ["A", "Avregistrerad"],
+            ["B", "Beslut"],
+            ["F", "Förslag"],
+            ["P", "Preliminär registrering"]
+        ];
+
+
         // Beslut i planregistret
         var isFirstBeslut = true;
         planAffected.forEach(function (itemAffected, index, affected) {
@@ -547,7 +556,7 @@ function putPlanAffected(planid, planAffected) {
                     isFirstBeslut = false;
                 }
                 // Item
-                if (itemAffected.NYCKEL_PAVARKAN) {
+                if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
                     var $menuItem = $('<a>');
                     $menuItem.addClass('dropdown-item');
                     if (itemAffected.BESKRIVNING == 'ingår i' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'består av') {
@@ -560,6 +569,16 @@ function putPlanAffected(planid, planAffected) {
                     });
                     $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
                     $menuItem.append($spanLinkNewWindow.clone());
+                }
+                else if (itemAffected.STATUS_PAVARKAN != "B") {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    statusPlan.forEach(function (element) {
+                        if (element[0] == itemAffected.STATUS_PAVARKAN) {
+                            $menuItem.attr('title', 'Påverkan är ej länkad p.g.a. ' + element[1].toLowerCase());
+                        }
+                    });
                 }
                 else {
                     var $menuItem = $('<span>');
@@ -590,7 +609,7 @@ function putPlanAffected(planid, planAffected) {
                     isFirstEjBeslut = false;
                 }
                 // Item
-                if (itemAffected.NYCKEL_PAVARKAN) {
+                if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
                     var $menuItem = $('<a>');
                     $menuItem.addClass('dropdown-item');
                     $menuItem.attr({
@@ -599,6 +618,16 @@ function putPlanAffected(planid, planAffected) {
                     });
                     $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
                     $menuItem.append($spanLinkNewWindow.clone());
+                }
+                else if (itemAffected.STATUS_PAVARKAN != "B") {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    statusPlan.forEach(function (element) {
+                        if (element[0] == itemAffected.STATUS_PAVARKAN) {
+                            $menuItem.attr('title', 'Påverkan är ej länkad p.g.a. ' + element[1].toLowerCase());
+                        }
+                    });
                 }
                 else {
                     var $menuItem = $('<span>');

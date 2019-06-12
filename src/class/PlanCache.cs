@@ -385,7 +385,7 @@ namespace Plan.Plandokument
         {
             string sql = string.Empty;
 
-            sql = "SELECT TO_CHAR(plan_id) AS nyckel, beskrivning AS beskrivning, TO_CHAR(pav_plan_id) AS nyckel_pavarkan, pav AS paverkan, registrerat_beslut AS registrerat_beslut " +
+            sql = "SELECT TO_CHAR(plan_id) AS nyckel, beskrivning AS beskrivning, TO_CHAR(pav_plan_id) AS nyckel_pavarkan, pav AS paverkan, pav_status AS status_pavarkan, registrerat_beslut AS registrerat_beslut " +
                   "FROM   gis_v_planpaverkade";
 
             DataTable dtPlanBerorPlan = new DataTable();
