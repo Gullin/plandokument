@@ -230,8 +230,11 @@
     font-weight: bold;
 }
 
-a.dropdown-item {
+.dropdown-item {
     font-size: 0.69em;
+}
+
+a.dropdown-item {
     color: blue;
 }
 
