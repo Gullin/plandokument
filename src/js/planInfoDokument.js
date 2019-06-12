@@ -564,15 +564,19 @@ function putPlansDocs($headerPlan, plansDocs) {
     // 0 = Planhandling
     // 1 = Övrigt plandokument
     // 2 = Dokumenttyp utan matchande dokument
-    documenttyper.forEach((object => { object.Avsnitt = 2; }));
+    //documenttyper.forEach((object => { object.Avsnitt = 2; })); /* Ej fungerande i IE */
+    documenttyper.forEach(function (object) { object.Avsnitt = 2 });
     //  Ska renderas som dokumenttyp med flera dokument som dokumenttypsgrupp (default false)
     //    true = finns fler än 1 dokument av samma dokumenttyp trotts namnkonvention som indikerar dokumentdelar
-    documenttyper.forEach((object => { object.Dokumenttypsgrupp = false; }));
+    //documenttyper.forEach((object => { object.Dokumenttypsgrupp = false; })); /* Ej fungerande i IE */
+    documenttyper.forEach(function (object) { object.Dokumenttypsgrupp = false });
     // Antal deldokument (default 0)
-    documenttyper.forEach((object => { object.DokumenttypsdelarAntal = 0; }));
+    //documenttyper.forEach((object => { object.DokumenttypsdelarAntal = 0; })); /* Ej fungerande i IE */
+    documenttyper.forEach(function (object) { object.DokumenttypsdelarAntal = 0 });
     // Dokumenttyp förekommer både som delat dokument och odelat
-    documenttyper.forEach((object => { object.DokumenttypDelatOdelat = false; }));
-
+    //documenttyper.forEach((object => { object.DokumenttypDelatOdelat = false; })); /* Ej fungerande i IE */
+    documenttyper.forEach(function (object) { object.DokumenttypDelatOdelat = false });
+    console.log(documenttyper);
 
     // För varje sökt plan
     $.each(Lkr.Plan.Dokument.planListInfo, function (planKey, valuePlan) {
