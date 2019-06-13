@@ -381,11 +381,16 @@ namespace Plan.Plandokument
                                 {
                                     findtype = FindTypes.IsPart;
                                 }
-                                else if (int.TryParse(findtypeParts[1], out int findtypePartResult))
+                                else if (!string.IsNullOrWhiteSpace(findtypeParts[1]))
                                 {
-                                    findtypePart = findtypePartResult.ToString();
+                                    findtypePart = findtypeParts[1].ToString();
                                     findtype = FindTypes.IsPart;
                                 }
+                                //else if (int.TryParse(findtypeParts[1], out int findtypePartResult))
+                                //{
+                                //    findtypePart = findtypePartResult.ToString();
+                                //    findtype = FindTypes.IsPart;
+                                //}
                                 else
                                 {
                                     findtype = FindTypes.Unmanaged;
