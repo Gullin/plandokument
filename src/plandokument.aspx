@@ -170,7 +170,7 @@
 
                 var filePathPart = splitFilePath(element.getAttribute('src'));
 
-                element.setAttribute('src', window.location.protocol + '//' + window.location.hostname + '/app/plan/pic/' + filePathPart[1] + '-invers.' + filePathPart[2]);
+                element.setAttribute('src', Lkr.Plan.Dokument.resolvedClientUrl + 'pic/' + filePathPart[1] + '-invers.' + filePathPart[2]);
 
             }
 
@@ -179,7 +179,7 @@
                 var filePathPart = splitFilePath(element.getAttribute('src'));
                 var fileName = filePathPart[1].substring(0, filePathPart[1].lastIndexOf('-'));
 
-                element.setAttribute('src', filePathPart[0] + '/' + fileName + '.' + filePathPart[2]);
+                element.setAttribute('src', Lkr.Plan.Dokument.resolvedClientUrl + 'pic/' + fileName + '.' + filePathPart[2]);
 
             }
 
