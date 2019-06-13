@@ -118,6 +118,7 @@
     <Content Include="css\reset.css" />
     <Content Include="js\config.js" />
     <Content Include="js\jquery-3.4.1.min.js" />
+    <Content Include="js\jquery-ui-1.9.2.min.js" />
     <Content Include="js\json3.min.js" />
     <Content Include="js\jtable.2.4.0\extensions\jquery.jtable.aspnetpagemethods.min.js" />
     <Content Include="js\jtable.2.4.0\jquery.jtable.js" />
