@@ -576,7 +576,6 @@ function putPlansDocs($headerPlan, plansDocs) {
     // Dokumenttyp förekommer både som delat dokument och odelat
     //documenttyper.forEach((object => { object.DokumenttypDelatOdelat = false; })); /* Ej fungerande i IE */
     documenttyper.forEach(function (object) { object.DokumenttypDelatOdelat = false });
-    console.log(documenttyper);
 
     // För varje sökt plan
     $.each(Lkr.Plan.Dokument.planListInfo, function (planKey, valuePlan) {
