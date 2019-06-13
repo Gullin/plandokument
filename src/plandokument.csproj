@@ -262,6 +262,7 @@
     <Content Include="pic\tif-bw.png" />
     <Content Include="pic\tif.png" />
     <Content Include="pic\txt.png" />
+    <Content Include="pic\warning.png" />
     <Content Include="pic\xls.png" />
     <Content Include="pic\xlsx.png" />
     <Content Include="plandokument.asmx" />
@@ -285,6 +286,9 @@
     <Compile Include="class\jTable.cs" />
     <Compile Include="class\Documents.cs" />
     <Compile Include="class\PackagingZip.cs" />
+    <Compile Include="class\PlanBerorPlan.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="class\UtilityDatabase.cs" />
     <Compile Include="class\UtilityException.cs" />
     <Compile Include="class\LayerDefinitionFactory.cs" />

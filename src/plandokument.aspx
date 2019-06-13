@@ -13,13 +13,11 @@
         <link href="css/page-UI-plan.css" rel="stylesheet" />
         <link href="css/file-images-li.css" rel="stylesheet" />
         <style type="text/css">
-            .btn-group > .btn, .btn-xs {
-                padding: .25rem .4rem;
-                /*font-size: .875rem;*/
-                font-size: 1em;
-                /*line-height: .5;*/
-                border-radius: .2rem;
-            }
+
+
+
+
+
         </style>
 
         <!-- Inställningar Klient -->

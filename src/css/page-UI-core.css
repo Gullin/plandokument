@@ -3,9 +3,13 @@
     line-height: 2.6;
 }
 
-a:visited {
+a, a:visited, a:hover {
     color: blue;
 }
+
+    a:hover {
+        text-decoration: underline;
+    }
 
 #versionWrapper {
     position: fixed;

@@ -13,6 +13,7 @@ namespace Plan.Plandokument
             Plan.Plandokument.PlanCache.GetPlandocumenttypesCache();
             Plan.Plandokument.PlanCache.GetPlanBasisCache();
             Plan.Plandokument.PlanCache.GetPlanBerorFastighetCache();
+            Plan.Plandokument.PlanCache.GetPlanBerorPlanCache();
             
             RegisterRoutes(RouteTable.Routes);
         }
@@ -22,6 +23,7 @@ namespace Plan.Plandokument
             Plan.Plandokument.PlanCache.GetPlandocumenttypesCache();
             Plan.Plandokument.PlanCache.GetPlanBasisCache();
             Plan.Plandokument.PlanCache.GetPlanBerorFastighetCache();
+            Plan.Plandokument.PlanCache.GetPlanBerorPlanCache();
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)

@@ -294,6 +294,9 @@ function getSearchedPlans() {
                             $icon.addClass("planLista-header-default-icon");
                         } else {
                             $contentPlan = putPlanContentHolder($contentPlan, planid);
+                            getPlansBerorPlans([planid], function (planAffected) {
+                                putPlanAffected(planid, planAffected);
+                            });
                             $contentPlan.show();
                             $headerPlan.removeClass("planLista-header-default");
                             $headerPlan.removeClass("planLista-corner-all");
@@ -393,6 +396,11 @@ function getSearchedPlans() {
                 var $contentDiv = putPlanContentHolder($contentDiv, planid);
 
                 $contentDiv.show();
+
+                getPlansBerorPlans([planid], function (planAffected) {
+                    putPlanAffected(planid, planAffected);
+                });
+
                 var $icon = $headerPlan.find('.planLista-header-icon');;
                 $headerPlan.removeClass("planLista-header-default");
                 $headerPlan.removeClass("planLista-corner-all");
@@ -438,6 +446,11 @@ function putPlanContentHolder($contentPlan, planid) {
     $contentPlan.append($contentPlanHeader);
 
     var $contentPlanHeader = $("<div></div>");
+    $contentPlanHeader.attr("id", "affected-" + planid)
+    $contentPlanHeader.addClass("planContent-affected");
+    $contentPlan.append($contentPlanHeader);
+
+    var $contentPlanHeader = $("<div></div>");
     $contentPlanHeader.attr("id", "head-" + planid)
     $contentPlanHeader.addClass("planContent-header");
     $contentPlan.append($contentPlanHeader);
@@ -469,6 +482,221 @@ function putPlanContentHolder($contentPlan, planid) {
     return $contentPlan;
 
 }; // SLUT putPlanContentHolder
+
+
+
+function putPlanAffected(planid, planAffected) {
+
+    if (planAffected.length > 0) {
+        // Platshållare för alla menyobjekt, grupp med berörda planer för drop down från meny
+        var $divAffectedDropDown = $('<div>');
+        $divAffectedDropDown.addClass('dropdown-menu dropdown-menu-right');
+        $divAffectedDropDown.attr('aria-labelledby', 'affected-btn-' + planid);
+
+        // Menyavgränsare
+        var $aAffectedDivider = $('<div>');
+        $aAffectedDivider.addClass('dropdown-divider');
+        var aAffectedDivider = '<div class="dropdown-divider">'
+
+
+        var $spanLinkNewWindow = $('<span>');
+        $spanLinkNewWindow.addClass('linkNewWindow');
+        $spanLinkNewWindow.attr('title', 'Öppnar länk i nytt webbläsarfönster');
+        $spanLinkNewWindow.html('');
+
+
+        // Bygger lista för länk till alla planer som har relation till sökt plan
+        var planidsAffected
+        planAffected.forEach(function (itemAffected) {
+            if (planAffected.indexOf(itemAffected) == 0) {
+                planidsAffected = itemAffected.NYCKEL_PAVARKAN;
+            }
+            else {
+                planidsAffected += "," + itemAffected.NYCKEL_PAVARKAN;
+            }
+
+
+        });
+
+        // Alla påverkade planer
+        var $menuItem = $('<a>');
+        $menuItem.addClass('dropdown-item');
+        $menuItem.attr({
+            'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + planidsAffected,
+            'target': '_blank',
+            'title': 'Öppnar ny sida och listar alla nedan planer som existerar i fastighetsregistrets bestämmelsedel (Planregistret)'
+        });
+        $menuItem.text('Lista alla');
+        $menuItem.append($spanLinkNewWindow);
+        $divAffectedDropDown.append($menuItem);
+        $divAffectedDropDown.append(aAffectedDivider);
+
+
+        var statusPlan = [
+            ["A", "Avregistrerad"],
+            ["B", "Beslut"],
+            ["F", "Förslag"],
+            ["P", "Preliminär registrering"]
+        ];
+
+        var isSearchPlanChangedByDecision = false;
+
+        // Beslut i planregistret
+        var isFirstBeslut = true;
+        planAffected.forEach(function (itemAffected, index, affected) {
+            if (itemAffected.REGISTRERAT_BESLUT == 1) {
+                // Rubrik
+                if (isFirstBeslut) {
+                    var $planRegisterBeslut = $('<h6>');
+                    $planRegisterBeslut.addClass('dropdown-header');
+                    $planRegisterBeslut.attr({
+                        'title': 'Registrerade i planregistret'
+                    });
+                    $planRegisterBeslut.text('Planbeslut');
+                    $divAffectedDropDown.append($planRegisterBeslut);
+                    isFirstBeslut = false;
+                }
+                // Item
+                if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
+                    var $menuItem = $('<a>');
+                    $menuItem.addClass('dropdown-item');
+                    if (itemAffected.BESKRIVNING == 'ingår i' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'består av') {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Bör kontrollera vad som påverkar');
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
+                        }
+                    }
+                    $menuItem.attr({
+                        'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
+                        'target': '_blank'
+                    });
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.append($spanLinkNewWindow.clone());
+                }
+                else if (itemAffected.STATUS_PAVARKAN != "B") {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    statusPlan.forEach(function (element) {
+                        if (element[0] == itemAffected.STATUS_PAVARKAN) {
+                            $menuItem.attr('title', 'Påverkan är ej länkad p.g.a. ' + element[1].toLowerCase());
+                        }
+                    });
+                }
+                else {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                }
+
+                $divAffectedDropDown.append($menuItem);
+            }
+        });
+
+        // Beslut ej planregistrerade
+        var isFirstEjBeslut = true;
+        planAffected.forEach(function (itemAffected, index, affected) {
+            if (itemAffected.REGISTRERAT_BESLUT == 0) {
+                // Rubrik
+                if (!isFirstBeslut) {
+                    $divAffectedDropDown.append(aAffectedDivider);
+                }
+                if (isFirstEjBeslut) {
+                    var $ejPlanRegisterBeslut = $('<h6>');
+                    $ejPlanRegisterBeslut.addClass('dropdown-header');
+                    $ejPlanRegisterBeslut.attr({
+                        'title': 'Beslut som ej är registrerade i planregistret'
+                    });
+                    $ejPlanRegisterBeslut.text('Övriga beslut');
+                    $divAffectedDropDown.append($ejPlanRegisterBeslut);
+                    isFirstEjBeslut = false;
+                }
+                // Item
+                if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
+                    var $menuItem = $('<a>');
+                    $menuItem.addClass('dropdown-item');
+                    if (itemAffected.BESKRIVNING == 'ingår i' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'består av') {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Bör kontrollera vad som påverkar');
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
+                        }
+                    }
+                    $menuItem.attr({
+                        'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
+                        'target': '_blank'
+                    });
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.append($spanLinkNewWindow.clone());
+                }
+                else if (itemAffected.STATUS_PAVARKAN != "B") {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    statusPlan.forEach(function (element) {
+                        if (element[0] == itemAffected.STATUS_PAVARKAN) {
+                            $menuItem.attr('title', 'Påverkan är ej länkad p.g.a. ' + element[1].toLowerCase());
+                        }
+                    });
+                }
+                else {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                }
+
+                $divAffectedDropDown.append($menuItem);
+            }
+        });
+
+
+        // Meny
+        var $btnAffectedGroup = $('<button>');
+        $btnAffectedGroup.attr({
+            id: 'affected-btn-' + planid,
+            type: 'button',
+            'data-toggle': 'dropdown',
+            'data-boundary': 'viewport',
+            'aria-haspopup': true,
+            'aria-expanded': false,
+            title: 'Andra planer som berör samma område, påverkar planen eller har påverkats av planen'
+        });
+        $btnAffectedGroup.addClass(
+            'btn btn-secondary dropdown-toggle btn-xs'
+        );
+        if (isSearchPlanChangedByDecision) {
+            $btnAffectedGroup.addClass('btn-outline-danger');
+        }
+        else {
+            $btnAffectedGroup.addClass('btn-outline-secondary');
+        }
+        $btnAffectedGroup.text('Planpåverkan');
+
+        var $divAffectedBtnGroup = $('<div>');
+        $divAffectedBtnGroup.addClass('btn-group');
+        $divAffectedBtnGroup.attr('role', 'group');
+
+        $divAffectedBtnGroup.append($btnAffectedGroup);
+        $divAffectedBtnGroup.append($divAffectedDropDown);
+    }
+    else {
+        var $divAffectedBtnGroup = $('<button disabled>');
+        $divAffectedBtnGroup.addClass('btn btn-outline-success btn-xs');
+        $divAffectedBtnGroup.attr({
+            id: 'affected-btn-' + planid,
+            type: 'button',
+            title: 'Ingen påverkan från andra registrerade planer och beslut'
+        });
+        $divAffectedBtnGroup.text('Ingen planpåverkan');
+
+    }
+
+    $('#affected-' + planid).append($divAffectedBtnGroup);
+
+}; // SLUT putPlanAffected
 
 
 
@@ -520,6 +748,54 @@ function getPlansDocs(planIds, callback) {
 
 
 
+// Hämtar planernas berörsrelationer till andra planer
+function getPlansBerorPlans(planIds, callback) {
+    Lkr.Plan.AjaxCalls.getPlansBerorPlans = $.ajax({
+        type: "POST",
+        url: urlBasePath + 'plandokument.asmx/getPlansBerorPlans',
+        contentType: "application/json; charset=UTF-8",
+        dataType: "json",
+        data: JSON.stringify({ planIds: planIds }),
+        success: function (msg) {
+            if (msg.d != '') {
+                var jsonData = $.parseJSON(msg.d);
+                // Initiering av vektor för planers dokument
+                //var plans = new Array(jsonData.length);
+                //for (i = 0; i < jsonData.length; i++) {
+                //    plans[i] = new Array(6);
+                //}
+                //// Fyll vektor med plandokument
+                //var arrayItemPlace = 0;
+                //$.each(eval(msg.d), function (key, val) {
+                //    plans[arrayItemPlace] = [
+                //        val.PLAN_ID,
+                //        val.NAME,
+                //        val.EXTENTION,
+                //        val.SIZE,
+                //        val.PATH,
+                //        val.DOCUMENTTYPE,
+                //        val.FINDTYPE,
+                //        val.DOCUMENTPART
+                //    ];
+                //    arrayItemPlace++;
+                //});
+                // Returnera planer med dess berörsrelation till andra planer
+                callback(jsonData);
+            } else {
+                callback(false);
+            }
+        },
+        error: function () {
+            alert("Fel: Systemfel (metod getPlansDocs i Landskrona.App.Plan.Dokument.Ws.WsPlanhandling), kontakta gis@landskrona.se vid upprepande fel.");
+        }
+    })
+
+}; // SLUT getPlansBerorPlans
+
+
+
+
+
 // Dokumenttyper
 function getDocumenttypes(callback) {
     $.ajax({
@@ -543,7 +819,7 @@ function getDocumenttypes(callback) {
             alert("Fel!\ngetDokumenttyper");
         }
     })
-};
+}; // SLUT getDocumenttypes
 
 
 
@@ -868,11 +1144,11 @@ function putPlansDocs($headerPlan, plansDocs) {
                         $olDoctypeGroup.css({
                             "padding-left": "24px"
                         });
-+
-                        // Bygg grupplista för alla listobjekt av dokumenttypen
-                        item.Doctype.LiItem.forEach(function (liItem) {
-                            $olDoctypeGroup.append(liItem);
-                        });
+                        +
+                            // Bygg grupplista för alla listobjekt av dokumenttypen
+                            item.Doctype.LiItem.forEach(function (liItem) {
+                                $olDoctypeGroup.append(liItem);
+                            });
                         $liDoctypeGroup.append($olDoctypeGroup);
                         $ulOvrPlandok.append($liDoctypeGroup);
                     }
@@ -1178,12 +1454,18 @@ function initialExpandCollapsAll() {
             if (Lkr.Plan.AjaxCalls.getPlansDocs != null) {
                 Lkr.Plan.AjaxCalls.getPlansDocs.abort();
             }
+            if (Lkr.Plan.AjaxCalls.getPlansBerorPlans != null) {
+                Lkr.Plan.AjaxCalls.getPlansBerorPlans.abort();
+            }
 
 
             $contentDivs.each(function () {
                 var $contentDiv = $(this);
                 var planid = $contentDiv.prev().attr("planid");
                 putPlanContentHolder($contentDiv, planid);
+                getPlansBerorPlans([planid], function (planAffected) {
+                    putPlanAffected(planid, planAffected);
+                });
             });
             $contentDivs.show();
             $planHeaders.removeClass("planLista-header-default planLista-corner-all");
@@ -1248,8 +1530,7 @@ function putMapOfPlan(planID, imageWidth, imageHeight) {
         success: function (msg) {
             if (msg.d != '') {
                 var imageObject = eval(msg.d);
-                if (imageObject)
-                {
+                if (imageObject) {
                     var mapSessionImage = imageObject[0].MAPIMAGEBASE64;
                     var mapSessionImageWidth = imageObject[0].WIDTH;
                     var mapSessionImageHeight = imageObject[0].HEIGHT;
@@ -1278,8 +1559,7 @@ function putMapOfPlan(planID, imageWidth, imageHeight) {
                     $('#map-' + planID).children('div, img').remove();
                     $('#map-' + planID).append($mapImg);
                 }
-                else
-                {
+                else {
                     $('#map-' + planID).find('img').attr("src", urlBasePath + "pic/no-image.png");
                     $('#map-' + planID).find('span').html(errorMessage);
                 }
@@ -1290,7 +1570,7 @@ function putMapOfPlan(planID, imageWidth, imageHeight) {
             $('#map-' + planID).find('span').html(errorMessage);
             var err = eval(jqxhr);
             console.error(err.status + " " + err.statusText + "\n" +
-                        err.statusCode);
+                err.statusCode);
         },
         complete: function () {
         }

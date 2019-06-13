@@ -71,6 +71,27 @@ namespace Plan.Plandokument
         }
 
 
+        /// <summary>
+        /// Returnerar plan beröra eller berör varandra från cache. Existerar cachen ej skapas den.
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetPlanBerorPlanCache()
+        {
+            DataTable cachedPlanBerorPlan = (DataTable)HttpRuntime.Cache["PlanBerorPlan"];
+
+            if (cachedPlanBerorPlan != null)
+            {
+                return cachedPlanBerorPlan;
+            }
+            else
+            {
+                setPlanBerorPlanCache();
+                return (DataTable)HttpRuntime.Cache["PlanBerorPlan"];
+            }
+        }
+
+
+
 
 
         /// <summary>
@@ -130,8 +151,28 @@ namespace Plan.Plandokument
         }
 
 
+        /// <summary>
+        /// Kontrollerar om planberoende är cachade 
+        /// </summary>
+        /// <returns></returns>
+        public static bool CacheExistsPlanBerorPlan()
+        {
+            DataTable cache = (DataTable)HttpRuntime.Cache["PlanBerorPlan"];
 
-        
+            if (cache != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+
+
+
         /// <summary>
         /// Förfluten tid från inställt cache-intervall
         /// </summary>
@@ -333,6 +374,41 @@ namespace Plan.Plandokument
             cache.Insert("PlanBerorFastighet", dtPlanBerorFastighet, null, cacheExpiration, Cache.NoSlidingExpiration);
 
             dtPlanBerorFastighet.Dispose();
+            con.Close();
+            con.Dispose();
+        }
+
+        /// <summary>
+        /// Skapar cache med planer som berör eller har berörts av andra planer
+        /// </summary>
+        public static void setPlanBerorPlanCache()
+        {
+            string sql = string.Empty;
+
+            sql = "SELECT TO_CHAR(plan_id) AS nyckel, beskrivning AS beskrivning, TO_CHAR(pav_plan_id) AS nyckel_pavarkan, pav AS paverkan, pav_status AS status_pavarkan, registrerat_beslut AS registrerat_beslut " +
+                  "FROM   gis_v_planpaverkade";
+
+            DataTable dtPlanBerorPlan = new DataTable();
+            //OleDbConnection con = new OleDbConnection(conStr);
+            OleDbConnection con = UtilityDatabase.GetOleDbConncection();
+            OleDbCommand com = new OleDbCommand(sql, con);
+            OleDbDataReader dr;
+
+            com.Connection.Open();
+            dr = com.ExecuteReader();
+
+            dtPlanBerorPlan.Load(dr);
+
+            dr.Close();
+            dr.Dispose();
+
+            DateTime cacheExpiration = setCacheExpiration();
+
+            // Skapa cach av alla planer
+            Cache cache = HttpRuntime.Cache;
+            cache.Insert("PlanBerorPlan", dtPlanBerorPlan, null, cacheExpiration, Cache.NoSlidingExpiration);
+
+            dtPlanBerorPlan.Dispose();
             con.Close();
             con.Dispose();
         }
