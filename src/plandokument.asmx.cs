@@ -565,7 +565,8 @@ namespace Plan.Plandokument
         {
             Documents planDocs = new Documents(planIds);
 
-            return getObjectAsJson(getTableSorted(planDocs.SearchedPlansDocuments, "EXTENTION", "ASC", "DOCUMENTTYPE", "ASC"));
+            //return getObjectAsJson(getTableSorted(planDocs.SearchedPlansDocuments, "EXTENTION", "ASC", "DOCUMENTTYPE", "ASC"));
+            return getObjectAsJson(getTableSorted(planDocs.SearchedPlansDocuments, "DOCUMENTTYPE", "ASC", "EXTENTION", "ASC"));
         }
 
 
