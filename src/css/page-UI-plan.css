@@ -249,7 +249,7 @@ a.dropdown-item {
         background-color: #f3f6f8;
     }
 
-.btn-outline-warning, .btn-outline-danger {
+.btn-outline-secondary, .btn-outline-dark, .btn-outline-warning, .btn-outline-danger {
     background-color: white;
 }
 

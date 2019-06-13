@@ -539,6 +539,7 @@ function putPlanAffected(planid, planAffected) {
             ["P", "Preliminär registrering"]
         ];
 
+        var isSearchPlanChangedByDecision = false;
 
         // Beslut i planregistret
         var isFirstBeslut = true;
@@ -562,6 +563,10 @@ function putPlanAffected(planid, planAffected) {
                     if (itemAffected.BESKRIVNING == 'ingår i' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'består av') {
                         $menuItem.addClass('planContent-affected-warning');
                         $menuItem.attr('title', 'Bör kontrollera vad som påverkar');
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
+                        }
                     }
                     $menuItem.attr({
                         'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
@@ -612,6 +617,14 @@ function putPlanAffected(planid, planAffected) {
                 if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
                     var $menuItem = $('<a>');
                     $menuItem.addClass('dropdown-item');
+                    if (itemAffected.BESKRIVNING == 'ingår i' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'består av') {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Bör kontrollera vad som påverkar');
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
+                        }
+                    }
                     $menuItem.attr({
                         'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
                         'target': '_blank'
@@ -654,11 +667,11 @@ function putPlanAffected(planid, planAffected) {
         $btnAffectedGroup.addClass(
             'btn btn-secondary dropdown-toggle btn-xs'
         );
-        if (!isFirstBeslut) {
+        if (isSearchPlanChangedByDecision) {
             $btnAffectedGroup.addClass('btn-outline-danger');
         }
         else {
-            $btnAffectedGroup.addClass('btn-outline-warning');
+            $btnAffectedGroup.addClass('btn-outline-secondary');
         }
         $btnAffectedGroup.text('Planpåverkan');
 
