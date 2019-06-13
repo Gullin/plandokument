@@ -241,6 +241,10 @@
     font-weight: bold;
 }
 
+.planContent-right .planContent-avsnitt {
+    display: block;
+}
+
 .planContent-left {
     width: 33%;
     float: left;
