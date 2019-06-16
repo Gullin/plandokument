@@ -852,6 +852,10 @@ function putPlansDocs($headerPlan, plansDocs) {
     // Dokumenttyp förekommer både som delat dokument och odelat
     //documenttyper.forEach((object => { object.DokumenttypDelatOdelat = false; })); /* Ej fungerande i IE */
     documenttyper.forEach(function (object) { object.DokumenttypDelatOdelat = false });
+    // Antal dokument per filformat och dokumenttyp
+    //documenttyper.forEach((object => { object.DokumenttypFormatAntal = []; })); /* Ej fungerande i IE */
+    documenttyper.forEach(function (object) { object.DokumenttypFormatAntal = [] });
+
 
     // För varje sökt plan
     $.each(Lkr.Plan.Dokument.planListInfo, function (planKey, valuePlan) {
@@ -912,15 +916,39 @@ function putPlansDocs($headerPlan, plansDocs) {
 
                             // Om dokumentets dokumenttyp stämmer med vektorns dokumenttyp
                             if (valueDoctype.Type == valueDoc[5]) {
+
                                 if (valueDoc[6] == "IsPart") {
                                     isIsPart = true;
                                 }
                                 if (valueDoc[6] == "Exact") {
                                     isExact = true;
                                 }
+
+
+                                // Dokumenterar vilka format och antal per dokumenttyp
+                                if (valueDoctype.DokumenttypFormatAntal.length == 0) {
+                                    valueDoctype.DokumenttypFormatAntal.push([valueDoc[2], 1]);
+                                }
+                                else {
+
+                                    var isFormatEarlier = false;
+                                    valueDoctype.DokumenttypFormatAntal.forEach(function (dfaItem, dfaIndex) {
+                                        if (dfaItem[0] == valueDoc[2]) {
+                                            isFormatEarlier = true;
+                                            dfaItem[1] += 1;
+                                        }
+                                    });
+
+                                    if (!isFormatEarlier) {
+                                        valueDoctype.DokumenttypFormatAntal.push([valueDoc[2], 1]);
+                                    }
+
+                                }
+
                             }
                         }
                     });
+
 
                     if (isIsPart && isExact) {
                         valueDoctype.DokumenttypDelatOdelat = true;
@@ -940,6 +968,7 @@ function putPlansDocs($headerPlan, plansDocs) {
                 var isDocFound = false;
                 var arrayPlanhandlingItems = [];
                 var arrayOvrPlandokItems = [];
+
 
                 //#region Bygger dokumentlistobjekt
                 // För varje dokument
@@ -1000,11 +1029,22 @@ function putPlansDocs($headerPlan, plansDocs) {
                                 $docLink.attr("title", valueDoc[1]);
                                 $docLink.attr("relhref", valueDoc[4] + valueDoc[1]);
                                 if (valueDoctype.Dokumenttypsgrupp) {
-                                    if (valueDoc[7] == "") {
-                                        $docLink.text("[SAKNAS DELTEXT] (" + bytesToSize(valueDoc[3]) + ")");
-                                    }
-                                    else {
-                                        $docLink.text(valueDoc[7] + " (" + bytesToSize(valueDoc[3]) + ")");
+                                    var isOneFilePerFormat = false;
+                                    valueDoctype.DokumenttypFormatAntal.forEach(function (item, index) {
+                                        // Samma format och ett dokument
+                                        if (item[0] == valueDoc[2] && item[1] == 1) {
+                                            $docLink.text("dokument (" + bytesToSize(valueDoc[3]) + ")");
+                                            isOneFilePerFormat = true;
+                                        }
+                                    });
+
+                                    if (!isOneFilePerFormat) {
+                                        if (valueDoc[7] == "") {
+                                            $docLink.text("[SAKNAS DELTEXT] (" + bytesToSize(valueDoc[3]) + ")");
+                                        }
+                                        else {
+                                            $docLink.text(valueDoc[7] + " (" + bytesToSize(valueDoc[3]) + ")");
+                                        }
                                     }
                                 }
                                 else {
