@@ -385,7 +385,8 @@ a.dropdown-item {
 #planSideWrapper {
     float: left;
     width: 200px;
-	position: relative;
+	position: fixed;
+    left: 50%;
 	min-height: 0; /* support: IE7 */
 
     line-height: 1.3em;
