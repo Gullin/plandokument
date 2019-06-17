@@ -581,7 +581,7 @@ function putPlanAffected(planid, planAffected) {
                     $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
                     statusPlan.forEach(function (element) {
                         if (element[0] == itemAffected.STATUS_PAVARKAN) {
-                            $menuItem.attr('title', 'Påverkan är ej länkad p.g.a. ' + element[1].toLowerCase());
+                            $menuItem.attr('title', 'Påverkan är ej länkningsbar p.g.a. att den är ' + element[1].toLowerCase());
                         }
                     });
                 }
