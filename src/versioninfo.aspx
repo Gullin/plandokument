@@ -51,6 +51,36 @@
                     <h4 id="1">Versionsinformation</h4>
                     <div id="version">
                         <ul>
+                            <li>
+                                <ul>
+                                    <li><span>v0.16.13</span> Layout, paddning topp för knapp komprimering/kollapsa har lagts till.
+                                    </li>
+                                    <li><span>v0.16.12</span> Layout, paddning topp för avsnittsrubrik "Övriga plandokument" har utökats.
+                                    </li>
+                                    <li><span>v0.16.11</span> Sidoinformationen med knapp för komprimering/expandering och statistik har ändrats till att vara "flytande" och "glider" med när man har många planer.
+                                    </li>
+                                    <li><span>v0.16.10</span> Dokumenttyper, om endast en fil i ett filformat i dokumenttypsgrupp ges standardbenämning "dokument".
+                                    </li>
+                                    <li><span>v0.16.9</span> Färger ändrades samt dess betydelse för Planpåverkan.
+                                    </li>
+                                    <li><span>v0.16.8</span> BUGGRÄTTNING: Verktygsbilderna fungerade ej som tänkt under SSL via https.
+                                    </li>
+                                    <li><span>v0.16.7</span> BUGGRÄTTNING: Flera dokumenttyper grupperas ej rätt när suffix är littera och när dokumenten inom samma dokumenttyp existerar i flera filformat.
+                                    </li>
+                                    <li><span>v0.16.6</span> BUGGRÄTTNING: Stöd för Internet Explorer (IE) förlorades genom ett för modernt sätt att bygga upp javascript-objekt. Alternativ lösning för bibehållet IE-stöd.
+                                    </li>
+                                    <li><span>v0.16.5</span> Layout, åtgärdat för stor paddning mellan avsnittsrubrik "Ej enskilt upprättade dokument" och bild.
+                                    </li>
+                                    <li><span>v0.16.4</span> Planpåverkan, avregistrerade planer länkas ej då det ej finns någon konsekvent hantering av plandokumenten för planer som upphört.
+                                    </li>
+                                    <li><span>v0.16.3</span> BUGGRÄTTNING: Vid många listade beslut i planpåverkan och scrollning behövs, visas ej sista beslutet.
+                                    </li>
+                                    <li><span>v0.16.2</span> Planpåverkan, beslut som påverkar sökt plan har getts titel som uppmanar till kontroll.
+                                    </li>
+                                    <li><span>v0.16.1</span> Planpåverkan, titel på länkbild om externt öppnande i nytt webbläsarfönster.
+                                    </li>
+                                </ul>
+                            </li>
                             <li><span>v0.16</span> Infört redovisning av planers påverkan på varandra som meny under specifik listad plan. Menyn-UI kommer från Bootstrap.
                             </li>
                             <li>
@@ -385,16 +415,6 @@
                             <li>Kartbild
                             <ul>
                                 <li>cachning av kartbild
-                                </li>
-                            </ul>
-                            </li>
-                            <li>Hänvisningar
-                            <ul>
-                                <li>upphävd av ...
-                                </li>
-                                <li>upphäver ...
-                                </li>
-                                <li>...
                                 </li>
                             </ul>
                             </li>
