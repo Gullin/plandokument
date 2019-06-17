@@ -7,15 +7,6 @@
         <link href="css/page-UI-core.css" rel="stylesheet" />
         <link href="css/page-UI-help.css" rel="stylesheet" />
         <title>Plandokument / Versionsinformation</title>
-        <script src="js/jquery-1.9.0.min.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#feedback').click(function () {
-                    $('#feedback div').toggle("slow");//.animate({ display: "inline" });
-                });
-            });
-            //$('#feedback div').
-        </script>
         <style type="text/css">
             li {
                 list-style-type: none;
