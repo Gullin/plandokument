@@ -560,7 +560,7 @@ function putPlanAffected(planid, planAffected) {
                 if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
                     var $menuItem = $('<a>');
                     $menuItem.addClass('dropdown-item');
-                    if (itemAffected.BESKRIVNING == 'ingår i' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'består av') {
+                    if (itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'har koppling till' || itemAffected.BESKRIVNING == 'består av') {
                         $menuItem.addClass('planContent-affected-warning');
                         $menuItem.attr('title', 'Bör kontrollera vad som påverkar');
 
