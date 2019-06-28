@@ -225,8 +225,6 @@ function getSearchedPlans() {
         success: function (msg) {
             if (msg.d != '') {
                 Lkr.Plan.Dokument.planListInfo = JSON.parse(msg.d);
-
-                //console.log(Lkr.Plan.Dokument.planListInfo);
             } else {
                 //Visa något vid inga sökträffar
             }
@@ -296,6 +294,9 @@ function getSearchedPlans() {
                             $icon.addClass("planLista-header-default-icon");
                         } else {
                             $contentPlan = putPlanContentHolder($contentPlan, planid);
+                            getPlansBerorPlans([planid], function (planAffected) {
+                                putPlanAffected(planid, planAffected);
+                            });
                             $contentPlan.show();
                             $headerPlan.removeClass("planLista-header-default");
                             $headerPlan.removeClass("planLista-corner-all");
@@ -395,6 +396,11 @@ function getSearchedPlans() {
                 var $contentDiv = putPlanContentHolder($contentDiv, planid);
 
                 $contentDiv.show();
+
+                getPlansBerorPlans([planid], function (planAffected) {
+                    putPlanAffected(planid, planAffected);
+                });
+
                 var $icon = $headerPlan.find('.planLista-header-icon');;
                 $headerPlan.removeClass("planLista-header-default");
                 $headerPlan.removeClass("planLista-corner-all");
@@ -440,20 +446,33 @@ function putPlanContentHolder($contentPlan, planid) {
     $contentPlan.append($contentPlanHeader);
 
     var $contentPlanHeader = $("<div></div>");
+    $contentPlanHeader.attr("id", "affected-" + planid)
+    $contentPlanHeader.addClass("planContent-affected");
+    $contentPlan.append($contentPlanHeader);
+
+    var $contentPlanHeader = $("<div></div>");
     $contentPlanHeader.attr("id", "head-" + planid)
     $contentPlanHeader.addClass("planContent-header");
     $contentPlan.append($contentPlanHeader);
 
+    var $avsnittPlanhandling = $("<span></span>")
+    $avsnittPlanhandling.addClass("planContent-avsnitt");
+    $avsnittPlanhandling.text("Planhandlingar");
+
     var $contentPlanDocs = $("<div></div>");
     $contentPlanDocs.attr("id", "doc-" + planid)
     $contentPlanDocs.addClass("planContent-left");
-    $contentPlanDocs.text("Planhandlingar");
+    $contentPlanDocs.append($avsnittPlanhandling);
     $contentPlan.append($contentPlanDocs);
+
+    var $avsnittPlanMap = $("<span></span>")
+    $avsnittPlanMap.addClass("planContent-avsnitt");
+    $avsnittPlanMap.text("Kartöversikt");
 
     var $contentPlanMap = $("<div></div>");
     $contentPlanMap.attr("id", "map-" + planid)
     $contentPlanMap.addClass("planContent-right");
-    $contentPlanMap.text("Kartöversikt");
+    $contentPlanMap.append($avsnittPlanMap);
     $contentPlan.append($contentPlanMap);
 
     var $contentPlanDummy = $("<div></div>");
@@ -463,6 +482,221 @@ function putPlanContentHolder($contentPlan, planid) {
     return $contentPlan;
 
 }; // SLUT putPlanContentHolder
+
+
+
+function putPlanAffected(planid, planAffected) {
+
+    if (planAffected.length > 0) {
+        // Platshållare för alla menyobjekt, grupp med berörda planer för drop down från meny
+        var $divAffectedDropDown = $('<div>');
+        $divAffectedDropDown.addClass('dropdown-menu dropdown-menu-right');
+        $divAffectedDropDown.attr('aria-labelledby', 'affected-btn-' + planid);
+
+        // Menyavgränsare
+        var $aAffectedDivider = $('<div>');
+        $aAffectedDivider.addClass('dropdown-divider');
+        var aAffectedDivider = '<div class="dropdown-divider">'
+
+
+        var $spanLinkNewWindow = $('<span>');
+        $spanLinkNewWindow.addClass('linkNewWindow');
+        $spanLinkNewWindow.attr('title', 'Öppnar länk i nytt webbläsarfönster');
+        $spanLinkNewWindow.html('');
+
+
+        // Bygger lista för länk till alla planer som har relation till sökt plan
+        var planidsAffected
+        planAffected.forEach(function (itemAffected) {
+            if (planAffected.indexOf(itemAffected) == 0) {
+                planidsAffected = itemAffected.NYCKEL_PAVARKAN;
+            }
+            else {
+                planidsAffected += "," + itemAffected.NYCKEL_PAVARKAN;
+            }
+
+
+        });
+
+        // Alla påverkade planer
+        var $menuItem = $('<a>');
+        $menuItem.addClass('dropdown-item');
+        $menuItem.attr({
+            'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + planidsAffected,
+            'target': '_blank',
+            'title': 'Öppnar ny sida och listar alla nedan planer som existerar i fastighetsregistrets bestämmelsedel (Planregistret)'
+        });
+        $menuItem.text('Lista alla');
+        $menuItem.append($spanLinkNewWindow);
+        $divAffectedDropDown.append($menuItem);
+        $divAffectedDropDown.append(aAffectedDivider);
+
+
+        var statusPlan = [
+            ["A", "Avregistrerad"],
+            ["B", "Beslut"],
+            ["F", "Förslag"],
+            ["P", "Preliminär registrering"]
+        ];
+
+        var isSearchPlanChangedByDecision = false;
+
+        // Beslut i planregistret
+        var isFirstBeslut = true;
+        planAffected.forEach(function (itemAffected, index, affected) {
+            if (itemAffected.REGISTRERAT_BESLUT == 1) {
+                // Rubrik
+                if (isFirstBeslut) {
+                    var $planRegisterBeslut = $('<h6>');
+                    $planRegisterBeslut.addClass('dropdown-header');
+                    $planRegisterBeslut.attr({
+                        'title': 'Registrerade i planregistret'
+                    });
+                    $planRegisterBeslut.text('Planbeslut');
+                    $divAffectedDropDown.append($planRegisterBeslut);
+                    isFirstBeslut = false;
+                }
+                // Item
+                if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
+                    var $menuItem = $('<a>');
+                    $menuItem.addClass('dropdown-item');
+                    if (itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'har koppling till' || itemAffected.BESKRIVNING == 'består av') {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Bör kontrollera vad som påverkar');
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
+                        }
+                    }
+                    $menuItem.attr({
+                        'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
+                        'target': '_blank'
+                    });
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.append($spanLinkNewWindow.clone());
+                }
+                else if (itemAffected.STATUS_PAVARKAN != "B") {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    statusPlan.forEach(function (element) {
+                        if (element[0] == itemAffected.STATUS_PAVARKAN) {
+                            $menuItem.attr('title', 'Påverkan är ej länkningsbar p.g.a. att den är ' + element[1].toLowerCase());
+                        }
+                    });
+                }
+                else {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                }
+
+                $divAffectedDropDown.append($menuItem);
+            }
+        });
+
+        // Beslut ej planregistrerade
+        var isFirstEjBeslut = true;
+        planAffected.forEach(function (itemAffected, index, affected) {
+            if (itemAffected.REGISTRERAT_BESLUT == 0) {
+                // Rubrik
+                if (!isFirstBeslut) {
+                    $divAffectedDropDown.append(aAffectedDivider);
+                }
+                if (isFirstEjBeslut) {
+                    var $ejPlanRegisterBeslut = $('<h6>');
+                    $ejPlanRegisterBeslut.addClass('dropdown-header');
+                    $ejPlanRegisterBeslut.attr({
+                        'title': 'Beslut som ej är registrerade i planregistret'
+                    });
+                    $ejPlanRegisterBeslut.text('Övriga beslut');
+                    $divAffectedDropDown.append($ejPlanRegisterBeslut);
+                    isFirstEjBeslut = false;
+                }
+                // Item
+                if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
+                    var $menuItem = $('<a>');
+                    $menuItem.addClass('dropdown-item');
+                    if (itemAffected.BESKRIVNING == 'ingår i' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'består av') {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Bör kontrollera vad som påverkar');
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
+                        }
+                    }
+                    $menuItem.attr({
+                        'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
+                        'target': '_blank'
+                    });
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.append($spanLinkNewWindow.clone());
+                }
+                else if (itemAffected.STATUS_PAVARKAN != "B") {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    statusPlan.forEach(function (element) {
+                        if (element[0] == itemAffected.STATUS_PAVARKAN) {
+                            $menuItem.attr('title', 'Påverkan är ej länkad p.g.a. ' + element[1].toLowerCase());
+                        }
+                    });
+                }
+                else {
+                    var $menuItem = $('<span>');
+                    $menuItem.addClass('dropdown-item cursor-redirect');
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                }
+
+                $divAffectedDropDown.append($menuItem);
+            }
+        });
+
+
+        // Meny
+        var $btnAffectedGroup = $('<button>');
+        $btnAffectedGroup.attr({
+            id: 'affected-btn-' + planid,
+            type: 'button',
+            'data-toggle': 'dropdown',
+            'data-boundary': 'viewport',
+            'aria-haspopup': true,
+            'aria-expanded': false,
+            title: 'Andra planer som berör samma område, påverkar planen eller har påverkats av planen'
+        });
+        $btnAffectedGroup.addClass(
+            'btn btn-secondary dropdown-toggle btn-xs'
+        );
+        if (isSearchPlanChangedByDecision) {
+            $btnAffectedGroup.addClass('btn-outline-danger');
+        }
+        else {
+            $btnAffectedGroup.addClass('btn-outline-secondary');
+        }
+        $btnAffectedGroup.text('Planpåverkan');
+
+        var $divAffectedBtnGroup = $('<div>');
+        $divAffectedBtnGroup.addClass('btn-group');
+        $divAffectedBtnGroup.attr('role', 'group');
+
+        $divAffectedBtnGroup.append($btnAffectedGroup);
+        $divAffectedBtnGroup.append($divAffectedDropDown);
+    }
+    else {
+        var $divAffectedBtnGroup = $('<button disabled>');
+        $divAffectedBtnGroup.addClass('btn btn-outline-success btn-xs');
+        $divAffectedBtnGroup.attr({
+            id: 'affected-btn-' + planid,
+            type: 'button',
+            title: 'Ingen påverkan från andra registrerade planer och beslut'
+        });
+        $divAffectedBtnGroup.text('Ingen planpåverkan');
+
+    }
+
+    $('#affected-' + planid).append($divAffectedBtnGroup);
+
+}; // SLUT putPlanAffected
 
 
 
@@ -486,12 +720,16 @@ function getPlansDocs(planIds, callback) {
                 // Fyll vektor med plandokument
                 var arrayItemPlace = 0;
                 $.each(eval(msg.d), function (key, val) {
-                    plans[arrayItemPlace] = [val.PLAN_ID,
-                                             val.NAME,
-                                             val.EXTENTION,
-                                             val.SIZE,
-                                             val.PATH,
-                                             val.DOCUMENTTYPE];
+                    plans[arrayItemPlace] = [
+                        val.PLAN_ID,
+                        val.NAME,
+                        val.EXTENTION,
+                        val.SIZE,
+                        val.PATH,
+                        val.DOCUMENTTYPE,
+                        val.FINDTYPE,
+                        val.DOCUMENTPART
+                    ];
                     arrayItemPlace++;
                 });
                 // Returnera plandokument med dess plan-ID
@@ -509,16 +747,123 @@ function getPlansDocs(planIds, callback) {
 
 
 
+
+// Hämtar planernas berörsrelationer till andra planer
+function getPlansBerorPlans(planIds, callback) {
+    Lkr.Plan.AjaxCalls.getPlansBerorPlans = $.ajax({
+        type: "POST",
+        url: urlBasePath + 'plandokument.asmx/getPlansBerorPlans',
+        contentType: "application/json; charset=UTF-8",
+        dataType: "json",
+        data: JSON.stringify({ planIds: planIds }),
+        success: function (msg) {
+            if (msg.d != '') {
+                var jsonData = $.parseJSON(msg.d);
+                // Initiering av vektor för planers dokument
+                //var plans = new Array(jsonData.length);
+                //for (i = 0; i < jsonData.length; i++) {
+                //    plans[i] = new Array(6);
+                //}
+                //// Fyll vektor med plandokument
+                //var arrayItemPlace = 0;
+                //$.each(eval(msg.d), function (key, val) {
+                //    plans[arrayItemPlace] = [
+                //        val.PLAN_ID,
+                //        val.NAME,
+                //        val.EXTENTION,
+                //        val.SIZE,
+                //        val.PATH,
+                //        val.DOCUMENTTYPE,
+                //        val.FINDTYPE,
+                //        val.DOCUMENTPART
+                //    ];
+                //    arrayItemPlace++;
+                //});
+                // Returnera planer med dess berörsrelation till andra planer
+                callback(jsonData);
+            } else {
+                callback(false);
+            }
+        },
+        error: function () {
+            alert("Fel: Systemfel (metod getPlansDocs i Landskrona.App.Plan.Dokument.Ws.WsPlanhandling), kontakta gis@landskrona.se vid upprepande fel.");
+        }
+    })
+
+}; // SLUT getPlansBerorPlans
+
+
+
+
+
+// Dokumenttyper
+function getDocumenttypes(callback) {
+    $.ajax({
+        type: "POST",
+        url: urlBasePath + 'plandokument.asmx/getDokumenttyper',
+        contentType: "application/json; charset=UTF-8",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.d != '') {
+                Lkr.Plan.Dokument.Dokumenttyper = JSON.parse(msg.d);
+                callback(Lkr.Plan.Dokument.Dokumenttyper);
+
+            } else {
+                callback(Lkr.Plan.Dokument.Dokumenttyper);
+
+                //Visa något vid inga dokumettyper
+
+            }
+        },
+        error: function () {
+            alert("Fel!\ngetDokumenttyper");
+        }
+    })
+}; // SLUT getDocumenttypes
+
+
+
 // Listar plandokumenten i var listad plans dokumenthållaren
 // Skicka in parameter som vektor med plan-ID
 function putPlansDocs($headerPlan, plansDocs) {
+
+    var documenttyper;
+    if (Lkr.Plan.Dokument.Dokumenttyper) {
+        documenttyper = Lkr.Plan.Dokument.Dokumenttyper;
+    }
+    else {
+        console.err("Dokumenttyper saknas.");
+    }
+
+
+    // Adderar signal om vilket avsnitt dokumentypen ska hamna under, planhandling, övriga plandokument eller inga plandokument
+    // 0 = Planhandling
+    // 1 = Övrigt plandokument
+    // 2 = Dokumenttyp utan matchande dokument
+    //documenttyper.forEach((object => { object.Avsnitt = 2; })); /* Ej fungerande i IE */
+    documenttyper.forEach(function (object) { object.Avsnitt = 2 });
+    //  Ska renderas som dokumenttyp med flera dokument som dokumenttypsgrupp (default false)
+    //    true = finns fler än 1 dokument av samma dokumenttyp trotts namnkonvention som indikerar dokumentdelar
+    //documenttyper.forEach((object => { object.Dokumenttypsgrupp = false; })); /* Ej fungerande i IE */
+    documenttyper.forEach(function (object) { object.Dokumenttypsgrupp = false });
+    // Antal deldokument (default 0)
+    //documenttyper.forEach((object => { object.DokumenttypsdelarAntal = 0; })); /* Ej fungerande i IE */
+    documenttyper.forEach(function (object) { object.DokumenttypsdelarAntal = 0 });
+    // Dokumenttyp förekommer både som delat dokument och odelat
+    //documenttyper.forEach((object => { object.DokumenttypDelatOdelat = false; })); /* Ej fungerande i IE */
+    documenttyper.forEach(function (object) { object.DokumenttypDelatOdelat = false });
+    // Antal dokument per filformat och dokumenttyp
+    //documenttyper.forEach((object => { object.DokumenttypFormatAntal = []; })); /* Ej fungerande i IE */
+    documenttyper.forEach(function (object) { object.DokumenttypFormatAntal = [] });
+
+
     // För varje sökt plan
-    $.each(Lkr.Plan.Dokument.planListInfo, function (planKey, planVal) {
+    $.each(Lkr.Plan.Dokument.planListInfo, function (planKey, valuePlan) {
         // Om plannyckel finns (träff på sökning, sökparameter har träff när värde finns för bl.a. nyckel. Alla sökparametrar returneras för presentation av ev. brister i sökningen)
         // och när sökt plan är samma som plan på hemsidan
-        if (planVal.NYCKEL != null && planVal.NYCKEL == $headerPlan.attr("planid")) {
-            var planid = planVal.NYCKEL;
-            var plannamn = planVal.PLANNAMN;
+        if (valuePlan.NYCKEL != null && valuePlan.NYCKEL == $headerPlan.attr("planid")) {
+            var planid = valuePlan.NYCKEL;
+            var plannamn = valuePlan.PLANNAMN;
 
             var $contentPlanHeader = $('#head-' + planid)
             if (plannamn == null || plannamn == "") {
@@ -537,50 +882,113 @@ function putPlansDocs($headerPlan, plansDocs) {
             // [3].SIZE,
             // [4].PATH,
             // [5].DOCUMENTTYPE
+            // [6].FINDTYPE
+            // [7].DOCUMENTPART
             if (plansDocs) {
-                // Dokumenttyper samt indikering om respektive dokumenttyp är hittad bland dokument
-                // 0 = Planhandling
-                // 1 = Övrigt plandokument
-                // 2 = Dokumenttyp utan matchande dokument
-                // true = dokumenttyp ses som planhandling
-                var documenttypesArray = [["Beskrivning", 2, true],
-                    ["Bestämmelser", 2, true],
-                    ["Fastighetsförteckning", 2, false],
-                    ["Genomförande", 2, true],
-                    ["Grundkarta", 2, false],
-                    ["Illustration", 2, true],
-                    ["Karta", 2, true],
-                    ["Samrådsredogörelse", 2, true],
-                    ["Utlåtande", 2, true],
-                    ["Plan- och genomförandebeskrivning", 2, true],
-                    ["Kvalitetsprogram", 2, false],
-                    ["Miljökonsekvensbeskrivning", 2, false],
-                    ["Bullerutredning", 2, false],
-                    ["Gestaltningsprogram", 2, false],
-                    ["Övriga", 2, false]];
 
-                var $ul = $("<ul>");
+
+                //#region För varje dokument, räknar dokumentdelar för resp. dokumenttyp samt signalerar om dokumenttypen ska renderas som grupp
+                $.each(eval(plansDocs), function (key, valueDoc) {
+                    // Om dokument tillhör specifikt sökt plan
+                    if (valuePlan.NYCKEL == valueDoc[0]) {
+
+                        documenttyper.forEach(function (valueDoctype) {
+                            if (valueDoc[6] == "IsPart" && valueDoc[5] == valueDoctype.Type) {
+                                valueDoctype.DokumenttypsdelarAntal += 1;
+                            }
+                        });
+
+                    }
+                });
+                documenttyper.forEach(function (valueDoctype) {
+
+                    // Markera om dokumenttypen ska renderas som grupp
+                    if (valueDoctype.DokumenttypsdelarAntal > 1) {
+                        valueDoctype.Dokumenttypsgrupp = true;
+                    }
+
+                    // Förekommer dokument under flera matchningstyper (FINDTYPE)
+                    // Markera för bristvarning i webbklient
+                    var isIsPart = false, isExact = false;
+                    plansDocs.forEach(function (valueDoc) {
+                        // Om dokument tillhör specifikt sökt plan
+                        if (valuePlan.NYCKEL == valueDoc[0]) {
+
+                            // Om dokumentets dokumenttyp stämmer med vektorns dokumenttyp
+                            if (valueDoctype.Type == valueDoc[5]) {
+
+                                if (valueDoc[6] == "IsPart") {
+                                    isIsPart = true;
+                                }
+                                if (valueDoc[6] == "Exact") {
+                                    isExact = true;
+                                }
+
+
+                                // Dokumenterar vilka format och antal per dokumenttyp
+                                if (valueDoctype.DokumenttypFormatAntal.length == 0) {
+                                    valueDoctype.DokumenttypFormatAntal.push([valueDoc[2], 1]);
+                                }
+                                else {
+
+                                    var isFormatEarlier = false;
+                                    valueDoctype.DokumenttypFormatAntal.forEach(function (dfaItem, dfaIndex) {
+                                        if (dfaItem[0] == valueDoc[2]) {
+                                            isFormatEarlier = true;
+                                            dfaItem[1] += 1;
+                                        }
+                                    });
+
+                                    if (!isFormatEarlier) {
+                                        valueDoctype.DokumenttypFormatAntal.push([valueDoc[2], 1]);
+                                    }
+
+                                }
+
+                            }
+                        }
+                    });
+
+
+                    if (isIsPart && isExact) {
+                        valueDoctype.DokumenttypDelatOdelat = true;
+                        console.warn("Plandokumenten redovisas ologiskt för plan " + valuePlan.AKT + " och bryter mot namnkonvetion.\nDokumenttypen " + valueDoctype.Type + " har dokument som matchat på exakt söksträng men även dokumentdelar. Är ej tillåtet enl. namnkonvention.\nDokumentobjekt:", plansDocs);
+                    }
+
+                });
+                //#endregion
+
+
+                // Platshållare för dokumentlistobjekt
+                var $ulPlanhandlingar = $("<ul>");
                 var $ulOvrPlandok = $("<ul>");
                 $ulOvrPlandok.addClass("ovrPlandok");
                 var $ulNoDoc = $("<ul>");
+
                 var isDocFound = false;
+                var arrayPlanhandlingItems = [];
+                var arrayOvrPlandokItems = [];
+
+
+                //#region Bygger dokumentlistobjekt
                 // För varje dokument
-                $.each(eval(plansDocs), function (key, val) {
+                $.each(eval(plansDocs), function (key, valueDoc) {
                     // Om dokument tillhör specifik sökt plan
-                    if (planVal.NYCKEL == val[0]) {
+                    if (valuePlan.NYCKEL == valueDoc[0]) {
                         isDocFound = true;
                         // Sätter indikering för om dokumenttyp finns, förutsättning för lista med saknade dokumenttyper
                         // För varje dokumenttyp
-                        $.each(eval(documenttypesArray), function (keyDoctype, valDoctype) {
+                        documenttyper.forEach(function (valueDoctype) {
+
                             // Indikering att dokumenttyp finns
-                            if (valDoctype[0] == val[5]) {
+                            if (valueDoctype.Type == valueDoc[5]) {
                                 // Lista med dokumenttyper
                                 var $li = $("<li>");
-                                $li.addClass(val[2].substring(1, val[2].length) + "-file");
+                                $li.addClass(valueDoc[2].substring(1, valueDoc[2].length) + "-file");
 
                                 // Valbarhet för varje dokument genom kryssruta
                                 var $checkbox = $("<input />",
-                                                  { type: 'checkbox' });
+                                    { type: 'checkbox' });
                                 // Hantera markering och flyout-texter för dokumentens kryssrutor och den globala kryssrutan
                                 $checkbox.change(function () {
                                     $checkboxes = $('#doc-' + planid + ' ul input');
@@ -590,71 +998,224 @@ function putPlansDocs($headerPlan, plansDocs) {
                                         if ($inputCheck.is(':checked')) {
                                             nbrCheckedBoxes++;
                                         }
-                                    });
-
-                                    if (nbrCheckedBoxes >= $checkboxes.length) {
-                                        // kryssas
-                                        $('#allCheck-' + planVal.NYCKEL).prop('indeterminate', false);
-                                        $('#allCheck-' + planVal.NYCKEL).prop('checked', true);
-                                        $('#allCheck-' + planVal.NYCKEL).prop('title', 'Avmarkera alla dokument');
-                                    } else if (nbrCheckedBoxes == 0) {
-                                        // kryssas ej
-                                        $('#allCheck-' + planVal.NYCKEL).prop('indeterminate', false);
-                                        $('#allCheck-' + planVal.NYCKEL).prop('checked', false);
-                                        $('#allCheck-' + planVal.NYCKEL).prop('title', 'Markera alla dokument');
-                                    } else {
-                                        // indeterminate
-                                        $('#allCheck-' + planVal.NYCKEL).prop('indeterminate', true);
-                                        if (this.checked){
-                                            $('#allCheck-' + planVal.NYCKEL).prop('title', 'Markera alla dokument');
+                                        if (nbrCheckedBoxes >= $checkboxes.length) {
+                                            // kryssas
+                                            $('#allCheck-' + valuePlan.NYCKEL).prop('indeterminate', false);
+                                            $('#allCheck-' + valuePlan.NYCKEL).prop('checked', true);
+                                            $('#allCheck-' + valuePlan.NYCKEL).prop('title', 'Avmarkera alla dokument');
+                                        } else if (nbrCheckedBoxes == 0) {
+                                            // kryssas ej
+                                            $('#allCheck-' + valuePlan.NYCKEL).prop('indeterminate', false);
+                                            $('#allCheck-' + valuePlan.NYCKEL).prop('checked', false);
+                                            $('#allCheck-' + valuePlan.NYCKEL).prop('title', 'Markera alla dokument');
                                         } else {
-                                            $('#allCheck-' + planVal.NYCKEL).prop('title', 'Avmarkera alla dokument');
+                                            // indeterminate
+                                            $('#allCheck-' + valuePlan.NYCKEL).prop('indeterminate', true);
+                                            if (this.checked) {
+                                                $('#allCheck-' + valuePlan.NYCKEL).prop('title', 'Markera alla dokument');
+                                            } else {
+                                                $('#allCheck-' + valuePlan.NYCKEL).prop('title', 'Avmarkera alla dokument');
+                                            }
                                         }
-                                    }
 
-
+                                    });
                                 });
 
                                 // Skapa dokumentlänk
                                 var $docLink = $("<a>");
-                                var href = urlBasePath + val[4] + val[1];
+                                var href = urlBasePath + valueDoc[4] + valueDoc[1];
                                 $docLink.attr("href", href);
                                 $docLink.attr("target", "_blank");
-                                $docLink.attr("title", val[1]);
-                                $docLink.attr("relhref", val[4] + val[1]);
-                                $docLink.text(val[5] + " (" + bytesToSize(val[3]) + ")");
+                                $docLink.attr("title", valueDoc[1]);
+                                $docLink.attr("relhref", valueDoc[4] + valueDoc[1]);
+                                if (valueDoctype.Dokumenttypsgrupp) {
+                                    var isOneFilePerFormat = false;
+                                    valueDoctype.DokumenttypFormatAntal.forEach(function (item, index) {
+                                        // Samma format och ett dokument
+                                        if (item[0] == valueDoc[2] && item[1] == 1) {
+                                            $docLink.text("dokument (" + bytesToSize(valueDoc[3]) + ")");
+                                            isOneFilePerFormat = true;
+                                        }
+                                    });
+
+                                    if (!isOneFilePerFormat) {
+                                        if (valueDoc[7] == "") {
+                                            $docLink.text("[SAKNAS DELTEXT] (" + bytesToSize(valueDoc[3]) + ")");
+                                        }
+                                        else {
+                                            $docLink.text(valueDoc[7] + " (" + bytesToSize(valueDoc[3]) + ")");
+                                        }
+                                    }
+                                }
+                                else {
+                                    $docLink.text(valueDoc[5] + " (" + bytesToSize(valueDoc[3]) + ")");
+                                }
+
                                 $li.append($checkbox);
                                 $li.append($docLink);
 
-                                // Placerar resp. dokument beroende på vilken rubrik de hamnar under (planhandling eller övriga)
-                                if (valDoctype[2]) {
-                                    $ul.append($li);
-                                    valDoctype[1] = 0;
+
+
+                                var Doctype = {};
+                                Doctype.LiItem = [];
+
+                                // Om planhandling eller övrigt plandokument
+                                if (valueDoctype.IsPlanhandling) {
+                                    valueDoctype.Avsnitt = 0;
+
+                                    // Skapar upp 1:a objektet, därefter fylls på
+                                    if (arrayPlanhandlingItems.length == 0) {
+                                        Doctype.Name = valueDoctype.Type
+                                        Doctype.LiItem.push($li);
+                                        arrayPlanhandlingItems.push({ Doctype: Doctype });
+                                    }
+                                    else {
+                                        // Indikerar om dokumentet inte har hanterats som dokumenttypsdel. Läggs till senare som "vanligt" dokument i så fall.
+                                        var isLiAdded = false;
+
+                                        // Om dokumentet ska renderas som dokumenttypsdel enl. backend matchning efter namnkonvention
+                                        if (valueDoctype.Dokumenttypsgrupp) {
+                                            // Itterera igenom alla tidigare dokument för gruppering tillsammans efter dokumenttyp
+                                            arrayPlanhandlingItems.forEach(function (item, index, theArray) {
+                                                if (item.Doctype.Name == valueDoctype.Type) {
+                                                    item.Doctype.LiItem.push($li);
+                                                    isLiAdded = true;
+                                                }
+                                            });
+                                        }
+
+                                        // Adderar dokument som ej tidigare adderats
+                                        if (!isLiAdded) {
+                                            Doctype.Name = valueDoctype.Type;
+                                            Doctype.LiItem.push($li);
+                                            arrayPlanhandlingItems.push({ Doctype: Doctype });
+                                        }
+                                    }
+
+
                                 } else {
-                                    valDoctype[1] = 1;
+                                    valueDoctype.Avsnitt = 1;
+
+                                    // Skapar upp 1:a objektet, därefter fylls på
+                                    if (arrayOvrPlandokItems.length == 0) {
+                                        Doctype.Name = valueDoctype.Type
+                                        Doctype.LiItem.push($li);
+                                        arrayOvrPlandokItems.push({ Doctype: Doctype });
+                                    }
+                                    else {
+                                        // Indikerar om dokumentet inte har hanterats som dokumenttypsdel. Läggs till senare som "vanligt" dokument i så fall.
+                                        var isLiAdded = false;
+
+                                        // Om dokumentet ska renderas som dokumenttypsdel enl. backend matchning efter namnkonvention
+                                        if (valueDoctype.Dokumenttypsgrupp) {
+                                            // Itterera igenom alla tidigare dokument för gruppering tillsammans efter dokumenttyp
+                                            arrayOvrPlandokItems.forEach(function (item, index, theArray) {
+                                                if (item.Doctype.Name == valueDoctype.Type) {
+                                                    item.Doctype.LiItem.push($li);
+                                                    isLiAdded = true;
+                                                }
+                                            });
+                                        }
+
+                                        // Adderar dokument som ej tidigare adderats
+                                        if (!isLiAdded) {
+                                            Doctype.Name = valueDoctype.Type;
+                                            Doctype.LiItem.push($li);
+                                            arrayOvrPlandokItems.push({ Doctype: Doctype });
+                                        }
+                                    }
+
+                                }
+
+
+                                // Placerar resp. dokument beroende på vilken rubrik de hamnar under (planhandling eller övriga)
+                                if (valueDoctype.IsPlanhandling) {
+                                    valueDoctype.Avsnitt = 0;
+                                    $ulPlanhandlingar.append($li);
+                                } else {
+                                    valueDoctype.Avsnitt = 1;
                                     $ulOvrPlandok.append($li);
                                 }
                             }
                         });
+
+
+                    }
+
+                });
+                //#endregion
+
+
+
+                //#region Skapar GUI-grupper med listobjekt för dokumenttyper med flera deldokument samt placerar listobjekt under i resp. platshållare för dokumentrubrik
+                arrayPlanhandlingItems.forEach(function (item) {
+                    // Om flera listobjekt, gruppera dessa under dokumenttypsrubrik, annars addera direkt till lista
+                    if (item.Doctype.LiItem.length > 1) {
+                        var $liDoctypeGroup = $("<li>");
+                        $liDoctypeGroup.css({
+                            "padding": "0"
+                        });
+                        $liDoctypeGroup.text(item.Doctype.Name + " (dokumenttyp flera)");
+                        var $olDoctypeGroup = $("<ol>");
+                        $olDoctypeGroup.css({
+                            "padding-left": "24px"
+                        });
+
+                        // Bygg grupplista för alla listobjekt av dokumenttypen
+                        item.Doctype.LiItem.forEach(function (liItem) {
+                            $olDoctypeGroup.append(liItem);
+                        });
+                        $liDoctypeGroup.append($olDoctypeGroup);
+                        $ulPlanhandlingar.append($liDoctypeGroup);
+                    }
+                    else {
+                        $ulPlanhandlingar.append(item.Doctype.LiItem[0]);
                     }
                 });
+                arrayOvrPlandokItems.forEach(function (item) {
+                    // Om flera listobjekt, gruppera dessa under dokumenttypsrubrik, annars addera direkt till lista
+                    if (item.Doctype.LiItem.length > 1) {
+                        var $liDoctypeGroup = $("<li>");
+                        $liDoctypeGroup.css({
+                            "padding": "0"
+                        });
+                        $liDoctypeGroup.text(item.Doctype.Name + " (dokumenttyp flera)");
+                        var $olDoctypeGroup = $("<ol>");
+                        $olDoctypeGroup.css({
+                            "padding-left": "24px"
+                        });
+                        +
+                            // Bygg grupplista för alla listobjekt av dokumenttypen
+                            item.Doctype.LiItem.forEach(function (liItem) {
+                                $olDoctypeGroup.append(liItem);
+                            });
+                        $liDoctypeGroup.append($olDoctypeGroup);
+                        $ulOvrPlandok.append($liDoctypeGroup);
+                    }
+                    else {
+                        $ulOvrPlandok.append(item.Doctype.LiItem[0]);
+                    }
+                });
+                //#endregion
 
 
                 // För varje dokumenttyp
-                $.each(eval(documenttypesArray), function (keyDoctype, valDoctype) {
+                documenttyper.forEach(function (valDoctype) {
                     // Om plandokument ej funnen uppdelad på specifik dokumenttyp
-                    if (valDoctype[1] == 2) {
+                    if (valDoctype.Avsnitt == 2) {
                         var $li = $("<li>");
                         $li.addClass("no-file");
-                        $li.text(valDoctype[0]);
+                        $li.text(valDoctype.Type);
                         $ulNoDoc.append($li);
                     }
                 });
 
+
                 var $contentPlanDocs = $('#doc-' + planid)
 
-                if ($ul.children().length > 0) {
-                    $contentPlanDocs.append($ul);
+                // GUI om planhandlingar inte har dokument
+                if ($ulPlanhandlingar.children().length > 0) {
+                    $contentPlanDocs.append($ulPlanhandlingar);
                 } else {
                     $contentPlanDocs.append($("<br />"))
                     $contentPlanDocs.append("-");
@@ -662,7 +1223,12 @@ function putPlansDocs($headerPlan, plansDocs) {
                     $contentPlanDocs.append($("<br />"))
                 }
 
-                $contentPlanDocs.append("Övriga plandokument");
+                // GUI om övriga plandokument inte har dokument
+                var $avsnittPlanOvrPlandok = $("<span></span>")
+                $avsnittPlanOvrPlandok.addClass("planContent-avsnitt");
+                $avsnittPlanOvrPlandok.text("Övriga plandokument");
+
+                $contentPlanDocs.append($avsnittPlanOvrPlandok);
                 if ($ulOvrPlandok.children().length > 0) {
                     $contentPlanDocs.append($ulOvrPlandok);
                 } else {
@@ -672,14 +1238,17 @@ function putPlansDocs($headerPlan, plansDocs) {
                     $contentPlanDocs.append($("<br />"))
                 }
 
-                // Bygger dispositionen för dokumenttyperna utan filer
+                // Bygger dispositionen för dokumenttyperna utan plandokument
+                var $avsnittEjDokument = $("<span></span>")
+                $avsnittEjDokument.addClass("planContent-avsnitt");
+                $avsnittEjDokument.text("Ej enskilt upprättade dokument");
                 var $noPlanDocsWrapper = $("<div>");
                 var $noPlanDocsHeader = $("<div>");
                 var $noPlanDocsIcon = $("<div>");
                 var $noPlanDocsSpan = $("<span>...</span>");
                 $noPlanDocsHeader.addClass("docs");
                 $noPlanDocsHeader.attr({ "title": "Klicka för att expandera" });
-                $noPlanDocsHeader.append("Ej enskilt upprättade dokument");
+                $noPlanDocsHeader.append($avsnittEjDokument);
                 $noPlanDocsHeader.append("<br />");
                 $noPlanDocsIcon.addClass("docs-collapsed");
                 $noPlanDocsIcon.css({ "margin-left": "0", "display": "inline-block" });
@@ -701,7 +1270,8 @@ function putPlansDocs($headerPlan, plansDocs) {
 
 
 
-                // Ansluter event expandering/komprimering av dokumenttyper utan filer
+                // Ansluter event expandering/komprimering av avsnitt med dokumenttyper utan filer
+                // Hover-event
                 $noPlanDocsHeader.hover(
                     function () {
                         if ($noPlanDocsList.is(":visible")) {
@@ -721,8 +1291,7 @@ function putPlansDocs($headerPlan, plansDocs) {
                         }
                     }
                 );
-
-
+                // Click-event
                 $noPlanDocsHeader.click(function () {
                     $noPlanDocsList.toggle();
                     if ($noPlanDocsList.is(":visible")) {
@@ -808,6 +1377,10 @@ function putPlansDocs($headerPlan, plansDocs) {
                 }
 
 
+                if (!isDocFound) {
+                    console.warn("Inga dokument till sökt plan " + valuePlan.AKT + " hittades. Kontakta gis@landskrona.se.\nPlanobjekt: ", valuePlan);
+                }
+
             } else {
 
                 alert("Inga dokument till sökt(a) plan(er) hittades. Kontakta gis@landskrona.se.");
@@ -815,6 +1388,7 @@ function putPlansDocs($headerPlan, plansDocs) {
             }
         }
     });
+
 
 }; // SLUT putPlansDocs
 
@@ -875,7 +1449,7 @@ function getFilesZipped(files, zipFileNamePart) {
 
 // Instantiera knappen för "global kollapps/expandering" av planlistan
 function initialExpandCollapsAll() {
-    var newDivExpCol = $("<div id='expcol'></div>");
+    var newDivExpCol = $('<button id="expcol" type="button" class="btn btn-outline-dark btn-sm">');
     var isVisible = false;
     $("#planLista").children('div').each(function () {
         if ($(this).is(':visible')) {
@@ -920,12 +1494,18 @@ function initialExpandCollapsAll() {
             if (Lkr.Plan.AjaxCalls.getPlansDocs != null) {
                 Lkr.Plan.AjaxCalls.getPlansDocs.abort();
             }
+            if (Lkr.Plan.AjaxCalls.getPlansBerorPlans != null) {
+                Lkr.Plan.AjaxCalls.getPlansBerorPlans.abort();
+            }
 
 
             $contentDivs.each(function () {
                 var $contentDiv = $(this);
                 var planid = $contentDiv.prev().attr("planid");
                 putPlanContentHolder($contentDiv, planid);
+                getPlansBerorPlans([planid], function (planAffected) {
+                    putPlanAffected(planid, planAffected);
+                });
             });
             $contentDivs.show();
             $planHeaders.removeClass("planLista-header-default planLista-corner-all");
@@ -990,8 +1570,7 @@ function putMapOfPlan(planID, imageWidth, imageHeight) {
         success: function (msg) {
             if (msg.d != '') {
                 var imageObject = eval(msg.d);
-                if (imageObject)
-                {
+                if (imageObject) {
                     var mapSessionImage = imageObject[0].MAPIMAGEBASE64;
                     var mapSessionImageWidth = imageObject[0].WIDTH;
                     var mapSessionImageHeight = imageObject[0].HEIGHT;
@@ -1020,8 +1599,7 @@ function putMapOfPlan(planID, imageWidth, imageHeight) {
                     $('#map-' + planID).children('div, img').remove();
                     $('#map-' + planID).append($mapImg);
                 }
-                else
-                {
+                else {
                     $('#map-' + planID).find('img').attr("src", urlBasePath + "pic/no-image.png");
                     $('#map-' + planID).find('span').html(errorMessage);
                 }
@@ -1031,8 +1609,8 @@ function putMapOfPlan(planID, imageWidth, imageHeight) {
             $('#map-' + planID).find('img').attr("src", urlBasePath + "pic/no-image.png");
             $('#map-' + planID).find('span').html(errorMessage);
             var err = eval(jqxhr);
-            console.log(err.status + " " + err.statusText + "\n" +
-                        err.statusCode);
+            console.error(err.status + " " + err.statusText + "\n" +
+                err.statusCode);
         },
         complete: function () {
         }

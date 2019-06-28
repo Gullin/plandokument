@@ -7,6 +7,9 @@ namespace Plan.Plandokument
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Krävs när aspx-fil använder sig av <%# %>, databind, och inte <%= %>, samma som Response.Write, .
+            Page.Header.DataBind();
+
             // AssemblyVersionOverride Version VersionPrefix VersionSuffix
             // Versionering på sida
             string version = ApplicationAssemblyUtility.GetApplicationVersionNumber();

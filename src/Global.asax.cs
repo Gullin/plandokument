@@ -10,16 +10,20 @@ namespace Plan.Plandokument
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            Plan.Plandokument.PlanCache.isPlanBasisCache();
-            Plan.Plandokument.PlanCache.isPlanBerorFastighetCache();
+            Plan.Plandokument.PlanCache.GetPlandocumenttypesCache();
+            Plan.Plandokument.PlanCache.GetPlanBasisCache();
+            Plan.Plandokument.PlanCache.GetPlanBerorFastighetCache();
+            Plan.Plandokument.PlanCache.GetPlanBerorPlanCache();
             
             RegisterRoutes(RouteTable.Routes);
         }
 
         protected void Session_Start(object sender, EventArgs e)
         {
-            Plan.Plandokument.PlanCache.isPlanBasisCache();
-            Plan.Plandokument.PlanCache.isPlanBerorFastighetCache();
+            Plan.Plandokument.PlanCache.GetPlandocumenttypesCache();
+            Plan.Plandokument.PlanCache.GetPlanBasisCache();
+            Plan.Plandokument.PlanCache.GetPlanBerorFastighetCache();
+            Plan.Plandokument.PlanCache.GetPlanBerorPlanCache();
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)

@@ -48,7 +48,7 @@
                     </li>
                     <li><a href="#3">Om</a></li>
                     <li><a href="#4">För utvecklare</a></li>
-                    <li><a href="versioninfo.aspx">Versionsinformation</a></li>
+                    <li><a href="<%=ResolveUrl("~")%>versioninfo.aspx">Versionsinformation</a></li>
                 </ul>
             </div>
 

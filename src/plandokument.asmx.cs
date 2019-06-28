@@ -107,7 +107,7 @@ namespace Plan.Plandokument
         {
             // Hämtar alla planer från cache
             Cache cache = HttpRuntime.Cache;
-            DataTable dtPlans = (DataTable)cache["Plans"];
+            DataTable dtPlans = PlanCache.GetPlanBasisCache();
 
             int nbrPlans = (from p in dtPlans.AsEnumerable()
                             select p).Count();
@@ -124,7 +124,7 @@ namespace Plan.Plandokument
         {
             // Hämtar alla planer från cache
             Cache cache = HttpRuntime.Cache;
-            DataTable dtPlans = (DataTable)cache["Plans"];
+            DataTable dtPlans = PlanCache.GetPlanBasisCache();
 
             DataTable dt = new DataTable();
             dt.Columns.Add("PLANFK", typeof(string));
@@ -157,7 +157,7 @@ namespace Plan.Plandokument
                 drResult["ANTAL"] = dt.Rows[0][1]; ;
             }
 
-            return getDatatableAsJson(getTableSorted(dtResult, "PLANFK", "ASC"));
+            return getObjectAsJson(getTableSorted(dtResult, "PLANFK", "ASC"));
         }
 
 
@@ -209,7 +209,7 @@ namespace Plan.Plandokument
 
             // Hämtar alla planer från cache
             Cache cache = HttpRuntime.Cache;
-            DataTable dtPlans = (DataTable)cache["Plans"];
+            DataTable dtPlans = PlanCache.GetPlanBasisCache();
 
             // Hämtar berörda fastigheter från cache om sökning görs på fastighet (begrepp)
             // Hämtas endast från cache när inget begrepp eller sökt specifikt på fastighetsnyckel eller fastighetsbeteckning
@@ -218,7 +218,7 @@ namespace Plan.Plandokument
             if (string.IsNullOrWhiteSpace(begrepp) || begrepp.ToUpper() == "FASTIGHET" || begrepp.ToUpper() == "FASTIGHETNYCKEL")
             {
                 parcelBlockUnitSearchSign = ConfigurationManager.AppSettings["URLParcelBlockUnitSign"].ToString();
-                dtPlanBerorFastighet = (DataTable)cache["PlanBerorFastighet"];
+                dtPlanBerorFastighet = PlanCache.GetPlanBerorFastighetCache();
             }
 
             // Datatabell för resultat av sökning
@@ -535,7 +535,7 @@ namespace Plan.Plandokument
 
             UtilityRequest.LogRequestStatsAsync(dtRequestLog);
 
-            return getDatatableAsJson(getTableSorted(dtResultDistinct, "AKT", "ASC", "BEGREPP", "ASC"));
+            return getObjectAsJson(getTableSorted(dtResultDistinct, "AKT", "ASC", "BEGREPP", "ASC"));
         }
 
 
@@ -565,7 +565,30 @@ namespace Plan.Plandokument
         {
             Documents planDocs = new Documents(planIds);
 
-            return getDatatableAsJson(getTableSorted(planDocs.SearchedPlansDocuments, "EXTENTION", "ASC", "DOCUMENTTYPE", "ASC"));
+            //return getObjectAsJson(getTableSorted(planDocs.SearchedPlansDocuments, "EXTENTION", "ASC", "DOCUMENTTYPE", "ASC"));
+            return getObjectAsJson(getTableSorted(planDocs.SearchedPlansDocuments, "DOCUMENTTYPE", "ASC", "EXTENTION", "ASC"));
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string getPlansBerorPlans(List<object> planIds)
+        {
+            PlanBerorPlan plansBerorPlans = new PlanBerorPlan(planIds);
+
+            return getObjectAsJson(plansBerorPlans.BerordaPlaner);
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string getDokumenttyper()
+        {
+            // Hämtar alla dokumenttyper från cache
+            Cache cache = HttpRuntime.Cache;
+            List<Documenttype> listDocumenttyper = PlanCache.GetPlandocumenttypesCache();
+
+            return getObjectAsJson(listDocumenttyper);
         }
 
 
@@ -970,7 +993,7 @@ namespace Plan.Plandokument
                 //JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
                 //return jsonSerializer.Serialize(imageBase64String);
 
-                return getDatatableAsJson(dtResult);
+                return getObjectAsJson(dtResult);
             }
             catch (System.Exception ex)
             {
@@ -990,6 +1013,100 @@ namespace Plan.Plandokument
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
             return jsonSerializer.Serialize(zipFileNamePath);
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsPlanBasis()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlanBasis());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsPlanBerorFastighet()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlanBerorFastighet());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsPlandocumenttypes()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlandocumenttypes());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsPlanBerorPlan()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlanBerorPlan());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheExistsAll()
+        {
+            bool planBasis = PlanCache.CacheExistsPlanBasis();
+            bool planBerorFastighet = PlanCache.CacheExistsPlanBerorFastighet();
+            bool planDocumenttypes = PlanCache.CacheExistsPlandocumenttypes();
+            bool planBerorPlan = PlanCache.CacheExistsPlanBerorPlan();
+            bool exists = false;
+
+            if (planBasis && planBerorFastighet && planDocumenttypes && planBerorPlan)
+            {
+                exists = true;
+            }
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(exists);
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheTimeDuration()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheDuration());
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string cacheTimeElapsed()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheElapsed());
 
         }
 
@@ -1024,7 +1141,7 @@ namespace Plan.Plandokument
         /// <returns>
         /// JSON-serialiserad string.
         /// </returns>
-        private string getDatatableAsJson(DataTable dataTable)
+        private string getObjectAsJson(DataTable dataTable)
         {
             List<Dictionary<string, Object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, Object> row = new Dictionary<string, object>();
@@ -1036,6 +1153,26 @@ namespace Plan.Plandokument
                 {
                     row.Add(col.ColumnName, dr[col]);
                 }
+                rows.Add(row);
+            }
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(rows);
+        }
+
+        private string getObjectAsJson(List<Documenttype> list)
+        {
+            List<Dictionary<string, Object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, Object> row = new Dictionary<string, object>();
+
+            foreach (var dt in list)
+            {
+                row = new Dictionary<string, object>();
+                row.Add("Type", dt.Type);
+                row.Add("UrlFilter", dt.UrlFilter);
+                row.Add("Suffix", dt.Suffix);
+                row.Add("Description", dt.Description);
+                row.Add("IsPlanhandling", dt.IsPlanhandling);
                 rows.Add(row);
             }
 

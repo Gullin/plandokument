@@ -7,11 +7,16 @@
     <head runat="server">
         <title>Plandokument</title>
         <link href="css/jquery-ui-1.10.3-smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
+        <link href="lib/bootstrap-4.1.2-dist/css/bootstrap.min.css" rel="stylesheet" />
         <link href="css/reset.css" rel="stylesheet" />
         <link href="css/page-UI-core.css" rel="stylesheet" />
         <link href="css/page-UI-plan.css" rel="stylesheet" />
         <link href="css/file-images-li.css" rel="stylesheet" />
         <style type="text/css">
+
+
+
+
 
         </style>
 
@@ -32,7 +37,8 @@
 
         <!-- För haneringar av IE 7 och tidigare samt IE:s modernare version i inställda i kompabilitetsläge -->
         <script src='<%#ResolveClientUrl("~/js/json3.min.js")%>' type="text/javascript"></script>
-        <script src='<%#ResolveClientUrl("~/js/jquery-1.9.0.min.js")%>' type="text/javascript"></script>
+        <script src='<%#ResolveClientUrl("~/js/jquery-3.4.1.min.js")%>' type="text/javascript"></script>
+    	<script src='<%#ResolveClientUrl("~/lib/bootstrap-4.1.2-dist/js/bootstrap.bundle.min.js")%>'></script>
         <script src='<%#ResolveClientUrl("~/js/utility.js")%>' type="text/javascript"></script>
         <!-- Används vid utveckling -->
         <script src='<%#ResolveClientUrl("~/js/planInfoDokument.js")%>' type="text/javascript"></script>
@@ -60,15 +66,19 @@
 
                 nbrOfSearchedPlans(Lkr.Plan.Dokument.isPlansSearched, function (isPlansSearched) {
                     if (isPlansSearched) {
-                        documentConditionOfSearchedPlans();
-                        columnConditionOfSearchedPlans();
-                        searchedPlans();
+                        getDocumenttypes(function (Dokumenttyper) {
+                            if (Dokumenttyper) {
+                                documentConditionOfSearchedPlans();
+                                columnConditionOfSearchedPlans();
+                                searchedPlans();
 
-                        getStatTotNbrPlans()
-                        getStatNbrPlanTypes();
-                        getStatNbrPlanImplement();
+                                getStatTotNbrPlans()
+                                getStatNbrPlanTypes();
+                                getStatNbrPlanImplement();
 
-                        getSearchedPlans();
+                                getSearchedPlans();
+                            }
+                        });
                     }
                 });
 
@@ -153,34 +163,65 @@
 
             }); // SLUT $(document).ready
 
+
+            function hover(element) {
+
+                var filePathPart = splitFilePath(element.getAttribute('src'));
+
+                element.setAttribute('src', Lkr.Plan.Dokument.resolvedClientUrl + 'pic/' + filePathPart[1] + '-invers.' + filePathPart[2]);
+
+            }
+
+            function unhover(element) {
+
+                var filePathPart = splitFilePath(element.getAttribute('src'));
+                var fileName = filePathPart[1].substring(0, filePathPart[1].lastIndexOf('-'));
+
+                element.setAttribute('src', Lkr.Plan.Dokument.resolvedClientUrl + 'pic/' + fileName + '.' + filePathPart[2]);
+
+            }
+
+            function splitFilePath(filePath) {
+                var fullFilePath = filePath;
+                var path = fullFilePath.substring(0, fullFilePath.lastIndexOf('/'));
+                var fullFileName = fullFilePath.substring(fullFilePath.lastIndexOf('/') + 1);
+                var fileName = fullFileName.substring(0, fullFileName.lastIndexOf('.'));
+                var fileExtension = fullFileName.substring(fullFileName.lastIndexOf('.') + 1);
+
+                return [path, fileName, fileExtension]
+            }
+
         </script>
     </head>
 
     <body>
         <form id="form1" runat="server">
             <asp:Label ID="logg" runat="server"></asp:Label>
+
             <div>
                 <div id="planLista">
                 </div>
                 <div id="planSideWrapper">
-                    <h4>Sökparametrar</h4>
-                    <div id="planSearch">
-                        <span id="searchResultNbr"></span>
-                        <span id="searchCriteria"></span>
-                        <span id="searchDocs"></span>
-                        <span id="searchString"></span>
-                    </div>
-                    <h4>Sökresultat</h4>
-                    <div id="planSearchResult">
-                        <span id="statNbrPlanHits"></span>
-                        <span id="statNbrPlanBoms"></span>
-                        <span id="Span3"></span>
-                    </div>
-                    <h4>Allmän planstatistik</h4>
-                    <div id="planAllm">
-                        <span id="statNbrPlans"></span>
-                        <span id="statNbrPlanTypes"></span>
-                        <span id="statNbrPlanImpImplement"></span>
+                    <div id="planSideWrapperStats">
+                        <h4>Sökparametrar</h4>
+                        <div id="planSearch">
+                            <span id="searchResultNbr"></span>
+                            <span id="searchCriteria"></span>
+                            <span id="searchDocs"></span>
+                            <span id="searchString"></span>
+                        </div>
+                        <h4>Sökresultat</h4>
+                        <div id="planSearchResult">
+                            <span id="statNbrPlanHits"></span>
+                            <span id="statNbrPlanBoms"></span>
+                            <span id="Span3"></span>
+                        </div>
+                        <h4>Allmän planstatistik</h4>
+                        <div id="planAllm">
+                            <span id="statNbrPlans"></span>
+                            <span id="statNbrPlanTypes"></span>
+                            <span id="statNbrPlanImpImplement"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -194,10 +235,12 @@
             </div>
 
             <div id="feedback">
-                <a href="<%= ResolveUrl("~/") %>om.aspx" title="Beskrivning av funktionalitet och utseende">
-                    <img src="<%= ResolveUrl("~/") %>pic/help.png" /></a>
+                <a href="<%= ResolveUrl("~/") %>dokument/alla" title="Lista alla planer från Planregistret">
+                    <img id="listAllPlanes" src="<%= ResolveUrl("~/") %>pic/list_all_planes.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
+                <a href="<%= ResolveUrl("~/") %>dokument/om" title="Beskrivning av funktionalitet och utseende">
+                    <img id="help" src="<%= ResolveUrl("~/") %>pic/help.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
                 <a href="mailto:gis@landskrona.se?Subject=Webbapplikation Plandokumentation" title="Lämna synpunkter eller rapportera fel">
-                    <img src="<%= ResolveUrl("~/") %>pic/mail.png" /></a>
+                    <img id="mail" src="<%= ResolveUrl("~/") %>pic/mail.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
             </div>
 
             <div id="copyrightWrapper">

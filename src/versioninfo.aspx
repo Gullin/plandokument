@@ -7,15 +7,6 @@
         <link href="css/page-UI-core.css" rel="stylesheet" />
         <link href="css/page-UI-help.css" rel="stylesheet" />
         <title>Plandokument / Versionsinformation</title>
-        <script src="js/jquery-1.9.0.min.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#feedback').click(function () {
-                    $('#feedback div').toggle("slow");//.animate({ display: "inline" });
-                });
-            });
-            //$('#feedback div').
-        </script>
         <style type="text/css">
             li {
                 list-style-type: none;
@@ -40,7 +31,7 @@
                         </li>
                         <li><a href="#2">vNext</a>
                         </li>
-                        <li><a href="om.aspx">Dokumentation</a>
+                        <li><a href="<%=ResolveUrl("~")%>om.aspx">Dokumentation</a>
                         </li>
                     </ul>
                 </div>
@@ -53,6 +44,60 @@
                         <ul>
                             <li>
                                 <ul>
+                                    <li><span>v0.16.13</span> Layout, paddning topp för knapp komprimering/kollapsa har lagts till.
+                                    </li>
+                                    <li><span>v0.16.12</span> Layout, paddning topp för avsnittsrubrik "Övriga plandokument" har utökats.
+                                    </li>
+                                    <li><span>v0.16.11</span> Sidoinformationen med knapp för komprimering/expandering och statistik har ändrats till att vara "flytande" och "glider" med när man har många planer.
+                                    </li>
+                                    <li><span>v0.16.10</span> Dokumenttyper, om endast en fil i ett filformat i dokumenttypsgrupp ges standardbenämning "dokument".
+                                    </li>
+                                    <li><span>v0.16.9</span> Färger ändrades samt dess betydelse för Planpåverkan.
+                                    </li>
+                                    <li><span>v0.16.8</span> BUGGRÄTTNING: Verktygsbilderna fungerade ej som tänkt under SSL via https.
+                                    </li>
+                                    <li><span>v0.16.7</span> BUGGRÄTTNING: Flera dokumenttyper grupperas ej rätt när suffix är littera och när dokumenten inom samma dokumenttyp existerar i flera filformat.
+                                    </li>
+                                    <li><span>v0.16.6</span> BUGGRÄTTNING: Stöd för Internet Explorer (IE) förlorades genom ett för modernt sätt att bygga upp javascript-objekt. Alternativ lösning för bibehållet IE-stöd.
+                                    </li>
+                                    <li><span>v0.16.5</span> Layout, åtgärdat för stor paddning mellan avsnittsrubrik "Ej enskilt upprättade dokument" och bild.
+                                    </li>
+                                    <li><span>v0.16.4</span> Planpåverkan, avregistrerade planer länkas ej då det ej finns någon konsekvent hantering av plandokumenten för planer som upphört.
+                                    </li>
+                                    <li><span>v0.16.3</span> BUGGRÄTTNING: Vid många listade beslut i planpåverkan och scrollning behövs, visas ej sista beslutet.
+                                    </li>
+                                    <li><span>v0.16.2</span> Planpåverkan, beslut som påverkar sökt plan har getts titel som uppmanar till kontroll.
+                                    </li>
+                                    <li><span>v0.16.1</span> Planpåverkan, titel på länkbild om externt öppnande i nytt webbläsarfönster.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><span>v0.16</span> Infört redovisning av planers påverkan på varandra som meny under specifik listad plan. Menyn-UI kommer från Bootstrap.
+                            </li>
+                            <li>
+                                <ul>
+                                    <li><span>v0.15.5</span> Tydliggjort avsnittsindelningen av "Planhandlingar", "Övriga plandokument" och "Ej enskilt upprättade dokument".
+                                    </li>
+                                    <li><span>v0.15.4</span> Utökat marginal till webbläsarfönstret för knapp som expanderar och kollapsar alla planer.
+                                    </li>
+                                    <li><span>v0.15.3</span> Funktion för expandera och kollapsa alla planer ändrad till Bootstrap-knapp.
+                                    </li>
+                                    <li><span>v0.15.2</span> Tydliggjort funktionsknapparna (alla planer, hjälp och e-post) för sida som listar specifika planer.
+                                    </li>
+                                    <li><span>v0.15.1</span> Adderat länk till listning av alla planer och dess dokument.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><span>v0.15</span> UI-förbättringar.</li>
+                            <li><span>v0.14</span> Uppgraderat ramverket jQuery från v1.9.0 till v3.4.1.</li>
+                            <li><span>v0.13</span> Adderat <a href="https://getbootstrap.com" target="_blank">Bootstrap</a> som UI-komponent.</li>
+                            <li><span>v0.12</span> Dokumenttyperna är domändrivna där domänvärdena sätts i filen dokumenttyper.csv.</li>
+                            <li><span>v0.11</span> Dokumenttyperna kan bestå av flera delar och grupperas då i gränssnittet.</li>
+                            <li>
+                                <ul>
+                                    <li><span>v0.10.3</span> BUGGRÄTTNING: Cachening av information på servern. <br />
+                                        <i>Cachening gjordes på nytt vid varje nystartad session, vilket upplevdes långsamt och motverkade anledningen till cachening. Cachening sker nu endast vid första sessionen som startar applikationen sedan utgången av cache.</i>
+                                    </li>
                                     <li><span>v0.10.2</span>  Korslänkning mellan dokumentation och versionsinformation under menyer.
                                     </li>
                                     <li><span>v0.10.1</span>  Ny typ av plandokument kan hanteras - Gestaltningsprogram. <br />
@@ -78,7 +123,7 @@
                                             <li>Miljökonsekvensbeskrivning (MKB) och</li>
                                             <li>Bullerutredning.</li>
                                         </ul>
-                                        Läs mer under dokumentation.
+                                        <a href="om.aspx#1.2.2">Läs mer under dokumentation.</a>
                                     </li>
                                     <li><span>v0.9.6</span> Kompilerat mott och nytt stöd till MapGuide Open Source version 3.1 och Autodesk Infrastructure Map Server (AIMS) 2016.</li>
                                     <li><span>v0.9.5</span> Ändrat till nativt bibliotek för komprimering till zipp-paket av filer som laddas ner. Dokumentation med biblioteket plockas bort senare efter tester.</li>
@@ -357,26 +402,10 @@
                     <div id="vnext">
                         <ul>
                             <li>Rubrik "Kartöversikt" ändras till "Kartöversikt - gällande planområde"</li>
-                            <li>Flera plankartor som dokument (existerar delar)
-                                <ul>
-                                    <li>Suffix i filnamn</li>
-                                    <li>Uppdatera specifikationsdokument för namnkonvention</li>
-                                </ul>
-                            </li>
                             <li>Sökvillkor NYCKEL i kod, ändras till plannyckel för konsekvens jmfr. FASTIGHETNYCKEL</li>
                             <li>Kartbild
                             <ul>
                                 <li>cachning av kartbild
-                                </li>
-                            </ul>
-                            </li>
-                            <li>Hänvisningar
-                            <ul>
-                                <li>upphävd av ...
-                                </li>
-                                <li>upphäver ...
-                                </li>
-                                <li>...
                                 </li>
                             </ul>
                             </li>
@@ -437,8 +466,6 @@
                                 </ul>
                             </li>
                             <li>Maxbredd på container för planerna
-                            </li>
-                            <li>Enumeration, Skapa klass för enumeration av plandokumentstyper och tillhörande dokument suffix i namnkonventionen. För att enklare administrera som domän.
                             </li>
                             <li>Integrera bilden på plankartan
                             <ul>

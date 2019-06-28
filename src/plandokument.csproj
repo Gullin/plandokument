@@ -117,6 +117,7 @@
     <Content Include="css\page-UI-plan.css" />
     <Content Include="css\reset.css" />
     <Content Include="js\config.js" />
+    <Content Include="js\jquery-3.4.1.min.js" />
     <Content Include="js\jquery-ui-1.9.2.min.js" />
     <Content Include="js\json3.min.js" />
     <Content Include="js\jtable.2.4.0\extensions\jquery.jtable.aspnetpagemethods.min.js" />
@@ -208,9 +209,10 @@
     <Content Include="js\jtable.2.4.0\themes\metro\red\loading.gif" />
     <Content Include="js\planInfoDokument.js" />
     <Content Include="Global.asax" />
-    <Content Include="js\jquery-1.9.0.min.js" />
     <Content Include="js\namespaceTopLevelLkrExtend.js" />
     <Content Include="js\utility.js" />
+    <Content Include="lib\bootstrap-4.1.2-dist\css\bootstrap.min.css" />
+    <Content Include="lib\bootstrap-4.1.2-dist\js\bootstrap.bundle.min.js" />
     <Content Include="om.aspx" />
     <Content Include="pic\animated_windows8_64.GIF" />
     <Content Include="pic\doc-bw.png" />
@@ -220,6 +222,7 @@
     <Content Include="pic\dwg.png" />
     <Content Include="pic\dxf.png" />
     <Content Include="pic\gif.png" />
+    <Content Include="pic\help-invers.png" />
     <Content Include="pic\help.png" />
     <Content Include="pic\help\handlaggarkartan-fastigheter-informationsruta.png" />
     <Content Include="pic\help\handlaggarkartan-fastigheter-lager_ibockad.png" />
@@ -236,6 +239,9 @@
     <Content Include="pic\LayoutExplanationAlla.png" />
     <Content Include="pic\LayoutExplanationv2.png" />
     <Content Include="pic\list-style-8x8.png" />
+    <Content Include="pic\list_all_planes-invers.png" />
+    <Content Include="pic\list_all_planes.png" />
+    <Content Include="pic\mail-invers.png" />
     <Content Include="pic\mail.png" />
     <Content Include="pic\mdb.png" />
     <Content Include="pic\msg.png" />
@@ -256,6 +262,7 @@
     <Content Include="pic\tif-bw.png" />
     <Content Include="pic\tif.png" />
     <Content Include="pic\txt.png" />
+    <Content Include="pic\warning.png" />
     <Content Include="pic\xls.png" />
     <Content Include="pic\xlsx.png" />
     <Content Include="plandokument.asmx" />
@@ -275,11 +282,13 @@
       <DependentUpon>checkFileaccess.aspx</DependentUpon>
     </Compile>
     <Compile Include="class\ApplicationAssemblyUtility.cs" />
+    <Compile Include="class\Documenttypes.cs" />
     <Compile Include="class\jTable.cs" />
-    <Compile Include="class\Documents.cs">
+    <Compile Include="class\Documents.cs" />
+    <Compile Include="class\PackagingZip.cs" />
+    <Compile Include="class\PlanBerorPlan.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="class\PackagingZip.cs" />
     <Compile Include="class\UtilityDatabase.cs" />
     <Compile Include="class\UtilityException.cs" />
     <Compile Include="class\LayerDefinitionFactory.cs" />
@@ -354,6 +363,9 @@
     <Content Include="js\jtable.2.4.0\themes\landskrona\metro-lightgray\jtable.less" />
     <Content Include="plandokument.ashx" />
     <Content Include="js\jtable.2.4.0\themes\metro\close.png" />
+    <Content Include="dokumenttyper.csv" />
+    <Content Include="lib\bootstrap-4.1.2-dist\css\bootstrap.min.css.map" />
+    <Content Include="lib\bootstrap-4.1.2-dist\js\bootstrap.bundle.min.js.map" />
     <None Include="Properties\PublishProfiles\AIMS2016x64.pubxml" />
     <Content Include="Settings.config.skarp" />
     <None Include="Web.Debug.config">
