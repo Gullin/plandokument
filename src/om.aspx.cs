@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -31,6 +34,44 @@ namespace Plan.Plandokument
             UrlParameterSearchString3.Text = UrlParameterSearchString;
             UrlParameterDocumentType3.Text = UrlParameterDocumentType;
             UrlParameterSearchType3.Text = UrlParameterSearchType;
+
+
+            PropertyInfo[] propInfos = typeof(Documenttype).GetProperties();
+            columnsDocumenttypes.InnerHtml = string.Empty;
+            List<string> rowspec = new List<string>();
+            int column = 0;
+            foreach (PropertyInfo propInfo in propInfos)
+            {
+                columnsDocumenttypes.InnerHtml += "<li>" + propInfo.GetCustomAttribute<DescriptionAttribute>().Description + "</li>";
+                column++;
+                rowspec.Add("kolumn " + column.ToString());
+            }
+
+
+            nbrColumnDocumenttypes.Text = propInfos.Length.ToString();
+
+
+            rowspecDocumenttypes.Text = "[" + String.Join("];[", rowspec.ToArray()) + "]";
+            
+
+            List<Documenttype> listDocumenttyper = PlanCache.GetPlandocumenttypesCache();
+            nbrDocumenttypes.Text = listDocumenttyper.Where(s => s.Type.Length != 0).Count().ToString();
+
+
+            StringBuilder tblDocumenttypes = new StringBuilder();
+            tblDocumenttypes.Append("<table>");
+            foreach (var itemDC in listDocumenttyper)
+            {
+                tblDocumenttypes.Append("<tr>");
+                foreach (var item in itemDC.GetType().GetProperties())
+                {
+                    tblDocumenttypes.Append("<td>" + item.GetValue(itemDC).ToString() + "</td>");
+                }
+                tblDocumenttypes.Append("</tr>");
+            }
+            tblDocumenttypes.Append("</table>");
+            tableDocumenttypes.Text = tblDocumenttypes.ToString();
+
         }
     }
 }

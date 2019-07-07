@@ -30,7 +30,6 @@
                     </ul>
                     </li>
                     <li><a href="#2">Grafiskt användargränssnitt</a>
-                        
                         <ul>
                             <li><a href="#2.1">För alla</a>
                                 <ul>
@@ -47,7 +46,13 @@
                         </ul>
                     </li>
                     <li><a href="#3">Om</a></li>
-                    <li><a href="#4">För utvecklare</a></li>
+                    <li><a href="#4">Inställningar / konfiguration</a>
+                        <ul>
+                            <li><a href="#4.1">Dokumentbegrepp</a></li>
+                            <li><a href="#4.2">Settings.config</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#5">För utvecklare</a></li>
                     <li><a href="<%=ResolveUrl("~")%>versioninfo.aspx">Versionsinformation</a></li>
                 </ul>
             </div>
@@ -510,7 +515,81 @@
                 </ol>
 
 
-                <h1 id="4">4 För utvecklare</h1>
+                <h1 id="4">4 Inställningar / konfiguration</h1>
+                <h2 id="4.1">4.1 Dokumentbegrepp</h2>
+                <p>
+                    Alla plandokument blir klassad som någon dokumenttyp. Dessa dokumenttyper definieras i filen "dokumenttyper.csv". Denna går att hitta i webbapplikationens rotkatalog.
+                    csv-filen kan ses som en tabell utan kolumnrubriker och där resp. kolumn separeras av semikolon (;). csv-filen består utav <asp:Label ID="nbrColumnDocumenttypes" runat="server" /> st. kolumner.
+                </p>
+                <ol id="columnsDocumenttypes" runat="server">
+                </ol>
+                <p>
+                    Enligt radspecifikation:
+                </p>
+                <div class="adresSearch">
+                    <asp:Label ID="rowspecDocumenttypes" runat="server" />
+                </div>
+                <p>
+                    Filen måste uppfylla specifikation för att kunna läsas av webbapplikationen.
+                    </p>
+                <p>
+                    För närvarande existerar det
+                    <asp:Label ID="nbrDocumenttypes" runat="server" />
+                    st. dokumenttyper och där "dokumenttyper.csv" är enligt nedan:
+                </p>
+                <p>
+                    <asp:Literal ID="tableDocumenttypes" runat="server" />
+                </p>
+
+
+                <h2 id="4.2">4.2 Settings.config</h2>
+                <p>
+                    Flera grundinställningar av webbappikationen kan göras i filen "Settings.config". Denna går att hitta i webbapplikationens rotkatalog. För närmare beskrivning av resp. inställning hänvisas man till kommentarerna i filen.
+                    <br />
+                    Nedan följer en sammanfattning av vad som kan konfigureras:
+                </p>
+                <ul>
+                    <li>Anslutningsuppgifter databas</li>
+                    <li>Applikationsversion</li>
+                    <li>Avgränsande tecken vid sökning på flera</li>
+                    <li>Skiljetecken mellan block och enhet för fastighet. <br />
+                        Traditionellt kolon-tecken är ej tillåtet som internationell standard i URL:er.</li>
+                    <li>Vid sökning enligt alternativet namn/värde-par
+                        <ul>
+                            <li>Parameternamn som håller söksträngen i URL:n.</li>
+                            <li>Parameternamn som håller vilken dokumenttyp sökningen filtreras efter.</li>
+                            <li>Parameternamn som håller vilken signal som sökningen ska göras mot.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        Cache-ning
+                        <ul>
+                            <li>Antal dagar</li>
+                            <li>Klockslag då cache går ut</li>
+                        </ul>
+                    </li>
+                    <li>Katalog där plandokument hittas</li>
+                    <li>Om sökning av dokument ska ske i underkataloger eller inte</li>
+                    <li>För vilka filändelser som sökningen sker mot</li>
+                    <li>Karta
+                        <ul>
+                            <li>Om kartbildens storlek ska sättas dynamiskt eller inte</li>
+                            <li>Fasta dimensioner för kartbilden om dynamiskt storlek inte används</li>
+                            <li>Skalning av vyn runt sökt objekt</li>
+                            <li>Bakgrundskarta som ska användas</li>
+                            <li>Vilket planlager i kartan</li>
+                            <li>Plannyckel i kartan</li>
+                            <li>Sökträffens färgpresentation</li>
+                            <li>...</li>
+                        </ul>
+                    </li>
+                    <li>Loggning</li>
+                    <li>E-post</li>
+                </ul>
+
+
+
+                <h1 id="5">5 För utvecklare</h1>
                 <p>
                     Ett sätt att söka via webbläsarens adressfält och på ett mer användarvänligt och intuativt sätt är enligt avsnittet "Hitta plandokument genom" "Adressfält i webbläsare". Yterliggare ett sätt att söka är genom parameter/värde-par. Ordningen på dessa namn/värde-par har ingen betydelse. Denna modell för sökning är främst tänkt att användas av andra applikationer.
                 </p>
