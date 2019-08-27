@@ -4,11 +4,20 @@ DEPLOYMENT
    References > [resp. assembly] > Properties > Copy Local = False
  * Ändring på plats i Settings.config kräver en ändring och omsparning av web.config (mellanslag i filen och spara).
    Annars tas inte ändringen.
+ * Stoppa berörd applikationspool
  * Rensa ev. ASP.NET cache under Microsoft .Net Framework
    För 64-bitars:
    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files
    För 32-bitars
    C:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files
+ * Backup webbapplikation
+ * Radera webbapplikationen så när som för
+    + filen Settings.config (om inga ändringar gjorts)
+    + Katalogen .\log
+ * Kopiera nya filer till skarp katalog
+ * Kopiera äldre binärer från backup men skriv inte över filerna som frågas för överskrivning
+   (de som önskas skrivas över är applikationens nya assemblies, dessa ska ju inte ersättas med de gamla igen)
+
 
 KONTROL AV KOMPILERAD .NET ASSEMBLY-version 
 Kontrollera kompilerad OS-version för dll-assemblys
