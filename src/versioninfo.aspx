@@ -44,6 +44,10 @@
                         <ul>
                             <li>
                                 <ul>
+                                    <li><span>v0.16.15</span> BUGGRÄTTNING: Planpåverkan, länkningsbara beslut listade under "Övriga beslut" var ej länkade.
+                                    </li>
+                                    <li><span>v0.16.14</span> Vid sökning på ÄDP och ÄOB ges varning i planpåverkan att de ska läsas tillsammans med plan som ändras.
+                                    </li>
                                     <li><span>v0.16.13</span> Layout, paddning topp för knapp komprimering/kollapsa har lagts till.
                                     </li>
                                     <li><span>v0.16.12</span> Layout, paddning topp för avsnittsrubrik "Övriga plandokument" har utökats.

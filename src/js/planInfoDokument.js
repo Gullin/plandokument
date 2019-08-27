@@ -560,9 +560,19 @@ function putPlanAffected(planid, planAffected) {
                 if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
                     var $menuItem = $('<a>');
                     $menuItem.addClass('dropdown-item');
-                    if (itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'har koppling till' || itemAffected.BESKRIVNING == 'består av') {
+                    if ((itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'upphävd av' ||
+                        itemAffected.BESKRIVNING == 'har koppling till' || itemAffected.BESKRIVNING == 'består av') &&
+                        (itemAffected.PAV_PLANFK == 'ÄDP' || itemAffected.PAV_PLANFK == 'ÄOB')) {
                         $menuItem.addClass('planContent-affected-warning');
                         $menuItem.attr('title', 'Bör kontrollera vad som påverkar');
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
+                        }
+                    }
+                    else if (itemAffected.BESKRIVNING == 'ändrar' && (itemAffected.PLANFK == 'ÄDP' || itemAffected.PLANFK == 'ÄOB')) {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Läses tillsammans med sökt ' + itemAffected.PLANFK);
 
                         if (!isSearchPlanChangedByDecision) {
                             isSearchPlanChangedByDecision = true;
@@ -572,13 +582,13 @@ function putPlanAffected(planid, planAffected) {
                         'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
                         'target': '_blank'
                     });
-                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAV_PLANFK + ' ' + itemAffected.PAVERKAN);
                     $menuItem.append($spanLinkNewWindow.clone());
                 }
                 else if (itemAffected.STATUS_PAVARKAN != "B") {
                     var $menuItem = $('<span>');
                     $menuItem.addClass('dropdown-item cursor-redirect');
-                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAV_PLANFK + ' ' + itemAffected.PAVERKAN);
                     statusPlan.forEach(function (element) {
                         if (element[0] == itemAffected.STATUS_PAVARKAN) {
                             $menuItem.attr('title', 'Påverkan är ej länkningsbar p.g.a. att den är ' + element[1].toLowerCase());
@@ -588,7 +598,7 @@ function putPlanAffected(planid, planAffected) {
                 else {
                     var $menuItem = $('<span>');
                     $menuItem.addClass('dropdown-item cursor-redirect');
-                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAV_PLANFK + ' ' + itemAffected.PAVERKAN);
                 }
 
                 $divAffectedDropDown.append($menuItem);
@@ -617,9 +627,19 @@ function putPlanAffected(planid, planAffected) {
                 if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
                     var $menuItem = $('<a>');
                     $menuItem.addClass('dropdown-item');
-                    if (itemAffected.BESKRIVNING == 'ingår i' || itemAffected.BESKRIVNING == 'upphävd av' || itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'består av') {
+                    if ((itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'upphävd av' ||
+                        itemAffected.BESKRIVNING == 'har koppling till' || itemAffected.BESKRIVNING == 'består av') &&
+                        (itemAffected.PAV_PLANFK == 'ÄDP' || itemAffected.PAV_PLANFK == 'ÄOB')) {
                         $menuItem.addClass('planContent-affected-warning');
                         $menuItem.attr('title', 'Bör kontrollera vad som påverkar');
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
+                        }
+                    }
+                    else if (itemAffected.BESKRIVNING == 'ändrar' && (itemAffected.PLANFK == 'ÄDP' || itemAffected.PLANFK == 'ÄOB')) {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Läses tillsammans med sökt ' + itemAffected.PLANFK);
 
                         if (!isSearchPlanChangedByDecision) {
                             isSearchPlanChangedByDecision = true;
@@ -629,13 +649,13 @@ function putPlanAffected(planid, planAffected) {
                         'href': Lkr.Plan.Dokument.resolvedClientUrl + 'dokument,nyckel/' + itemAffected.NYCKEL_PAVARKAN,
                         'target': '_blank'
                     });
-                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAV_PLANFK + ' ' + itemAffected.PAVERKAN);
                     $menuItem.append($spanLinkNewWindow.clone());
                 }
                 else if (itemAffected.STATUS_PAVARKAN != "B") {
                     var $menuItem = $('<span>');
                     $menuItem.addClass('dropdown-item cursor-redirect');
-                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAV_PLANFK + ' ' + itemAffected.PAVERKAN);
                     statusPlan.forEach(function (element) {
                         if (element[0] == itemAffected.STATUS_PAVARKAN) {
                             $menuItem.attr('title', 'Påverkan är ej länkad p.g.a. ' + element[1].toLowerCase());
@@ -645,7 +665,7 @@ function putPlanAffected(planid, planAffected) {
                 else {
                     var $menuItem = $('<span>');
                     $menuItem.addClass('dropdown-item cursor-redirect');
-                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAVERKAN);
+                    $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAV_PLANFK + ' ' + itemAffected.PAVERKAN);
                 }
 
                 $divAffectedDropDown.append($menuItem);
