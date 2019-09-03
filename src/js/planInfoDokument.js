@@ -488,6 +488,28 @@ function putPlanContentHolder($contentPlan, planid) {
 function putPlanAffected(planid, planAffected) {
 
     if (planAffected.length > 0) {
+
+        // Skapar stödmetod för kontroll om planen/institutet är möjlig att länka
+        planAffected.isPlanfkLinkable = function (planfk) {
+            switch (planfk) {
+                case 'BPL':
+                    return true;
+                case 'DP':
+                    return true;
+                case 'OB':
+                    return true;
+                case 'SPL':
+                    return true;
+                case 'ÄDP':
+                    return true;
+                case 'ÄOB':
+                    return true;
+                default:
+                    return false;
+            }
+        };
+
+
         // Platshållare för alla menyobjekt, grupp med berörda planer för drop down från meny
         var $divAffectedDropDown = $('<div>');
         $divAffectedDropDown.addClass('dropdown-menu dropdown-menu-right');
@@ -507,14 +529,18 @@ function putPlanAffected(planid, planAffected) {
 
         // Bygger lista för länk till alla planer som har relation till sökt plan
         var planidsAffected
+        var firstLinkebleAffected = true;
         planAffected.forEach(function (itemAffected) {
-            if (planAffected.indexOf(itemAffected) == 0) {
-                planidsAffected = itemAffected.NYCKEL_PAVARKAN;
-            }
-            else {
-                planidsAffected += "," + itemAffected.NYCKEL_PAVARKAN;
-            }
 
+            if (planAffected.isPlanfkLinkable(itemAffected.PAV_PLANFK)) {
+                if (firstLinkebleAffected) {
+                    planidsAffected = itemAffected.NYCKEL_PAVARKAN;
+                    firstLinkebleAffected = false;
+                }
+                else {
+                    planidsAffected += "," + itemAffected.NYCKEL_PAVARKAN;
+                }
+            }
 
         });
 
@@ -532,12 +558,14 @@ function putPlanAffected(planid, planAffected) {
         $divAffectedDropDown.append(aAffectedDivider);
 
 
-        var statusPlan = [
+        var statusPlanToText = [
             ["A", "Avregistrerad"],
             ["B", "Beslut"],
             ["F", "Förslag"],
             ["P", "Preliminär registrering"]
         ];
+
+
 
         var isSearchPlanChangedByDecision = false;
 
@@ -556,10 +584,12 @@ function putPlanAffected(planid, planAffected) {
                     $divAffectedDropDown.append($planRegisterBeslut);
                     isFirstBeslut = false;
                 }
+                console.log(itemAffected);
                 // Item
-                if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
+                if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B" && planAffected.isPlanfkLinkable(itemAffected.PAV_PLANFK)) {
                     var $menuItem = $('<a>');
                     $menuItem.addClass('dropdown-item');
+                    // Om plan blir ändrad av ÄDP eller ÄOB
                     if ((itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'upphävd av' ||
                         itemAffected.BESKRIVNING == 'har koppling till' || itemAffected.BESKRIVNING == 'består av') &&
                         (itemAffected.PAV_PLANFK == 'ÄDP' || itemAffected.PAV_PLANFK == 'ÄOB')) {
@@ -570,6 +600,7 @@ function putPlanAffected(planid, planAffected) {
                             isSearchPlanChangedByDecision = true;
                         }
                     }
+                    // Annars om ÄDP och ÄOB och ändrar
                     else if (itemAffected.BESKRIVNING == 'ändrar' && (itemAffected.PLANFK == 'ÄDP' || itemAffected.PLANFK == 'ÄOB')) {
                         $menuItem.addClass('planContent-affected-warning');
                         $menuItem.attr('title', 'Läses tillsammans med sökt ' + itemAffected.PLANFK);
@@ -585,15 +616,37 @@ function putPlanAffected(planid, planAffected) {
                     $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAV_PLANFK + ' ' + itemAffected.PAVERKAN);
                     $menuItem.append($spanLinkNewWindow.clone());
                 }
-                else if (itemAffected.STATUS_PAVARKAN != "B") {
+                else if (itemAffected.STATUS_PAVARKAN != "B" || !planAffected.isPlanfkLinkable(itemAffected.PAV_PLANFK)) {
                     var $menuItem = $('<span>');
                     $menuItem.addClass('dropdown-item cursor-redirect');
                     $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAV_PLANFK + ' ' + itemAffected.PAVERKAN);
-                    statusPlan.forEach(function (element) {
-                        if (element[0] == itemAffected.STATUS_PAVARKAN) {
-                            $menuItem.attr('title', 'Påverkan är ej länkningsbar p.g.a. att den är ' + element[1].toLowerCase());
+                    // Om plan blir ändrad av ÄDP eller ÄOB
+                    if ((itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'upphävd av' ||
+                        itemAffected.BESKRIVNING == 'har koppling till' || itemAffected.BESKRIVNING == 'består av') &&
+                        (itemAffected.PAV_PLANFK == 'ÄDP' || itemAffected.PAV_PLANFK == 'ÄOB')) {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Bör kontrollera vad som påverkar');
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
                         }
-                    });
+                    }
+                    // Annars om ÄDP och ÄOB och ändrar
+                    else if (itemAffected.BESKRIVNING == 'ändrar' && (itemAffected.PLANFK == 'ÄDP' || itemAffected.PLANFK == 'ÄOB')) {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Läses tillsammans med sökt ' + itemAffected.PLANFK);
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
+                        }
+                    }
+                    if (itemAffected.STATUS_PAVARKAN != "B") {
+                        statusPlanToText.forEach(function (element) {
+                            if (element[0] == itemAffected.STATUS_PAVARKAN) {
+                                $menuItem.attr('title', 'Påverkan är ej länkningsbar p.g.a. att den har status "' + element[1].toLowerCase() + '"');
+                            }
+                        });
+                    }
                 }
                 else {
                     var $menuItem = $('<span>');
@@ -623,8 +676,9 @@ function putPlanAffected(planid, planAffected) {
                     $divAffectedDropDown.append($ejPlanRegisterBeslut);
                     isFirstEjBeslut = false;
                 }
+
                 // Item
-                if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B") {
+                if (itemAffected.NYCKEL_PAVARKAN && itemAffected.STATUS_PAVARKAN == "B" && planAffected.isPlanfkLinkable(itemAffected.PAV_PLANFK)) {
                     var $menuItem = $('<a>');
                     $menuItem.addClass('dropdown-item');
                     if ((itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'upphävd av' ||
@@ -652,15 +706,37 @@ function putPlanAffected(planid, planAffected) {
                     $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAV_PLANFK + ' ' + itemAffected.PAVERKAN);
                     $menuItem.append($spanLinkNewWindow.clone());
                 }
-                else if (itemAffected.STATUS_PAVARKAN != "B") {
+                else if (itemAffected.STATUS_PAVARKAN != "B" || !planAffected.isPlanfkLinkable(itemAffected.PAV_PLANFK)) {
                     var $menuItem = $('<span>');
                     $menuItem.addClass('dropdown-item cursor-redirect');
                     $menuItem.text(itemAffected.BESKRIVNING + ' ' + itemAffected.PAV_PLANFK + ' ' + itemAffected.PAVERKAN);
-                    statusPlan.forEach(function (element) {
-                        if (element[0] == itemAffected.STATUS_PAVARKAN) {
-                            $menuItem.attr('title', 'Påverkan är ej länkad p.g.a. ' + element[1].toLowerCase());
+                    // Om plan blir ändrad av ÄDP eller ÄOB
+                    if ((itemAffected.BESKRIVNING == 'ändrad av' || itemAffected.BESKRIVNING == 'upphävd av' ||
+                        itemAffected.BESKRIVNING == 'har koppling till' || itemAffected.BESKRIVNING == 'består av') &&
+                        (itemAffected.PAV_PLANFK == 'ÄDP' || itemAffected.PAV_PLANFK == 'ÄOB')) {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Bör kontrollera vad som påverkar');
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
                         }
-                    });
+                    }
+                    // Annars om ÄDP och ÄOB och ändrar
+                    else if (itemAffected.BESKRIVNING == 'ändrar' && (itemAffected.PLANFK == 'ÄDP' || itemAffected.PLANFK == 'ÄOB')) {
+                        $menuItem.addClass('planContent-affected-warning');
+                        $menuItem.attr('title', 'Läses tillsammans med sökt ' + itemAffected.PLANFK);
+
+                        if (!isSearchPlanChangedByDecision) {
+                            isSearchPlanChangedByDecision = true;
+                        }
+                    }
+                    if (itemAffected.STATUS_PAVARKAN != "B") {
+                        statusPlanToText.forEach(function (element) {
+                            if (element[0] == itemAffected.STATUS_PAVARKAN) {
+                                $menuItem.attr('title', 'Påverkan är ej länkningsbar p.g.a. att den har status "' + element[1].toLowerCase() + '"');
+                            }
+                        });
+                    }
                 }
                 else {
                     var $menuItem = $('<span>');
