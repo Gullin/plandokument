@@ -8,7 +8,7 @@ deploy/
 log/
 zipTemp/
 packages/
-plandokument/
+plandokument*/
 plangeodata/
 
 # User-specific files
