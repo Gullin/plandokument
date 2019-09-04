@@ -4,6 +4,8 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
+    <link href="lib/bootstrap-4.1.2-dist/css/bootstrap.min.css" rel="stylesheet" />
+
     <link href="css/page-UI-core.css" rel="stylesheet" />
     <link href="css/page-UI-help.css" rel="stylesheet" />
     <title>Plandokument / Dokumentation</title>
@@ -43,6 +45,9 @@
                                     <li><a href="#2.2.1">Översiktlig panel</a></li>
                                     <li><a href="#2.2.2">Plandokument</a></li>
                                 </ul>
+                            </li>
+                            <li><a href="#2.3">Planpåverkan</a>
+
                             </li>
                         </ul>
                     </li>
@@ -487,7 +492,56 @@
                     Resultat av presenterade planer i kollapsat läge, ej presenterad detaljerad information med planens dokument och översiktsbild.
                 </p>
 
-                <h1 id="3">3 Om</h1>
+                <h2 id="2.3">2.3 Planpåverkan</h2>
+                <p>
+                    Sökt plan redovisar dess beroende/relationer (planpåverkan) till andra beslut som ex. andra planer, tomtindelningar, ändrade planer, beslut som upphäver men som ej 
+                    är en registrerad plan, etc. Relevansen av planpåverkan markeras med någon av nedan knappars utseende.
+                </p>
+                <table>
+                    <tr>
+                        <td>
+                            <button disabled="disabled" class="btn btn-outline-success btn-xs" type="button" title="Ingen påverkan från andra registrerade planer och beslut">
+                                Ingen planpåverkan</button>
+                        </td>
+                        <td style="vertical-align: middle;">
+                            Ingen relation till något annat beslut.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-secondary dropdown-toggle btn-xs btn-outline-secondary" type="button" title="Andra planer som berör samma område, påverkar planen eller har påverkats av planen">
+                                Planpåverkan</button>
+                        </td>
+                        <td style="vertical-align: middle;">
+                            Relation till andra beslut men som <span style="font-weight: bold; text-decoration: underline;">inte</span> påverkar sökt plans bestämmelse(r).
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-secondary dropdown-toggle btn-xs btn-outline-danger" type="button" title="Andra planer som berör samma område, påverkar planen eller har påverkats av planen">
+                                Planpåverkan</button>
+                        </td>
+                        <td style="vertical-align: middle;">
+                            Relation till andra beslut som <span style="font-weight: bold; text-decoration: underline;">påverkar</span> sökt plan i någon form. Markerade relationer ska läsas tillsammans med sökt plan!
+                        </td>
+                    </tr>
+                </table>
+                <p>
+                    <img style="float: right;" src="<%= ResolveUrl("~/") %>pic/help/planpavarkan-beslut.png" />
+                    Vid klickning på knappen, vid existerande relation, listas påverkande beslut. Alla relationer listas oberoende typ av relation.
+                    Relationer som är av betydelse för gällande bestämmelser markeras specifikt. <br />
+                    Beslut som påverkar sökt plan markeras med <img src="<%= ResolveUrl("~/") %>pic/warning.png" alt="Röd varningstriangel med utropstecken" />
+                    och ska läsas tillsammans med sökt plan. Om relation är en registrerad plan länkas beslutet och plandokument är möjliga att få fram även för det beslutet.
+                </p>
+                <p>
+                    Existerar länkade beslut sammanfattas de även överst under en länk "Lista alla". <br />
+                    Beslut listas som "Planbeslut" eller "Övriga beslut". <br />
+                    "Planbeslut" är planer som registrerats i fastighetsregistret och i registerkartan och har en faktisk representation i kartan. <br />
+                    "Övriga beslut" listar beslut som inte nödvändigt är en registrerad plan men som påverkar sökt plan. Kan exempelvis vara upphävande beslut.
+                </p>
+
+
+                <h1 id="3" style="clear: right;">3 Om</h1>
                 <p>
                     Plandokumenten skannas och bearbetas i rutinen för planens lagakrafthantering och i den efterföljande registrering. Alla dokument kopplade till planen skannas och genomgår sortering om vad som bl.a. utgör formell planhandling. Dokumenten är åtkomliga inom Landskrona stads organisation och för de som har tillgång till intranätet (det s.k. Arbetsnätet) samt som delmängd på www.landskrona.se. Det är originalhandlingen, undertecknade dokument, som skannas. Undertecknad handling existerar inte för alla dokument i alla planer då de ej alltid gått att finna.
                 </p>
@@ -508,6 +562,10 @@
                     <li>Planens berörkrets av fastigheter genom resp. fastighets lokala nyckel i fastighetsregistret</li>
                     <li>Planens berörkrets av fastigheter genom resp. fastighets fastighetsbeteckning</li>
                 </ol>
+                <p>
+                    Respektive sökt plan listar även relaterande beslut för en så fullständig bild över bestämmelserna som möjligt.
+                </p>
+
 
 
                 <h1 id="4">4 För utvecklare</h1>

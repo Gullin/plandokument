@@ -44,6 +44,8 @@
                         <ul>
                             <li>
                                 <ul>
+                                    <li><span>v0.16.17</span> Planpåverkan, hjälpdokumentation <a href="<%= ResolveUrl("~/") %>dokument/om#2.3">här</a>.
+                                    </li>
                                     <li><span>v0.16.16</span> BUGGRÄTTNING: Planpåverkan, tomtindelningar flaggas som varningar men länkas ej.
                                     </li>
                                     <li><span>v0.16.15</span> BUGGRÄTTNING: Planpåverkan, länkningsbara beslut listade under "Övriga beslut" var ej länkade.
