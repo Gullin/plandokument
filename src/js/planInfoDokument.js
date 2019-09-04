@@ -536,6 +536,7 @@ function putPlanAffected(planid, planAffected) {
         var spanLinkNewWindow = '<span class="linkNewWindow" title="Öppnar länk i nytt webbläsarfönster"> </span>';
 
 
+        // För varje påverkande beslut
         planAffected.forEach(function (itemAffected, index, affected) {
 
             // Länkning
@@ -554,6 +555,7 @@ function putPlanAffected(planid, planAffected) {
             else {
 
                 var $menuItem = $('<span>');
+                $menuItem.addClass('cursor-redirect');
 
             }
 
@@ -622,12 +624,10 @@ function putPlanAffected(planid, planAffected) {
 
             }
 
-
-
-
         });
 
 
+        // Länk för alla länkbara påverkande beslut
         if (linkablePlanAll.length > 0) {
             var $menuItem = $('<a>');
             $menuItem.addClass('dropdown-item');

@@ -44,6 +44,8 @@
                         <ul>
                             <li>
                                 <ul>
+                                    <li><span>v0.16.16</span> BUGGRÄTTNING: Planpåverkan, tomtindelningar flaggas som varningar men länkas ej.
+                                    </li>
                                     <li><span>v0.16.15</span> BUGGRÄTTNING: Planpåverkan, länkningsbara beslut listade under "Övriga beslut" var ej länkade.
                                     </li>
                                     <li><span>v0.16.14</span> Vid sökning på ÄDP och ÄOB ges varning i planpåverkan att de ska läsas tillsammans med plan som ändras.
