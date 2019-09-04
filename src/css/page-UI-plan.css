@@ -216,6 +216,17 @@
     background-position-y: center;
 }
 
+.planContent-deregistered {
+    text-decoration: line-through;
+    text-decoration-color: rgb(150,150,150);
+    color: rgb(50,50,50)
+}
+
+    .planContent-deregistered:hover {
+        text-decoration: none;
+        color: rgb(150,150,150);
+    }
+
 .btn, .btn-xs {
     padding: .25rem .4rem;
     font-size: 1.1em;
