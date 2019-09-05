@@ -283,20 +283,54 @@ namespace Plan.Plandokument
         /// </summary>
         private static void setDocumenttypesCache()
         {
+            initDocumenttypesCache();
+        }
+        /// <summary>
+        /// Skapa cache för plandokumenttyper med samma signatur som för delegate CacheItemRemovedCallback.
+        /// Existerar p.g.a. callback och reinitiering av cache när cache slutar existera.
+        /// </summary>
+        private static void setDocumenttypesCache(string key, object value, CacheItemRemovedReason reason)
+        {
+            initDocumenttypesCache();
+        }
+        /// <summary>
+        /// Initierar cache för dokumenttyper
+        /// </summary>
+        private static void initDocumenttypesCache()
+        {
             DateTime cacheExpiration = setCacheExpiration();
 
             Documenttypes documenttypes = new Documenttypes();
             List<Documenttype> listOfDocumenttypes = documenttypes.GetDocumenttypes;
 
+            // Callback för när cache försvinner
+            CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setDocumenttypesCache);
+
             // Skapa cach av alla planer
             Cache cache = HttpRuntime.Cache;
-            cache.Insert("Documenttypes", listOfDocumenttypes, null, cacheExpiration, Cache.NoSlidingExpiration);
+            cache.Insert("Documenttypes", listOfDocumenttypes, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
         }
+        
 
         /// <summary>
         /// Skapar cache för basinformationen till planer
         /// </summary>
         public static void setPlanCache()
+        {
+            initPlanCache();
+        }
+        /// <summary>
+        /// Skapa cache för basinformationen till planer med samma signatur som för delegate CacheItemRemovedCallback.
+        /// Existerar p.g.a. callback och reinitiering av cache när cache slutar existera.
+        /// </summary>
+        private static void setPlanCache(string key, object value, CacheItemRemovedReason reason)
+        {
+            initPlanCache();
+        }
+        /// <summary>
+        /// Initierar cache för basinformationen till planer
+        /// </summary>
+        public static void initPlanCache()
         {
             //string conStr = ConfigurationManager.AppSettings["OracleOleDBConString"].ToString();
             string sql = string.Empty;
@@ -333,19 +367,38 @@ namespace Plan.Plandokument
 
             DateTime cacheExpiration = setCacheExpiration();
 
+            // Callback för när cache försvinner
+            CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setPlanCache);
+
             // Skapa cach av alla planer
             Cache cache = HttpRuntime.Cache;
-            cache.Insert("Plans", dtPlans, null, cacheExpiration, Cache.NoSlidingExpiration);
+            cache.Insert("Plans", dtPlans, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
 
             dtPlans.Dispose();
             con.Close();
             con.Dispose();
         }
 
+
         /// <summary>
         /// Skapar cache med fastigheter som berörs av resp. plan
         /// </summary>
         public static void setPlanBerorFastighetCache()
+        {
+            initPlanBerorFastighetCache();
+        }
+        /// <summary>
+        /// Skapa cache med fastigheter som berörs av resp. plan med samma signatur som för delegate CacheItemRemovedCallback.
+        /// Existerar p.g.a. callback och reinitiering av cache när cache slutar existera.
+        /// </summary>
+        private static void setPlanBerorFastighetCache(string key, object value, CacheItemRemovedReason reason)
+        {
+            initPlanBerorFastighetCache();
+        }
+        /// <summary>
+        /// Initierar cache med fastigheter som berörs av resp. plan
+        /// </summary>
+        public static void initPlanBerorFastighetCache()
         {
             //string conStr = ConfigurationManager.AppSettings["OracleOleDBConString"].ToString();
             string sql = string.Empty;
@@ -369,19 +422,38 @@ namespace Plan.Plandokument
 
             DateTime cacheExpiration = setCacheExpiration();
 
+            // Callback för när cache försvinner
+            CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setPlanBerorFastighetCache);
+
             // Skapa cach av alla planer
             Cache cache = HttpRuntime.Cache;
-            cache.Insert("PlanBerorFastighet", dtPlanBerorFastighet, null, cacheExpiration, Cache.NoSlidingExpiration);
+            cache.Insert("PlanBerorFastighet", dtPlanBerorFastighet, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
 
             dtPlanBerorFastighet.Dispose();
             con.Close();
             con.Dispose();
         }
 
+
         /// <summary>
         /// Skapar cache med planer som berör eller har berörts av andra planer
         /// </summary>
         public static void setPlanBerorPlanCache()
+        {
+            initPlanBerorPlanCache();
+        }
+        /// <summary>
+        /// Skapa cache med planer som berörs eller har berörts av andra planer med samma signatur som för delegate CacheItemRemovedCallback.
+        /// Existerar p.g.a. callback och reinitiering av cache när cache slutar existera.
+        /// </summary>
+        public static void setPlanBerorPlanCache(string key, object value, CacheItemRemovedReason reason)
+        {
+            initPlanBerorPlanCache();
+        }
+        /// <summary>
+        /// Initierar cache med planer som berör eller har berörts av andra planer
+        /// </summary>
+        public static void initPlanBerorPlanCache()
         {
             string sql = string.Empty;
 
@@ -404,14 +476,18 @@ namespace Plan.Plandokument
 
             DateTime cacheExpiration = setCacheExpiration();
 
+            // Callback för när cache försvinner
+            CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setPlanBerorPlanCache);
+
             // Skapa cach av alla planer
             Cache cache = HttpRuntime.Cache;
-            cache.Insert("PlanBerorPlan", dtPlanBerorPlan, null, cacheExpiration, Cache.NoSlidingExpiration);
+            cache.Insert("PlanBerorPlan", dtPlanBerorPlan, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
 
             dtPlanBerorPlan.Dispose();
             con.Close();
             con.Dispose();
         }
+
 
 
         /// <summary>
