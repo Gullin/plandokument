@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Web.Routing;
 using OSGeo.MapGuide;
 
@@ -10,6 +11,13 @@ namespace Plan.Plandokument
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            // Starta ping-ning av webb applikation
+            if (Boolean.TryParse(ConfigurationManager.AppSettings["shouldPing"], out bool result))
+            {
+                new CheckingRestartApp().Start(int.Parse(ConfigurationManager.AppSettings["pingIntervall"]));
+            }
+
+
             Plan.Plandokument.PlanCache.GetPlandocumenttypesCache();
             Plan.Plandokument.PlanCache.GetPlanBasisCache();
             Plan.Plandokument.PlanCache.GetPlanBerorFastighetCache();
@@ -73,7 +81,11 @@ namespace Plan.Plandokument
 
         protected void Application_End(object sender, EventArgs e)
         {
-
+            // Tvinga app:n att starta om direkt
+            if (Boolean.TryParse(ConfigurationManager.AppSettings["shouldPing"], out bool result))
+            {
+                new CheckingRestartApp().PingServer();
+            }
         }
 
         public static void RegisterRoutes(RouteCollection routes)

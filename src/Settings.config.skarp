@@ -43,6 +43,7 @@
   <add key="UrlParameterDocumentType" value="dokument" />
   <!-- "NYCKEL", "AKT", "AKTTIDIGARE", "AKTEGEN", "FASTIGHET", "FASTIGHETNYCKEL" -->
   <add key="UrlParameterSearchType" value="begrepp" />
+  
   <!-- Cachning, registerinformation planer för snabbare sökning och minskat beroende till databas -->
   <!-- Antal dagar från applikationsstart som begränsad planinformation cachas -->
   <add key="CacheNbrOfDays" value="1" />
@@ -98,6 +99,15 @@
   <add key="requestStatFileMaxByteSize" value="0,001" />
   <!-- Maximalt antal filer (möjlighet att dela upp loggning i flera filer), negativt värde ger oändligt antal filer, noll ingen loggning etc. (anges inget eller ej hanterbart värde är standard oändlig antal filer) -->
   <add key="requestStatFileMaxTotal" value="-1" />
+
+
+  <!-- Ping av webbapplikation. Möjliggör för automatisk uppstarta av applikationen efter att IIS rensat resurser. -->
+  <!-- Aktivering av funktion [true|false]. Standard är false. -->
+  <add key="shouldPing" value="true" />
+  <!-- Tidsintervall mellan ping i sekunder -->
+  <add key="pingIntervall" value="30" />
+  <!-- URL som ping:as -->
+  <add key="pingUrl" value="" />
 
 
   <!-- E-post, används för signal vid fel i applikationen -->

@@ -20,7 +20,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>true</Use64BitIISExpress>
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -230,6 +230,7 @@
     <Content Include="pic\help\handlaggarkartan-gallande_planer-informationsruta.png" />
     <Content Include="pic\help\handlaggarkartan-gallande_planer-lager_ibockad.png" />
     <Content Include="pic\help\handlaggarkartan-gallande_planer.png" />
+    <Content Include="pic\help\planpavarkan-beslut.png" />
     <Content Include="pic\jpg.png" />
     <Content Include="pic\katalog.png" />
     <Content Include="pic\knob-blue.png" />
@@ -289,6 +290,7 @@
     <Compile Include="class\PlanBerorPlan.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="class\Utility.CheckingRestartApp.cs" />
     <Compile Include="class\UtilityDatabase.cs" />
     <Compile Include="class\UtilityException.cs" />
     <Compile Include="class\LayerDefinitionFactory.cs" />
@@ -422,7 +424,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>61806</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/app/plan</IISUrl>
+          <IISUrl>http://localhost/plan/dokument</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
