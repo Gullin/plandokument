@@ -57,7 +57,6 @@ namespace Plan.Plandokument
             while (!Cancelled)
             {
                 // *** Http Ping to force the server to stay alive 
-                Debug.WriteLine("Ping");
                 this.PingServer();
                 // *** Put in 
                 this.WaitHandle.WaitOne(this.CheckFrequency * 1000, true);
@@ -70,14 +69,7 @@ namespace Plan.Plandokument
             try
             {
                 WebClient http = new WebClient();
-                //string Result = http.DownloadString(ConfigurationManager.AppSettings["pingUrl"].ToString());
-                StackTrace stackTrace = new StackTrace();
-
-                // Get calling method name
-                Debug.WriteLine(stackTrace.GetFrame(3).GetMethod().Name);
-                Debug.WriteLine(stackTrace.GetFrame(1).GetMethod().Name);
-                Debug.WriteLine("####################" + DateTime.Now.ToString());
-
+                string Result = http.DownloadString(ConfigurationManager.AppSettings["pingUrl"].ToString());
             }
             catch
             {
