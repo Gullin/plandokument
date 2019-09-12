@@ -42,7 +42,6 @@ namespace Plan.Plandokument
                 baseFileName = baseFileNameDefult;
             }
             string logFile = logDirectory + baseFileName + ".log";
-            logFile = HttpContext.Current.Server.MapPath(logFile);
             if (!File.Exists(logFile))
             {
                 using (FileStream fs = File.Create(logFile))
@@ -187,7 +186,7 @@ namespace Plan.Plandokument
                 {
                     // Formatera datum-tids-sträng för unik
                     string fileTimeSuffix = DateTime.Now.ToString("yyyyMMddTHHmmss.fff");
-                    File.Copy(logFile, logDirectory + "\\" + baseFileName + fileTimeSuffix + ".log");
+                    File.Copy(logFile, logDirectory + baseFileName + fileTimeSuffix + ".log");
                 }
 
                 // Tömmer basfilen till noll byte

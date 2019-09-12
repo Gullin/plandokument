@@ -14,7 +14,11 @@ namespace Plan.Plandokument
             // Starta ping-ning av webb applikation
             if (Boolean.TryParse(ConfigurationManager.AppSettings["shouldPing"], out bool result))
             {
-                new CheckingRestartApp().Start(int.Parse(ConfigurationManager.AppSettings["pingIntervall"]));
+                CheckingRestartApp checkingRestartApp = new CheckingRestartApp();
+                checkingRestartApp.Start(int.Parse(ConfigurationManager.AppSettings["pingIntervall"]));
+                // Lyssna efter när ping görs
+                checkingRestartApp.OnPinged += new EventHandler(Log_OnPinged);
+                UtilityLog.Log("Start av intern ping av webbapplikationen", Utility.LogLevel.INFORM);
             }
 
 
@@ -86,6 +90,12 @@ namespace Plan.Plandokument
             {
                 new CheckingRestartApp().PingServer();
             }
+        }
+
+
+        private void Log_OnPinged(object sender, EventArgs e)
+        {
+            UtilityLog.Log("Ping av webbapplikation", Utility.LogLevel.INFORM);
         }
 
         public static void RegisterRoutes(RouteCollection routes)

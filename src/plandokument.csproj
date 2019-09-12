@@ -292,6 +292,7 @@
     </Compile>
     <Compile Include="class\Utility.CheckingRestartApp.cs" />
     <Compile Include="class\UtilityDatabase.cs" />
+    <Compile Include="class\UtilityLog.cs" />
     <Compile Include="class\UtilityException.cs" />
     <Compile Include="class\LayerDefinitionFactory.cs" />
     <Compile Include="class\Utility.cs" />

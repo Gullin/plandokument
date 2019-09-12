@@ -14,11 +14,15 @@ namespace Plan.Plandokument
         public bool Cancelled { get; set; } = false;
         // Frekvensen (default värde), i sekunder, kontroll av app:n sker
         private int CheckFrequency = 180;
+        SynchronizationContext _currentContex;
+        public event EventHandler OnPinged;
         AutoResetEvent WaitHandle = new AutoResetEvent(false);
         object SyncLock = new Object();
 
         public CheckingRestartApp()
         {
+            _currentContex = SynchronizationContext.Current;
+            _currentContex = _currentContex ?? new SynchronizationContext();
         }
         
 
@@ -58,11 +62,16 @@ namespace Plan.Plandokument
             {
                 // *** Http Ping to force the server to stay alive 
                 this.PingServer();
+                _currentContex.Post(new SendOrPostCallback(this.CallEventHandler), this);
                 // *** Put in 
                 this.WaitHandle.WaitOne(this.CheckFrequency * 1000, true);
             }
         }
 
+        private void CallEventHandler(object state)
+        {
+            OnPinged.Invoke(this, EventArgs.Empty);
+        }
 
         public void PingServer()
         {
