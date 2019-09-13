@@ -11,6 +11,8 @@ namespace Plan.Plandokument
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            UtilityLog.Log("Start, webbapplikation", Utility.LogLevel.INFORM);
+
             // Starta ping-ning av webb applikation
             if (Boolean.TryParse(ConfigurationManager.AppSettings["shouldPing"], out bool result))
             {
@@ -50,7 +52,7 @@ namespace Plan.Plandokument
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            // Code that runs when an unhandled error occurs
+            UtilityLog.Log("Fel i webbapplikation, detaljer i Error.log", Utility.LogLevel.ERROR);
 
             // Get the exception object.
             Exception exc = Server.GetLastError();
@@ -85,6 +87,8 @@ namespace Plan.Plandokument
 
         protected void Application_End(object sender, EventArgs e)
         {
+            UtilityLog.Log("Avslutar webbapplikation", Utility.LogLevel.WARN);
+
             // Tvinga app:n att starta om direkt
             if (Boolean.TryParse(ConfigurationManager.AppSettings["shouldPing"], out bool result))
             {
