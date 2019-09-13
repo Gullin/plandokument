@@ -9,68 +9,85 @@
     <link href="css/page-UI-core.css" rel="stylesheet" />
     <link href="css/page-UI-help.css" rel="stylesheet" />
     <title>Plandokument / Dokumentation</title>
+
+    <script src="../js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="../lib/bootstrap-4.1.2-dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        body {
+            position: relative;
+        }
+
+        #menu a {
+            border: none;
+            padding: 0px 0px 0px 0.5em;
+        }
+
+        .list-group-item.active {
+            background-color: rgb(155, 193, 235);
+        }
+    </style>
 </head>
-<body>
+<body data-spy="scroll" data-target="#menu">
     <form id="form1" runat="server">
-        <div id="wrapper">
-            <div id="contentIndex">
-                <ul>
-                    <li><a href="#1">Hitta plandokument från</a>
+            <div id="contentIndex" class="list-group">
+                <ul id="menu">
+                    <li><a class="list-group-item list-group-item-action" href="#avsnitt1">Hitta plandokument från</a>
                     <ul>
-                        <li><a href="#1.1">Karta</a>
+                        <li><a class="list-group-item list-group-item-action" href="#avsnitt1-1">Karta</a>
                             <ul>
-                                <li><a href="#1.1.1">Plan</a></li>
-                                <li><a href="#1.1.2">Fastighet</a></li>
+                                <li><a class="list-group-item list-group-item-action" href="#avsnitt1-1-1">Plan</a></li>
+                                <li><a class="list-group-item list-group-item-action" href="#avsnitt1-1-2">Fastighet</a></li>
                             </ul>
                         </li>
-                        <li><a href="#1.2">Adressfält i webbläsare</a>
+                        <li><a class="list-group-item list-group-item-action" href="#avsnitt1-2">Adressfält i webbläsare</a>
                             <ul>
-                                <li><a href="#1.2.1">För alla</a></li>
-                                <li><a href="#1.2.2">För enskilda</a></li>
+                                <li><a class="list-group-item list-group-item-action" href="#avsnitt1-2-1">För alla</a></li>
+                                <li><a class="list-group-item list-group-item-action" href="#avsnitt1-2-2">För enskilda</a></li>
                             </ul>
                         </li>
                     </ul>
                     </li>
-                    <li><a href="#2">Grafiskt användargränssnitt</a>
+                    <li><a class="list-group-item list-group-item-action" href="#avsnitt2">Grafiskt användargränssnitt</a>
                         <ul>
-                            <li><a href="#2.1">För alla</a>
+                            <li><a class="list-group-item list-group-item-action" href="#avsnitt2-1">För alla</a>
                                 <ul>
-                                    <li><a href="#2.1.1">Enkel listform</a></li>
-                                    <li><a href="#2.1.2">Listning av plandokument</a></li>
+                                    <li><a class="list-group-item list-group-item-action" href="#avsnitt2-1-1">Enkel listform</a></li>
+                                    <li><a class="list-group-item list-group-item-action" href="#avsnitt2-1-2">Listning av plandokument</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#2.2">För enskilda</a>
+                            <li><a class="list-group-item list-group-item-action" href="#avsnitt2-2">För enskilda</a>
                                 <ul>
-                                    <li><a href="#2.2.1">Översiktlig panel</a></li>
-                                    <li><a href="#2.2.2">Plandokument</a></li>
+                                    <li><a class="list-group-item list-group-item-action" href="#avsnitt2-2-1">Översiktlig panel</a></li>
+                                    <li><a class="list-group-item list-group-item-action" href="#avsnitt2-2-2">Plandokument</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#2.3">Planpåverkan</a>
+                            <li><a class="list-group-item list-group-item-action" href="#avsnitt2-3">Planpåverkan</a>
 
                             </li>
                         </ul>
                     </li>
-                    <li><a href="#3">Om</a></li>
-                    <li><a href="#4">Inställningar / konfiguration</a>
+                    <li><a class="list-group-item list-group-item-action" href="#avsnitt3">Om</a></li>
+                    <li><a class="list-group-item list-group-item-action" href="#avsnitt4">Inställningar / konfiguration</a>
                         <ul>
-                            <li><a href="#4.1">Dokumentbegrepp</a></li>
-                            <li><a href="#4.2">Settings.config</a></li>
+                            <li><a class="list-group-item list-group-item-action" href="#avsnitt4-1">Dokumentbegrepp</a></li>
+                            <li><a class="list-group-item list-group-item-action" href="#avsnitt4-2">Settings.config</a></li>
                         </ul>
                     </li>
-                    <li><a href="#5">För utvecklare</a></li>
-                    <li><a href="<%=ResolveUrl("~")%>versioninfo.aspx">Versionsinformation</a></li>
+                    <li><a class="list-group-item list-group-item-action" href="#avsnitt5">För utvecklare</a></li>
+                    <li><a href="<%=ResolveUrl("~")%>versioninfo.aspx">Versionsinformation</a><span class="linkNewWindow"> </span></li>
                 </ul>
             </div>
 
             <div id="content">
 
-                <h1 id="1">1 Hitta plandokument från</h1>
+                <h1 id="avsnitt1">1 Hitta plandokument från</h1>
                 <p>
                     Plandokumenten är tillgängliga genom karta eller genom att söka direkt på plan i webbläsarens adressfält.
                 </p>
 
 
-                <h2 id="1.1">1.1 Karta</h2>
+                <h2 id="avsnitt1-1">1.1 Karta</h2>
                 <p>
                     Plandokumenten är åtkomliga genom kartorna ”<a href="https://geodata.landskrona.local">Medarbetarkartan</a>” och ”<a href="https://geodata-handlaggare.landskrona.local">Handläggarkartan</a>” samt ”<a href="https://karta.landskrona.se">Landskronakartan</a>” (begränsas till plandokumenten plankarta, planbeskrivning och genomförandebeskrivning i "Landskronakartan"). Åtkomsten sker antingen genom att utgå ifrån planområdet för gällande planer, fastighet (genom planens berörkrets) eller indirekt genom sökning på planbeteckning.
                 </p>
@@ -78,7 +95,7 @@
                     Alternativen nedan kan användas när objekt väljs/markeras i kartan. Plandokument tillhörande en plan åt gången går att ladda ner eller öppna.
                 </p>
 
-                <h3 id="1.1.1">1.1.1 Plan</h3>
+                <h3 id="avsnitt1-1-1">1.1.1 Plan</h3>
                 <p>
                     Lagergruppen ”Planer” innehåller lager ”Gällande planer” (kan ses i nedan exempelbild från "Handläggarkartan"). ”Gällande planer” är ett delvis transparent och valbart lager.
                 </p>
@@ -102,7 +119,7 @@
 
 
 
-                <h3 id="1.1.2">1.1.2 Fastighet</h3>
+                <h3 id="avsnitt1-1-2">1.1.2 Fastighet</h3>
                 <p>
                     Lagergruppen ”Fastighet mm” innehåller ytterligare en lagergrupp ”Fastigheter” på samma sätt som för gällande planer i lagergrupp planer (se avsnitt ovan). Genom att använda sig av fastighet som ingång till planer väljs plan beroende av vilka fastigheter en plan berör. En plans s.k. berörkrets är registrerad i fastighetsregistret.
                 </p>
@@ -130,7 +147,7 @@
 
 
 
-                <h2 id="1.2">1.2 Adressfält i webbläsare</h2>
+                <h2 id="avsnitt1-2">1.2 Adressfält i webbläsare</h2>
                 <p>
                     Plandokumenten kan nås, inte bara genom kartan, utan även direkt genom webbläsarens adressfält. Kräver dock att det finns kännedom om planens formella aktbeteckning, stadens f.d. stadsingenjörskontors arkivserie, plan- och bygglovsverksamheternas f.d. arkivserie eller fastighet planen berör. De båda sistnämnda arkivserierna uppstår det inga nya av (för planer beslutade efter år 1999 existerar ingen arkivserie från f.d. stadsingenjörskontoret samt planer beslutade efter år 2012 existerar inte heller någon arkivserie från plan-och bygglovsverksamheterna).
                 </p>
@@ -146,7 +163,7 @@
                     <br />
                     efterkommande delar i adressen styr vilka och på vilket sätt plandokument presenteras.
                 </p>
-                <h3 id="1.2.1">1.2.1 För alla</h3>
+                <h3 id="avsnitt1-2-1">1.2.1 För alla</h3>
                 <p>
                     För att lista alla gällande och registrerade planer gäller nedan adress. Vardera plans plandokument går att ladda ner. <br />
                     Information som presenteras är typ av plan, aktbeteckning, de äldre arkivserierna, dess plannamn och om planen är inom genomförande tid eller ej. <br />
@@ -155,7 +172,7 @@
                 <div class="adresSearch">
                     https://geodata.landskrona.local/app/plan/dokument/alla
                 </div>
-                <h3 id="1.2.2">1.2.2 För enskilda</h3>
+                <h3 id="avsnitt1-2-2">1.2.2 För enskilda</h3>
                 <p>
                     I detta fall finns det tre delar för specificering:
                 </p>
@@ -389,13 +406,13 @@
                 </div>
 
 
-                <h1 id="2">2 Grafiskt användargränssnitt</h1>
-                <h2 id="2.1">2.1 För alla</h2>
+                <h1 id="avsnitt2">2 Grafiskt användargränssnitt</h1>
+                <h2 id="avsnitt2-1">2.1 För alla</h2>
                 <p>
                     Indexen i bilden nedan hänvisas det till i den förklarande texten. Var rad i tabellen motsvarar en plan.
                     <img src="<%= ResolveUrl("~/") %>pic/LayoutExplanationAlla.png" />
                 </p>
-                <h3 id="2.1.1">2.1.1 Enkel listform (i bildens del 'A')</h3>
+                <h3 id="avsnitt2-1-1">2.1.1 Enkel listform (i bildens del 'A')</h3>
                 <p style="font-size: 1.5em; font-weight: bold;">A</p>
                 <ol>
                     <li>Sorterar kolumn</li>
@@ -408,7 +425,7 @@
                     </li>
                 </ol>
 
-                <h3 id="2.1.2">2.1.2 Listning av plandokument (i bildens del 'B')</h3>
+                <h3 id="avsnitt2-1-2">2.1.2 Listning av plandokument (i bildens del 'B')</h3>
                 <p style="font-size: 1.5em; font-weight: bold;">B</p>
                 <ol start="4">
                     <li>Urvalsruta - markerar eller avmarkerar alla plandokument.</li>
@@ -417,14 +434,15 @@
                     <li>Stänger planens tabell med plandokument.</li>
                 </ol>
 
-                <h2 id="2.2">2.2 För enskilda</h2>
+                <h2 id="avsnitt2-2">2.2 För enskilda</h2>
                 <p>
                     Indexen i bilden nedan hänvisas det till i den förklarande texten. Presentationen av sökt plan görs i en layout liknande bibliotekens gamla kort i kartoteken, i huvudsak enligt ’B’, där ett kort är detsamma som en plan. Vid sökning där fler än en plan presenteras är dessa kort initialt kollapsade till att endast presentera planerna i rubrikform enligt ’C’. Alla sökningar presenteras översiktligt tillsammans med annan information av mer statistisk karaktär enligt ’A’.
+                    <br />
                     <img src="<%= ResolveUrl("~/") %>pic/LayoutExplanationv2.png" />
                 </p>
 
 
-                <h3 id="2.2.1">2.2.1 Översiktlig panel (i bildens del 'A')</h3>
+                <h3 id="avsnitt2-2-1">2.2.1 Översiktlig panel (i bildens del 'A')</h3>
                 <p style="font-size: 1.5em; font-weight: bold;">A</p>
                 <ol>
                     <li>Funktion som för alla planer kollapsar/stänger alternativt expanderar den detaljerade informationen med plandokument och kartöversikt.</li>
@@ -442,7 +460,7 @@
                     <li>Visar antalet gällande planer, vilka olika plantyper som existerar av dessa och hur många vardera är samt även hur många av dessa som är inom genomförandetid.</li>
                 </ol>
 
-                <h3 id="2.2.2">2.2.2 Plandokument (i bildens del 'B')</h3>
+                <h3 id="avsnitt2-2-2">2.2.2 Plandokument (i bildens del 'B')</h3>
                 <p style="font-size: 1.5em; font-weight: bold;">B</p>
                 <ol>
                     <li>Planens rubrikparti, innehållande i huvudsak formell aktbeteckning och arkivserier, är aktiv där det är möjligt att kollapsa respektive expandera planinnehållet.</li>
@@ -497,7 +515,7 @@
                     Resultat av presenterade planer i kollapsat läge, ej presenterad detaljerad information med planens dokument och översiktsbild.
                 </p>
 
-                <h2 id="2.3">2.3 Planpåverkan</h2>
+                <h2 id="avsnitt2-3">2.3 Planpåverkan</h2>
                 <p>
                     Sökt plan redovisar dess beroende/relationer (planpåverkan) till andra beslut som ex. andra planer, tomtindelningar, ändrade planer, beslut som upphäver men som ej 
                     är en registrerad plan, etc. Relevansen av planpåverkan markeras med någon av nedan knappars utseende.
@@ -546,7 +564,7 @@
                 </p>
 
 
-                <h1 id="3" style="clear: right;">3 Om</h1>
+                <h1 id="avsnitt3" style="clear: right;">3 Om</h1>
                 <p>
                     Plandokumenten skannas och bearbetas i rutinen för planens lagakrafthantering och i den efterföljande registrering. Alla dokument kopplade till planen skannas och genomgår sortering om vad som bl.a. utgör formell planhandling. Dokumenten är åtkomliga inom Landskrona stads organisation och för de som har tillgång till intranätet (det s.k. Arbetsnätet) samt som delmängd på www.landskrona.se. Det är originalhandlingen, undertecknade dokument, som skannas. Undertecknad handling existerar inte för alla dokument i alla planer då de ej alltid gått att finna.
                 </p>
@@ -573,8 +591,8 @@
 
 
 
-                <h1 id="4">4 Inställningar / konfiguration</h1>
-                <h2 id="4.1">4.1 Dokumentbegrepp</h2>
+                <h1 id="avsnitt4">4 Inställningar / konfiguration</h1>
+                <h2 id="avsnitt4-1">4.1 Dokumentbegrepp</h2>
                 <p>
                     Alla plandokument blir klassad som någon dokumenttyp. Dessa dokumenttyper definieras i filen "dokumenttyper.csv". Denna går att hitta i webbapplikationens rotkatalog.
                     csv-filen kan ses som en tabell utan kolumnrubriker och där resp. kolumn separeras av semikolon (;). csv-filen består utav <asp:Label ID="nbrColumnDocumenttypes" runat="server" /> st. kolumner.
@@ -600,7 +618,7 @@
                 </p>
 
 
-                <h2 id="4.2">4.2 Settings.config</h2>
+                <h2 id="avsnitt4-2">4.2 Settings.config</h2>
                 <p>
                     Flera grundinställningar av webbappikationen kan göras i filen "Settings.config". Denna går att hitta i webbapplikationens rotkatalog. För närmare beskrivning av resp. inställning hänvisas man till kommentarerna i filen.
                     <br />
@@ -654,7 +672,7 @@
 
 
 
-                <h1 id="5">5 För utvecklare</h1>
+                <h1 id="avsnitt5">5 För utvecklare</h1>
                 <p>
                     Ett sätt att söka via webbläsarens adressfält och på ett mer användarvänligt och intuativt sätt är enligt avsnittet "Hitta plandokument genom" "Adressfält i webbläsare". Yterliggare ett sätt att söka är genom parameter/värde-par. Ordningen på dessa namn/värde-par har ingen betydelse. Denna modell för sökning är främst tänkt att användas av andra applikationer.
                 </p>
@@ -680,7 +698,6 @@
                     </p>
                 </div>
             </div>
-        </div>
     </form>
 </body>
 </html>
