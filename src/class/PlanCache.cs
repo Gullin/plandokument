@@ -100,7 +100,7 @@ namespace Plan.Plandokument
         /// <returns></returns>
         public static bool CacheExistsPlanBasis()
         {
-            DataTable cache = (DataTable)HttpRuntime.Cache["Plans"];
+            var cache = HttpRuntime.Cache["Plans"];
 
             if (cache != null)
             {
@@ -119,7 +119,7 @@ namespace Plan.Plandokument
         /// <returns></returns>
         public static bool CacheExistsPlandocumenttypes()
         {
-            DataTable cache = (DataTable)HttpRuntime.Cache["Documenttypes"];
+            var cache = HttpRuntime.Cache["Documenttypes"];
 
             if (cache != null)
             {
@@ -138,7 +138,7 @@ namespace Plan.Plandokument
         /// <returns></returns>
         public static bool CacheExistsPlanBerorFastighet()
         {
-            DataTable cache = (DataTable)HttpRuntime.Cache["PlanBerorFastighet"];
+            var cache = HttpRuntime.Cache["PlanBerorFastighet"];
 
             if (cache != null)
             {
@@ -157,7 +157,7 @@ namespace Plan.Plandokument
         /// <returns></returns>
         public static bool CacheExistsPlanBerorPlan()
         {
-            DataTable cache = (DataTable)HttpRuntime.Cache["PlanBerorPlan"];
+            var cache = HttpRuntime.Cache["PlanBerorPlan"];
 
             if (cache != null)
             {
