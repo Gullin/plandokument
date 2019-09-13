@@ -11,7 +11,11 @@ namespace Plan.Plandokument
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            UtilityLog.Log("Start, webbapplikation", Utility.LogLevel.INFORM);
+            UtilityLog.Log("Start, webbapplikation - " + 
+                ApplicationAssemblyUtility.GetApplicationVersionNumber() + ", " +
+                ApplicationAssemblyUtility.GetApplicationCopyright() + " (debug='" +
+                ApplicationAssemblyUtility.AssemblyIsDebugBuild(ApplicationAssemblyUtility.ApplicationAssembly).ToString() + "')",
+                Utility.LogLevel.INFORM);
 
             // Starta ping-ning av webb applikation
             if (Boolean.TryParse(ConfigurationManager.AppSettings["shouldPing"], out bool result))
@@ -55,7 +59,7 @@ namespace Plan.Plandokument
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            UtilityLog.Log("Fel i webbapplikation, detaljer i Error.log", Utility.LogLevel.ERROR);
+            UtilityLog.Log("Ohanterat fel i webbapplikation, detaljer i Error.log", Utility.LogLevel.ERROR);
 
             // Get the exception object.
             Exception exc = Server.GetLastError();

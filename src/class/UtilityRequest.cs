@@ -26,6 +26,8 @@ namespace Plan.Plandokument
         /// <value>Test</value>
         public static void LogRequestStatsAsync(DataTable searchRequest)
         {
+            UtilityLog.Log("Request loggad med statistik, detaljer i RequestStatistik.log", Utility.LogLevel.STATS);
+
             try
             {
                 // Tilldelar värde för max antal loggfiler, noll ingen loggning, negativt värde oändligt antal filer eller annars antalet

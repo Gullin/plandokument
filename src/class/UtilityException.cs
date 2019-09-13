@@ -35,6 +35,8 @@ namespace Plan.Plandokument
 
             logDirectoryExist();
 
+            UtilityLog.Log("Hanterat fel i webbapplikation, detaljer i Error.log", Utility.LogLevel.ERROR);
+
             // Get the absolute path to the log file, skapa logg-fil om den inte finns
             string baseFileName = ConfigurationManager.AppSettings["errorFileName"].ToString();
             if (string.IsNullOrEmpty(baseFileName))
