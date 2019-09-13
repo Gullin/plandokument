@@ -231,7 +231,12 @@ namespace Plan.Plandokument
             using (StreamWriter sw = new StreamWriter(logFile, true))
             {
                 string _dateTimeStamp = dateTimeStamp.ToString("yyyy-MM-dd HH:mm:ss");
-                sw.WriteLine($"{_dateTimeStamp}|\t{logLevel.ToString()}|\t{logMessage}");
+                //sw.WriteLine($"{_dateTimeStamp}|\t{logLevel.ToString()}|\t{logMessage}");
+                sw.WriteLine(string.Format("{0,20} {1,7} {2}",
+                     _dateTimeStamp + "|",
+                     logLevel.ToString() + "|",
+                     logMessage
+                    ));
 
 
                 sw.Close();
