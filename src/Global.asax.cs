@@ -95,7 +95,7 @@ namespace Plan.Plandokument
 
         private void Log_OnPinged(object sender, EventArgs e)
         {
-            UtilityLog.Log("Ping av webbapplikation", Utility.LogLevel.INFORM);
+            UtilityLog.Log("Ping av webbapplikation på adressen " + ConfigurationManager.AppSettings["pingUrl"].ToString(), Utility.LogLevel.INFORM);
         }
 
         public static void RegisterRoutes(RouteCollection routes)
