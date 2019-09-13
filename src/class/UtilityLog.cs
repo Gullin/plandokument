@@ -92,7 +92,7 @@ namespace Plan.Plandokument
             }
 
             // Om basfilen inte är för stor skriv till den, annars kopiera bort den och skapa ny tom basfil
-            if (fileSize == maxFileByteSize)
+            if (fileSize < maxFileByteSize)
             {
                 // skriv till basfilen
                 writeLoggTextToFile(logMessage, dateTimeStamp, logLevel, logFile);
