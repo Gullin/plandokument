@@ -641,7 +641,14 @@
                             <li>...</li>
                         </ul>
                     </li>
-                    <li>Loggning</li>
+                    <li>Loggning
+                        <ul>
+                            <li>Händelser (audit)</li>
+                            <li>Statistik</li>
+                            <li>Fel</li>
+                        </ul>
+                    </li>
+                    <li>Aktivera funktion som kan "hålla webbapplikationen i liv" för när webbservern vill återvinna applikationen</li>
                     <li>E-post</li>
                 </ul>
 
