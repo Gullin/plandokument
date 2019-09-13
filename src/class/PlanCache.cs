@@ -291,6 +291,7 @@ namespace Plan.Plandokument
         /// </summary>
         private static void setDocumenttypesCache(string key, object value, CacheItemRemovedReason reason)
         {
+            LogCacheRemovedReason(key, reason);
             initDocumenttypesCache();
         }
         /// <summary>
@@ -325,6 +326,7 @@ namespace Plan.Plandokument
         /// </summary>
         private static void setPlanCache(string key, object value, CacheItemRemovedReason reason)
         {
+            LogCacheRemovedReason(key, reason);
             initPlanCache();
         }
         /// <summary>
@@ -393,6 +395,7 @@ namespace Plan.Plandokument
         /// </summary>
         private static void setPlanBerorFastighetCache(string key, object value, CacheItemRemovedReason reason)
         {
+            LogCacheRemovedReason(key, reason);
             initPlanBerorFastighetCache();
         }
         /// <summary>
@@ -448,6 +451,7 @@ namespace Plan.Plandokument
         /// </summary>
         public static void setPlanBerorPlanCache(string key, object value, CacheItemRemovedReason reason)
         {
+            LogCacheRemovedReason(key, reason);
             initPlanBerorPlanCache();
         }
         /// <summary>
@@ -535,6 +539,16 @@ namespace Plan.Plandokument
                                            cachTime.Minute,
                                            cachTime.Second);
             return cacheExpiration;
+        }
+
+        /// <summary>
+        /// Abstraktionsmetod för att logga cached removed p.g.a. flera förekomster.
+        /// </summary>
+        /// <param name="key">Chache-nyckel</param>
+        /// <param name="reason">Enum för anledningen till tömnning av cache</param>
+        private static void LogCacheRemovedReason(string key, CacheItemRemovedReason reason)
+        {
+            UtilityLog.Log($"Cache '{key}' tömdes med anledningen '{reason.ToString()}'", Utility.LogLevel.WARN);
         }
     }
 }
