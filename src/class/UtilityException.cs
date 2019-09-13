@@ -35,6 +35,8 @@ namespace Plan.Plandokument
 
             logDirectoryExist();
 
+            UtilityLog.Log("Hanterat fel i webbapplikation, detaljer i Error.log", Utility.LogLevel.ERROR);
+
             // Get the absolute path to the log file, skapa logg-fil om den inte finns
             string baseFileName = ConfigurationManager.AppSettings["errorFileName"].ToString();
             if (string.IsNullOrEmpty(baseFileName))
@@ -42,7 +44,6 @@ namespace Plan.Plandokument
                 baseFileName = baseFileNameDefult;
             }
             string logFile = logDirectory + baseFileName + ".log";
-            logFile = HttpContext.Current.Server.MapPath(logFile);
             if (!File.Exists(logFile))
             {
                 using (FileStream fs = File.Create(logFile))
@@ -187,7 +188,7 @@ namespace Plan.Plandokument
                 {
                     // Formatera datum-tids-sträng för unik
                     string fileTimeSuffix = DateTime.Now.ToString("yyyyMMddTHHmmss.fff");
-                    File.Copy(logFile, logDirectory + "\\" + baseFileName + fileTimeSuffix + ".log");
+                    File.Copy(logFile, logDirectory + baseFileName + fileTimeSuffix + ".log");
                 }
 
                 // Tömmer basfilen till noll byte

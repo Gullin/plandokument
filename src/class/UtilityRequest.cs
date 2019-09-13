@@ -26,6 +26,8 @@ namespace Plan.Plandokument
         /// <value>Test</value>
         public static void LogRequestStatsAsync(DataTable searchRequest)
         {
+            UtilityLog.Log("Request loggad med statistik, detaljer i RequestStatistik.log", Utility.LogLevel.STATS);
+
             try
             {
                 // Tilldelar värde för max antal loggfiler, noll ingen loggning, negativt värde oändligt antal filer eller annars antalet
@@ -48,7 +50,6 @@ namespace Plan.Plandokument
                         baseFileName = baseFileNameDefult;
                     }
                     string logFile = logDirectory + baseFileName + ".log";
-                    logFile = HttpContext.Current.Server.MapPath(logFile);
                     if (!File.Exists(logFile))
                     {
                         FileStream fs = File.Create(logFile);
@@ -186,7 +187,7 @@ namespace Plan.Plandokument
                         // Formatera datum-tids-sträng för unik
                         string fileTimeSuffix = DateTime.Now.ToString("yyyyMMddTHHmmss.fff");
                         // Kopiera undan basfil med tidsstämpel om antalet filer i inställningar tillåter
-                        File.Copy(logFile, logDirectory + "\\" + baseFileName + fileTimeSuffix + ".log");
+                        File.Copy(logFile, logDirectory + baseFileName + fileTimeSuffix + ".log");
 
                         // Tömmer basfilen till noll byte
                         FileStream fs = File.Open(logFile, FileMode.Truncate, FileAccess.Write);

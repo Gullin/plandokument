@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Web.Routing;
 using OSGeo.MapGuide;
 
@@ -10,6 +11,26 @@ namespace Plan.Plandokument
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            UtilityLog.Log("Start, webbapplikation - " + 
+                ApplicationAssemblyUtility.GetApplicationVersionNumber() + ", " +
+                ApplicationAssemblyUtility.GetApplicationCopyright() + " (debug='" +
+                ApplicationAssemblyUtility.AssemblyIsDebugBuild(ApplicationAssemblyUtility.ApplicationAssembly).ToString() + "')",
+                Utility.LogLevel.INFORM);
+
+            // Starta ping-ning av webb applikation
+            if (Boolean.TryParse(ConfigurationManager.AppSettings["shouldPing"], out bool result))
+            {
+                if (result)
+                {
+                    CheckingRestartApp checkingRestartApp = new CheckingRestartApp();
+                    checkingRestartApp.Start(int.Parse(ConfigurationManager.AppSettings["pingIntervall"]));
+                    // Lyssna efter när ping görs
+                    checkingRestartApp.OnPinged += new EventHandler(Log_OnPinged);
+                    UtilityLog.Log("Start av intern ping av webbapplikation", Utility.LogLevel.INFORM);
+                }
+            }
+
+
             Plan.Plandokument.PlanCache.GetPlandocumenttypesCache();
             Plan.Plandokument.PlanCache.GetPlanBasisCache();
             Plan.Plandokument.PlanCache.GetPlanBerorFastighetCache();
@@ -38,7 +59,7 @@ namespace Plan.Plandokument
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            // Code that runs when an unhandled error occurs
+            UtilityLog.Log("Ohanterat fel i webbapplikation, detaljer i Error.log", Utility.LogLevel.ERROR);
 
             // Get the exception object.
             Exception exc = Server.GetLastError();
@@ -73,7 +94,22 @@ namespace Plan.Plandokument
 
         protected void Application_End(object sender, EventArgs e)
         {
+            UtilityLog.Log("Avslutar webbapplikation", Utility.LogLevel.WARN);
 
+            // Tvinga app:n att starta om direkt
+            if (Boolean.TryParse(ConfigurationManager.AppSettings["shouldPing"], out bool result))
+            {
+                if (result)
+                {
+                    new CheckingRestartApp().PingServer();
+                }
+            }
+        }
+
+
+        private void Log_OnPinged(object sender, EventArgs e)
+        {
+            UtilityLog.Log("Ping av webbapplikation på adressen " + ConfigurationManager.AppSettings["pingUrl"].ToString(), Utility.LogLevel.INFORM);
         }
 
         public static void RegisterRoutes(RouteCollection routes)

@@ -20,7 +20,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>true</Use64BitIISExpress>
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -230,6 +230,7 @@
     <Content Include="pic\help\handlaggarkartan-gallande_planer-informationsruta.png" />
     <Content Include="pic\help\handlaggarkartan-gallande_planer-lager_ibockad.png" />
     <Content Include="pic\help\handlaggarkartan-gallande_planer.png" />
+    <Content Include="pic\help\planpavarkan-beslut.png" />
     <Content Include="pic\jpg.png" />
     <Content Include="pic\katalog.png" />
     <Content Include="pic\knob-blue.png" />
@@ -289,7 +290,9 @@
     <Compile Include="class\PlanBerorPlan.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="class\Utility.CheckingRestartApp.cs" />
     <Compile Include="class\UtilityDatabase.cs" />
+    <Compile Include="class\UtilityLog.cs" />
     <Compile Include="class\UtilityException.cs" />
     <Compile Include="class\LayerDefinitionFactory.cs" />
     <Compile Include="class\Utility.cs" />
@@ -368,6 +371,8 @@
     <Content Include="lib\bootstrap-4.1.2-dist\js\bootstrap.bundle.min.js.map" />
     <None Include="Properties\PublishProfiles\AIMS2016x64.pubxml" />
     <Content Include="Settings.config.skarp" />
+    <None Include="Properties\PublishProfiles\Deploy Debug x64.pubxml" />
+    <None Include="Properties\PublishProfiles\Deploy Release x64.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -381,10 +386,6 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DeployAIMS|AnyCPU'">
-    <OutputPath>bin\</OutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -406,11 +407,6 @@
     <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DeployAIMS|x64'">
-    <OutputPath>bin\</OutputPath>
-    <PlatformTarget>x64</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
@@ -422,7 +418,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>61806</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/app/plan</IISUrl>
+          <IISUrl>http://localhost/app/plan/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

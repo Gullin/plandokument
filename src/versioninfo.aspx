@@ -42,6 +42,8 @@
                     <h4 id="1">Versionsinformation</h4>
                     <div id="version">
                         <ul>
+                            <li><span>v0.17</span> Metod för att hålla webbapplikationen i liv (ping:ar sig själv). På detta sätt hålls chachen i liv och svartider ska vara snabba trots lång tid mellan requests.
+                            </li>
                             <li>
                                 <ul>
                                     <li><span>v0.16.17</span> Planpåverkan, hjälpdokumentation <a href="<%= ResolveUrl("~/") %>dokument/om#2.3">här</a>.
