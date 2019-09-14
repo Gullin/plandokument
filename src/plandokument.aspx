@@ -228,7 +228,7 @@
 
             <div id="versionWrapper">
                 <asp:PlaceHolder runat="server">
-                    <a href="<%= ResolveUrl("~/") %>versioninfo.aspx" title="Om versioner och historik">
+                    <a href="<%= ResolveUrl("~/") %>dokument/version" title="Om versioner och historik">
                         <asp:Label ID="lblVersion" runat="server"></asp:Label>
                     </a>
                 </asp:PlaceHolder>

@@ -10,8 +10,8 @@
     <link href="css/page-UI-help.css" rel="stylesheet" />
     <title>Plandokument / Dokumentation</title>
 
-    <script src="../js/jquery-3.4.1.min.js" type="text/javascript"></script>
-    <script src="../lib/bootstrap-4.1.2-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<%= ResolveUrl("~/") %>js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="<%= ResolveUrl("~/") %>lib/bootstrap-4.1.2-dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
         body {
@@ -75,7 +75,7 @@
                         </ul>
                     </li>
                     <li><a class="list-group-item list-group-item-action" href="#avsnitt5">För utvecklare</a></li>
-                    <li><a href="<%=ResolveUrl("~")%>versioninfo.aspx">Versionsinformation</a><span class="linkNewWindow"> </span></li>
+                    <li><a href="<%= ResolveUrl("~/") %>dokument/version">Versionsinformation</a><span class="linkNewWindow"> </span></li>
                 </ul>
             </div>
 

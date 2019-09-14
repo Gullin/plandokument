@@ -9,8 +9,8 @@
     <link href="css/page-UI-help.css" rel="stylesheet" />
     <title>Plandokument / Versionsinformation</title>
 
-    <script src="../js/jquery-3.4.1.min.js" type="text/javascript"></script>
-    <script src="../lib/bootstrap-4.1.2-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<%= ResolveUrl("~/") %>js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="<%= ResolveUrl("~/") %>lib/bootstrap-4.1.2-dist/js/bootstrap.bundle.min.js"></script>
 
     <style type="text/css">
         li {
@@ -51,7 +51,7 @@
                 </li>
                 <li><a class="list-group-item list-group-item-action" href="#asvnitt2">vNext</a>
                 </li>
-                <li><a class="list-group-item list-group-item-action" href="<%=ResolveUrl("~")%>om.aspx">Dokumentation<span class="linkNewWindow"> </span></a>
+                <li><a class="list-group-item list-group-item-action" href="<%= ResolveUrl("~/") %>dokument/om">Dokumentation<span class="linkNewWindow"> </span></a>
                 </li>
             </ul>
         </div>
@@ -63,6 +63,18 @@
                 <h4 id="avsnitt1">Versionsinformation</h4>
                 <div id="version">
                     <ul>
+                        <li>
+                            <ul>
+                                <li><span>v0.18.3</span> BUGGRÄTTNING: Länkningsfel för skriptresurser.
+                                </li>
+                                <li><span>v0.18.2</span> Indikering i menyn för vilket avsnitt som visas för hjälpen och versionsinformationen (s.k. scrollspy).
+                                </li>
+                                <li><span>v0.18.1</span> Loggning för cache-händelser till händelseloggen.
+                                </li>
+                            </ul>
+                        </li>
+                        <li><span>v0.18</span> Utökat med generell händelseloggning (Audit.log).
+                        </li>
                         <li><span>v0.17</span> Metod för att hålla webbapplikationen i liv (ping:ar sig själv). På detta sätt hålls chachen i liv och svartider ska vara snabba trots lång tid mellan requests.
                         </li>
                         <li>
@@ -469,15 +481,22 @@
                                     <li>Cachning av sökbart planregister</li>
                                     <li>
                                         <ul>
-                                            <li>Presentation av senast uppdaterad cach (sökunderlag)
+                                            <li>Presentation av senast uppdaterad cache (sökunderlag)
                                                 <br />
                                                 "Sökning baserad på registerinformation från YYYY-MM-DD"
                                             </li>
+                                            <li>Funktion som visar att cache är osynk med databas och fillager</li>
                                             <li>Funktion för att reseta applikationscachen för planregistret
                                             </li>
                                         </ul>
                                     </li>
                                     <li>Presentation av loggad sökstatistik</li>
+                                    <li>Funktion för att reseta loggar
+                                        <ul>
+                                            <li>Audit</li>
+                                            <li>Error</li>
+                                        </ul>
+                                    </li>
                                     <li>Validering av plandokument efter planregistret</li>
                                     <li>
                                         <ul>
