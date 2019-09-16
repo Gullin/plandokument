@@ -476,47 +476,6 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>Kontrollpanel
-                                <ul>
-                                    <li>Cachning av sökbart planregister</li>
-                                    <li>
-                                        <ul>
-                                            <li>Presentation av senast uppdaterad cache (sökunderlag)
-                                                <br />
-                                                "Sökning baserad på registerinformation från YYYY-MM-DD"
-                                            </li>
-                                            <li>Funktion som visar att cache är osynk med databas och fillager</li>
-                                            <li>Funktion för att reseta applikationscachen för planregistret
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>Presentation av loggad sökstatistik</li>
-                                    <li>Funktion för att reseta loggar
-                                        <ul>
-                                            <li>Audit</li>
-                                            <li>Error</li>
-                                        </ul>
-                                    </li>
-                                    <li>Validering av plandokument efter planregistret</li>
-                                    <li>
-                                        <ul>
-                                            <li>Finns plandokument till alla gällande planer</li>
-                                            <li>Följs namnkonventionen</li>
-                                            <li>Dokument som ej hör hemma eller är aktiva (upphävda kan sparas m.h.a. namnkonvention)</li>
-                                            <li>När plankarta finns ska tiff-fil finnas och tvärt om</li>
-                                            <li>Tiff-filer är GeoTiff (georefererade)</li>
-                                        </ul>
-                                    </li>
-                                    <li>Validering av nödvändiga kataloger virtuella/fysiska</li>
-                                    <li>
-                                        <ul>
-                                            <li>log</li>
-                                            <li>plandokument</li>
-                                            <li>zipTemp</li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                        </li>
                         <li>Maxbredd på container för planerna
                         </li>
                         <li>Integrera bilden på plankartan
