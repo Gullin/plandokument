@@ -527,7 +527,7 @@
                                 Ingen planpåverkan</button>
                         </td>
                         <td style="vertical-align: middle;">
-                            Ingen relation till något annat beslut.
+                            INGEN PÅVERKAN. Ingen relation till något annat beslut.
                         </td>
                     </tr>
                     <tr>
@@ -536,7 +536,7 @@
                                 Planpåverkan</button>
                         </td>
                         <td style="vertical-align: middle;">
-                            Relation till andra beslut men som <span style="font-weight: bold; text-decoration: underline;">inte</span> påverkar sökt plans bestämmelse(r).
+                            PÅVERKAN. Relation till andra beslut men som <span style="font-weight: bold; text-decoration: underline;">inte</span> påverkar sökt plans bestämmelse(r).
                         </td>
                     </tr>
                     <tr>
@@ -545,7 +545,7 @@
                                 Planpåverkan</button>
                         </td>
                         <td style="vertical-align: middle;">
-                            Relation till andra beslut som <span style="font-weight: bold; text-decoration: underline;">påverkar</span> sökt plan i någon form. Markerade relationer ska läsas tillsammans med sökt plan!
+                            PÅVERKAN. Relation till andra beslut som <span style="font-weight: bold; text-decoration: underline;">påverkar</span> sökt plan i någon form. Markerade relationer ska läsas tillsammans med sökt plan!
                         </td>
                     </tr>
                 </table>
