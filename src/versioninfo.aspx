@@ -79,7 +79,7 @@
                         </li>
                         <li>
                             <ul>
-                                <li><span>v0.16.17</span> Planpåverkan, hjälpdokumentation <a href="<%= ResolveUrl("~/") %>dokument/om#2.3">här</a>.
+                                <li><span>v0.16.17</span> Planpåverkan, hjälpdokumentation <a href="<%= ResolveUrl("~/") %>dokument/om#avsnitt2-3">här</a>.
                                 </li>
                                 <li><span>v0.16.16</span> BUGGRÄTTNING: Planpåverkan, tomtindelningar flaggas som varningar men länkas ej.
                                 </li>
@@ -146,7 +146,7 @@
                                 </li>
                                 <li><span>v0.10.1</span>  Ny typ av plandokument kan hanteras - Gestaltningsprogram.
                                     <br />
-                                    <a href="om.aspx#1.2.2">Läs mer under dokumentation</a>
+                                    <a href="om.aspx#avsnitt1-2-2">Läs mer under dokumentation</a>
                                 </li>
                             </ul>
                         </li>
@@ -161,7 +161,7 @@
                                 </li>
                                 <li><span>v0.9.8</span> Ny typ av plandokument kan hanteras - Plan- och genomförandebeskrivning.
                                     <br />
-                                    <a href="om.aspx#1.2.2">Läs mer under dokumentation</a>
+                                    <a href="om.aspx#avsnitt1-2-2">Läs mer under dokumentation</a>
                                 </li>
                                 <li><span>v0.9.7</span> Ytterligare fler typer av plandokument kan hanteras;
                                         <ul>
@@ -169,7 +169,7 @@
                                             <li>Miljökonsekvensbeskrivning (MKB) och</li>
                                             <li>Bullerutredning.</li>
                                         </ul>
-                                    <a href="om.aspx#1.2.2">Läs mer under dokumentation.</a>
+                                    <a href="om.aspx#avsnitt1-2-2">Läs mer under dokumentation.</a>
                                 </li>
                                 <li><span>v0.9.6</span> Kompilerat mott och nytt stöd till MapGuide Open Source version 3.1 och Autodesk Infrastructure Map Server (AIMS) 2016.</li>
                                 <li><span>v0.9.5</span> Ändrat till nativt bibliotek för komprimering till zipp-paket av filer som laddas ner. Dokumentation med biblioteket plockas bort senare efter tester.</li>
