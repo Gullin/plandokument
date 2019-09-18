@@ -56,11 +56,9 @@ namespace Plan.WindowsService
 
         private static void OnDeleted(object sender, FileSystemEventArgs e)
         {
-            FileInfo _file = new FileInfo(e.FullPath);
-
             try
             {
-                foreach (var file in Directory.EnumerateFiles(@Config.ThumnailsFolder, Path.GetFileNameWithoutExtension(_file.Name) + "_thumnail*." + Config.ThumnailsExtension))
+                foreach (var file in Directory.EnumerateFiles(@Config.ThumnailsFolder, Path.GetFileNameWithoutExtension(e.Name) + "_thumnail*." + Config.ThumnailsExtension))
                 {
                     LoggEvent.Logger.WriteEntry("Raderar fil: " + file, EventLogEntryType.Information, LoggEvent.LoggEventID++);
                     File.Delete(file);
@@ -77,8 +75,7 @@ namespace Plan.WindowsService
             if (!IsFileReady(e.FullPath)) return; //first notification the file is arriving
 
             LoggEvent.Logger.WriteEntry("Ändrad fil: " + e.FullPath, EventLogEntryType.Information, LoggEvent.LoggEventID++);
-            FileInfo _file = new FileInfo(e.FullPath);
-            string _newFile = Config.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_file.Name) + "_thumnail";
+            string _newFile = Config.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(e.Name) + "_thumnail";
 
 
             if (Config.ImageQuality < 0 || Config.ImageQuality > 100)
@@ -87,7 +84,7 @@ namespace Plan.WindowsService
 
             try
             {
-                using (FileStream fs = new FileStream(_file.FullName, FileMode.Open, FileAccess.Read))
+                using (FileStream fs = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read))
                 {
 
                     // Komprimering

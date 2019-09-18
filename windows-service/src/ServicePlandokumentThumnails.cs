@@ -29,7 +29,6 @@ namespace Plan.WindowsService
         {
             InitializeComponent();
 
-            //eventLog = new EventLog();
             if (!System.Diagnostics.EventLog.SourceExists(LogEventSource))
             {
                 System.Diagnostics.EventLog.CreateEventSource(
@@ -54,17 +53,7 @@ namespace Plan.WindowsService
                 LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Information, LoggEvent.LoggEventID++);
                 throw;
             }
-
-            //Timer timer = new Timer();
-            //timer.Interval = 10000; // 10 seconds
-            //timer.Elapsed += new ElapsedEventHandler(this.OnTimer);
-            //timer.Start();
         }
-
-        //private void OnTimer(object sender, ElapsedEventArgs e)
-        //{
-        //    eventLog.WriteEntry("Monitorerar Tjänsten ", EventLogEntryType.Information, EventId++);
-        //}
 
         protected override void OnStop()
         {
