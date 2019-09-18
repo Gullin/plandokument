@@ -15,27 +15,26 @@ namespace Plan.WindowsService
     class LoggEvent
     {
         public static EventLog Logger { get; set; } = new EventLog();
+        public static string LogEventSource { get; set; } = "Plandokument Thumnails Service";
+        public static string LogName { get; set; } = "Plandokument Thumnails Service";
         public static int LoggEventID { get; set; } = 0;
     }
 
     public partial class ServicePlandokumentThumnails : ServiceBase
     {
-        public static string LogEventSource { get; set; } = "PlandokumentThumnails";
-        public static string LogEvent { get; set; } = "ThumnailsLog";
-        private int EventId { get; set; } = 0;
         public FileSystemWatcher fileWatcher = new FileSystemWatcher();
 
         public ServicePlandokumentThumnails()
         {
             InitializeComponent();
 
-            if (!System.Diagnostics.EventLog.SourceExists(LogEventSource))
+            if (!System.Diagnostics.EventLog.SourceExists(LoggEvent.LogEventSource))
             {
                 System.Diagnostics.EventLog.CreateEventSource(
-                    LogEventSource, LogEvent);
+                    LoggEvent.LogEventSource, LoggEvent.LogName);
             }
-            LoggEvent.Logger.Source = LogEventSource;
-            LoggEvent.Logger.Log = LogEvent;
+            LoggEvent.Logger.Source = LoggEvent.LogEventSource;
+            LoggEvent.Logger.Log = LoggEvent.LogName;
         }
 
         protected override void OnStart(string[] args)
@@ -44,7 +43,7 @@ namespace Plan.WindowsService
 
             try
             {
-                LoggEvent.Logger.WriteEntry("Initierar bevakning av " + Config.WatchedFolder, EventLogEntryType.Information, LoggEvent.LoggEventID++);
+                LoggEvent.Logger.WriteEntry("Initierar bevakning av " + ConfigWatcher.WatchedFolder, EventLogEntryType.Information, LoggEvent.LoggEventID++);
                 Watcher.Init(fileWatcher);
             }
             catch (Exception ex)
