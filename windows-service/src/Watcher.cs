@@ -28,57 +28,28 @@ namespace Plan.WindowsService
     {
         public Watcher()
         {
-            //// Create a new FileSystemWatcher and set its properties.
-            //using (FileSystemWatcher watcher = new FileSystemWatcher())
-            //{
-            //    //watcher.Path = args[1];
 
-            //    watcher.Path = Config.WatchedFolder;
-
-            //    // Watch for changes in LastAccess and LastWrite times, and
-            //    // the renaming of files or directories.
-            //    watcher.NotifyFilter = NotifyFilters.LastAccess
-            //                         | NotifyFilters.LastWrite
-            //                         | NotifyFilters.FileName
-            //                         | NotifyFilters.DirectoryName;
-
-            //    // Only watch text files.
-            //    watcher.Filter = Config.WatchFilter;
-
-            //    // Add event handlers.
-            //    watcher.Changed += OnChanged;
-            //    watcher.Created += OnChanged;
-            //    watcher.Deleted += OnDeleted;
-            //    watcher.Renamed += OnRenamed;
-
-            //    // Begin watching.
-            //    watcher.EnableRaisingEvents = true;
-            //}
         }
 
         public static void Init(FileSystemWatcher watcher)
         {
-            //watcher.Path = args[1];
-
             watcher.Path = Config.WatchedFolder;
 
-            // Watch for changes in LastAccess and LastWrite times, and
-            // the renaming of files or directories.
+            // Villka förändringar som ska bevakas
             watcher.NotifyFilter = NotifyFilters.LastAccess
                                  | NotifyFilters.LastWrite
                                  | NotifyFilters.FileName
                                  | NotifyFilters.DirectoryName;
 
-            // Only watch text files.
             watcher.Filter = Config.WatchFilter;
 
-            // Add event handlers.
+            // Lägger till event-hanterare
             watcher.Changed += OnChanged;
             watcher.Created += OnChanged;
             watcher.Deleted += OnDeleted;
             watcher.Renamed += OnRenamed;
 
-            // Begin watching.
+            // Starta bevakning
             watcher.EnableRaisingEvents = true;
         }
 
@@ -91,20 +62,21 @@ namespace Plan.WindowsService
             {
                 foreach (var file in Directory.EnumerateFiles(@Config.ThumnailsFolder, Path.GetFileNameWithoutExtension(_file.Name) + "_thumnail*." + Config.ThumnailsExtension))
                 {
+                    LoggEvent.Logger.WriteEntry("Raderar fil: " + file, EventLogEntryType.Information, LoggEvent.LoggEventID++);
                     File.Delete(file);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
-                //TODO: Logga
+                LoggEvent.Logger.WriteEntry("Vid radering av: " + e.FullPath + " uppstod felet - " + ex.Message, EventLogEntryType.Error, LoggEvent.LoggEventID++);
             }
         }
 
         private static void OnChanged(object source, FileSystemEventArgs e)
         {
-            LoggEvent.Logger.WriteEntry("Ändrad fil: " + e.FullPath, EventLogEntryType.Information);
+            if (!IsFileReady(e.FullPath)) return; //first notification the file is arriving
+
+            LoggEvent.Logger.WriteEntry("Ändrad fil: " + e.FullPath, EventLogEntryType.Information, LoggEvent.LoggEventID++);
             FileInfo _file = new FileInfo(e.FullPath);
             string _newFile = Config.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_file.Name) + "_thumnail";
 
@@ -112,8 +84,6 @@ namespace Plan.WindowsService
             if (Config.ImageQuality < 0 || Config.ImageQuality > 100)
                 throw new ArgumentOutOfRangeException("Bildkvaliteten måste vara mellan 0 och 100.");
 
-
-            if (!IsFileReady(e.FullPath)) return; //first notification the file is arriving
 
             try
             {
@@ -130,7 +100,7 @@ namespace Plan.WindowsService
                     // Utkatalog
                     if (!Directory.Exists(Config.ThumnailsFolder))
                     {
-                        LoggEvent.Logger.WriteEntry("Skapar katalog: " + Config.ThumnailsFolder);
+                        LoggEvent.Logger.WriteEntry("Skapar katalog: " + Config.ThumnailsFolder, EventLogEntryType.Information, LoggEvent.LoggEventID++);
                         Directory.CreateDirectory(Config.ThumnailsFolder);
                     }
 
@@ -144,7 +114,7 @@ namespace Plan.WindowsService
                             {
                                 using (Image _newImage = ScaleImage(_image, Config.MaxDimensions[0], Config.MaxDimensions[0]))
                                 {
-                                    LoggEvent.Logger.WriteEntry("Skapar: " + _newFile + Config.ThumnailsSuffixes[0] + "." + Config.ThumnailsExtension);
+                                    LoggEvent.Logger.WriteEntry("Skapar: " + _newFile + Config.ThumnailsSuffixes[0] + "." + Config.ThumnailsExtension, EventLogEntryType.Information, LoggEvent.LoggEventID++);
                                     _newImage.Save(_newFile + Config.ThumnailsSuffixes[0] + "." + Config.ThumnailsExtension, pngEncoder, myEncoderParameters);
                                 }
                             }
@@ -154,7 +124,7 @@ namespace Plan.WindowsService
                             {
                                 using (Image _newImage = ScaleImage(_image, Config.MaxDimensions[1], Config.MaxDimensions[1]))
                                 {
-                                    LoggEvent.Logger.WriteEntry("Skapar: " + _newFile + Config.ThumnailsSuffixes[1] + "." + Config.ThumnailsExtension);
+                                    LoggEvent.Logger.WriteEntry("Skapar: " + _newFile + Config.ThumnailsSuffixes[1] + "." + Config.ThumnailsExtension, EventLogEntryType.Information, LoggEvent.LoggEventID++);
                                     _newImage.Save(_newFile + Config.ThumnailsSuffixes[1] + "." + Config.ThumnailsExtension, pngEncoder, myEncoderParameters);
                                 }
                             }
@@ -163,9 +133,7 @@ namespace Plan.WindowsService
                     }
                     catch (Exception ex)
                     {
-
-                        //TODO: Logga felet på ett hanterat sätt
-                        LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Error);
+                        LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Error, LoggEvent.LoggEventID++);
                     }
 
 
@@ -173,8 +141,7 @@ namespace Plan.WindowsService
             }
             catch (Exception ex)
             {
-                //TODO: Logga felet på ett hanterat sätt
-                LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Error);
+                LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Error, LoggEvent.LoggEventID++);
             }
         }
 
@@ -184,31 +151,38 @@ namespace Plan.WindowsService
             FileInfo _newFile = new FileInfo(e.FullPath);
             string _oldFileThumnailL = Config.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_oldFile.Name) + "_thumnail" + Config.ThumnailsSuffixes[0] + "." + Config.ThumnailsExtension;
             string _oldFileThumnailS = Config.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_oldFile.Name) + "_thumnail" + Config.ThumnailsSuffixes[1] + "." + Config.ThumnailsExtension;
-            if (File.Exists(_oldFileThumnailL))
-            {
-                File.Move(
-                    _oldFileThumnailL,
-                    Config.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_newFile.Name) + "_thumnail" + Config.ThumnailsSuffixes[0] + "." + Config.ThumnailsExtension
-                    );
-            }
-            if (File.Exists(_oldFileThumnailS))
-            {
-                File.Move(
-                _oldFileThumnailS,
-                Config.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_newFile.Name) + "_thumnail" + Config.ThumnailsSuffixes[1] + "." + Config.ThumnailsExtension
-                );
-            }
 
+            try
+            {
+                if (File.Exists(_oldFileThumnailL))
+                {
+                    File.Move(
+                        _oldFileThumnailL,
+                        Config.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_newFile.Name) + "_thumnail" + Config.ThumnailsSuffixes[0] + "." + Config.ThumnailsExtension
+                        );
+                }
+                if (File.Exists(_oldFileThumnailS))
+                {
+                    File.Move(
+                    _oldFileThumnailS,
+                    Config.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_newFile.Name) + "_thumnail" + Config.ThumnailsSuffixes[1] + "." + Config.ThumnailsExtension
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Error, LoggEvent.LoggEventID++);
+            }
         }
 
 
 
         private static bool IsFileReady(string fullPath)
         {
-            //One exception per file rather than several like in the polling pattern
+            // Ett fel per fil istället för flera när polling-metoden används
             try
             {
-                //If we can't open the file, it's still copying
+                // Om filen inte kan öppnas används kopieras den fortfarande
                 using (var file = File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     return true;
@@ -220,7 +194,7 @@ namespace Plan.WindowsService
             }
             catch (Exception ex)
             {
-                LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Error);
+                LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Error, LoggEvent.LoggEventID++);
                 return false;
             }
         }
@@ -237,8 +211,16 @@ namespace Plan.WindowsService
 
             var newImage = new Bitmap(newWidth, newHeight);
 
-            using (var graphics = Graphics.FromImage(newImage))
-                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+            try
+            {
+                using (var graphics = Graphics.FromImage(newImage))
+                    graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+
+            }
+            catch (Exception ex)
+            {
+                LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Error, LoggEvent.LoggEventID++);
+            }
 
             return newImage;
         }

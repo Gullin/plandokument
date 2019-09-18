@@ -15,6 +15,7 @@ namespace Plan.WindowsService
     class LoggEvent
     {
         public static EventLog Logger { get; set; } = new EventLog();
+        public static int LoggEventID { get; set; } = 0;
     }
 
     public partial class ServicePlandokumentThumnails : ServiceBase
@@ -40,17 +41,17 @@ namespace Plan.WindowsService
 
         protected override void OnStart(string[] args)
         {
-            LoggEvent.Logger.WriteEntry("Start av " + this.ServiceName, EventLogEntryType.Information);
+            LoggEvent.Logger.WriteEntry("Start av " + this.ServiceName, EventLogEntryType.Information, LoggEvent.LoggEventID++);
 
             try
             {
-                LoggEvent.Logger.WriteEntry("Initierar bevakning av " + Config.WatchedFolder, EventLogEntryType.Information);
+                LoggEvent.Logger.WriteEntry("Initierar bevakning av " + Config.WatchedFolder, EventLogEntryType.Information, LoggEvent.LoggEventID++);
                 Watcher.Init(fileWatcher);
             }
             catch (Exception ex)
             {
 
-                LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Information);
+                LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Information, LoggEvent.LoggEventID++);
                 throw;
             }
 
@@ -67,7 +68,7 @@ namespace Plan.WindowsService
 
         protected override void OnStop()
         {
-            LoggEvent.Logger.WriteEntry("Stoppar " + this.ServiceName, EventLogEntryType.Information);
+            LoggEvent.Logger.WriteEntry("Stoppar " + this.ServiceName, EventLogEntryType.Information, LoggEvent.LoggEventID++);
         }
     }
 }
