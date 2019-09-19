@@ -51,6 +51,8 @@ namespace Plan.WindowsService
             watcher.Created += new FileSystemEventHandler(OnChanged);
             watcher.Deleted += new FileSystemEventHandler(OnDeleted);
             watcher.Renamed += new RenamedEventHandler(OnRenamed);
+            watcher.Error += new ErrorEventHandler(OnError);
+            watcher.Disposed += new EventHandler(OnDisposed);
 
             // Starta bevakning
             watcher.EnableRaisingEvents = true;
@@ -184,6 +186,19 @@ namespace Plan.WindowsService
             {
                 LoggEvent.Logger.WriteEntry(ex.Message, EventLogEntryType.Error, LoggEvent.LoggEventID++);
             }
+        }
+
+        private static void OnDisposed(object sender, EventArgs e)
+        {
+            LoggEvent.Logger.WriteEntry("FileSystemWatcher har återvunnits (disposed)", EventLogEntryType.Warning, LoggEvent.LoggEventID++);
+        }
+
+        private static void OnError(object sender, ErrorEventArgs e)
+        {
+            Exception ex = e.GetException();
+            string errorType = ex.GetType().ToString();
+            string errorMessage = ex.Message;
+            LoggEvent.Logger.WriteEntry($"FileSystemWatcher meddelar fel ({errorType}): {errorMessage}", EventLogEntryType.Warning, LoggEvent.LoggEventID++);
         }
 
 
