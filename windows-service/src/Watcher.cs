@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
 
 namespace Plan.WindowsService
 {
@@ -36,23 +37,24 @@ namespace Plan.WindowsService
             watcher.Path = ConfigWatcher.WatchedFolder;
 
             // Villka förändringar som ska bevakas
-            watcher.NotifyFilter = NotifyFilters.LastAccess
-                                 | NotifyFilters.LastWrite
-                                 | NotifyFilters.FileName
-                                 | NotifyFilters.DirectoryName;
+            watcher.NotifyFilter = NotifyFilters.LastWrite
+                                 | NotifyFilters.FileName;
 
             watcher.Filter = ConfigWatcher.WatchFilter;
 
+            //watcher.InternalBufferSize = 65536; // 64 KB råder docs.microsoft ska vara max (4 KB är minimum)
+            watcher.InternalBufferSize = 1048576; // 1 MB
+
+
             // Lägger till event-hanterare
-            watcher.Changed += OnChanged;
-            watcher.Created += OnChanged;
-            watcher.Deleted += OnDeleted;
-            watcher.Renamed += OnRenamed;
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+            watcher.Created += new FileSystemEventHandler(OnChanged);
+            watcher.Deleted += new FileSystemEventHandler(OnDeleted);
+            watcher.Renamed += new RenamedEventHandler(OnRenamed);
 
             // Starta bevakning
             watcher.EnableRaisingEvents = true;
         }
-
 
         private static void OnDeleted(object sender, FileSystemEventArgs e)
         {
@@ -82,6 +84,8 @@ namespace Plan.WindowsService
 
         private static void OnChanged(object source, FileSystemEventArgs e)
         {
+            Thread.Sleep(500);
+
             if (!IsFileReady(e.FullPath)) return; //first notification the file is arriving
 
             LoggEvent.Logger.WriteEntry("Ändrad fil: " + e.FullPath, EventLogEntryType.Information, LoggEvent.LoggEventID++);
