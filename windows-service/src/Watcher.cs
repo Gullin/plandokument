@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -10,11 +11,11 @@ namespace Plan.WindowsService
 {
     class ConfigWatcher
     {
-        public static string WatchedFolder { get; } = @"C:\dev\_sandbox\ThumnailImages\files";
+        public static string WatchedFolder { get; } = @ConfigurationManager.AppSettings["WatchedFolder"].ToString();
 
         public static string WatchFilter { get; } = "*.tif";
 
-        public static string ThumnailsFolder { get; } = @"C:\dev\_sandbox\ThumnailImages\files\Thumnails";
+        public static string ThumnailsFolder { get; } = @ConfigurationManager.AppSettings["ThumnailsFolder"].ToString();
 
         public static string ThumnailsExtension { get; } = "jpg";
 
