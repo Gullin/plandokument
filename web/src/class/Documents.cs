@@ -5,6 +5,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Services;
@@ -86,6 +87,14 @@ namespace Plan.Plandokument
             cl = new DataColumn("FINDTYPE", System.Type.GetType("System.String"));
             dtFileResult.Columns.Add(cl);
             cl = new DataColumn("DOCUMENTPART", System.Type.GetType("System.String"));
+            dtFileResult.Columns.Add(cl);
+            cl = new DataColumn("THUMNAILPATH", System.Type.GetType("System.String"));
+            dtFileResult.Columns.Add(cl);
+            // N/A = ingen thumnail
+            // L = liten
+            // S = stor
+            // L,S = liten och stor
+            cl = new DataColumn("THUMNAILINDICATION", System.Type.GetType("System.String"));
             dtFileResult.Columns.Add(cl);
 
             string[] rotes = ConfigurationManager.AppSettings["filesRotDirectory"].ToString().Split(',');
@@ -240,6 +249,88 @@ namespace Plan.Plandokument
                 }
             }
             #endregion
+
+
+            try
+            {
+                // Hitta ev. thumnails till plankarta
+                foreach (DataRow row in dtFileResult.Rows)
+                {
+                    string thumnailsRotDirectory = @ConfigurationManager.AppSettings["thumnailsRotDirectory"].ToString();
+                    DirectoryInfo thumnailDirectory = new DirectoryInfo(
+                        Server.MapPath(thumnailsRotDirectory)
+                        );
+
+                    if (row["DOCUMENTTYPE"].ToString() == "Karta")
+                    {
+                        // Se om thumnail existerar och indikera passande
+                        string fileFilter = Path.GetFileNameWithoutExtension(
+                                thumnailDirectory.FullName + @"\" + row["NAME"].ToString()
+                                ) + "_thumnail-*.jpg";
+                        Regex regex = new Regex(
+                            "(" + Path.GetFileNameWithoutExtension(
+                                thumnailDirectory.FullName + @"\" + row["NAME"].ToString()
+                                ) + "_thumnail-l.jpg)" + "|" +
+                            "(" + Path.GetFileNameWithoutExtension(
+                                thumnailDirectory.FullName + @"\" + row["NAME"].ToString()
+                                ) + "_thumnail-s.jpg)"
+                            );
+                        List<FileInfo> filesFoundExact = thumnailDirectory.EnumerateFiles(fileFilter)
+                            .Where(f => regex.IsMatch(@f.FullName)).ToList();
+
+                        bool thumnailS = false, thumnailL = false;
+                        foreach (FileInfo file in filesFoundExact)
+                        {
+                            if (file.Name.Contains("-s"))
+                            {
+                                thumnailS = true;
+                            }
+                            if (file.Name.Contains("-l"))
+                            {
+                                thumnailL = true;
+                            }
+                        }
+
+                        if (thumnailS && thumnailL)
+                        {
+                            row["THUMNAILINDICATION"] = "s,l";
+                        }
+                        else if (thumnailS)
+                        {
+                            row["THUMNAILINDICATION"] = "s";
+                        }
+                        else if (thumnailL)
+                        {
+                            row["THUMNAILINDICATION"] = "l";
+                        }
+                        else
+                        {
+                            row["THUMNAILINDICATION"] = "N/A";
+                        }
+
+                        row["THUMNAILPATH"] = thumnailsRotDirectory + "/";
+
+                    }
+                    else
+                    {
+                        // Ej karta, sätts N/A
+                        row["THUMNAILINDICATION"] = "N/A";
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                // Klassens namn för loggning
+                string className = this.GetType().Name;
+                // Metod i klassen som används
+                string methodName = MethodBase.GetCurrentMethod().Name;
+
+                UtilityException.LogException(ex, className + " : " + methodName, false);
+
+                // Ej möjligt att uppdatera hänvisning till thumnail, sätts N/A för default hantering i klient
+                dtFileResult.Columns["THUMNAILINDICATION"].Expression = "'N/A'";
+            }
+
 
             return dtFileResult;
         }

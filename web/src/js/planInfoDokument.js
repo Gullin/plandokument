@@ -755,7 +755,9 @@ function getPlansDocs(planIds, callback) {
                         val.PATH,
                         val.DOCUMENTTYPE,
                         val.FINDTYPE,
-                        val.DOCUMENTPART
+                        val.DOCUMENTPART,
+                        val.THUMNAILPATH,
+                        val.THUMNAILINDICATION
                     ];
                     arrayItemPlace++;
                 });
@@ -911,8 +913,10 @@ function putPlansDocs($headerPlan, plansDocs) {
             // [5].DOCUMENTTYPE
             // [6].FINDTYPE
             // [7].DOCUMENTPART
+            // [8].THUMNAILPATH
+            // [9].THUMNAILINDICATION
             if (plansDocs) {
-
+                console.log(plansDocs);
 
                 //#region För varje dokument, räknar dokumentdelar för resp. dokumenttyp samt signalerar om dokumenttypen ska renderas som grupp
                 $.each(eval(plansDocs), function (key, valueDoc) {
@@ -1052,9 +1056,52 @@ function putPlansDocs($headerPlan, plansDocs) {
                                 var $docLink = $("<a>");
                                 var href = urlBasePath + valueDoc[4] + valueDoc[1];
                                 $docLink.attr("href", href);
-                                $docLink.attr("target", "_blank");
-                                $docLink.attr("title", valueDoc[1]);
                                 $docLink.attr("relhref", valueDoc[4] + valueDoc[1]);
+                                $docLink.attr("target", "_blank");
+                                // Möjliggör Bootstrap Popover för dokumenttyp plankarta
+                                // TODO: slå ihop thumnails för paginering till pdf-fil
+                                if (valueDoc[5] == "Karta" && valueDoc[2] == ".tif") {
+                                    var thumnailsImgParam;
+                                    if (valueDoc[9].indexOf("s")  != -1) {
+                                        thumnailsImgParam = '"' + urlBasePath + valueDoc[8] + valueDoc[1].replace(/\.[^/.]+$/, "") + '_thumnail-s.jpg" /><span class="popover-content-big-image" title="Större bild"></span>';
+                                    }
+                                    else {
+                                        thumnailsImgParam = '"' + urlBasePath + 'pic/no-image.png" alt="Avsaknad plankarta som miniatyr" title="Ingen miniatyrbild av plankartan" />';
+                                    }
+                                    // Ansluter Popover
+                                    $docLink.popover({
+                                        trigger: 'manual',
+                                        placement: 'auto',
+                                        title: valueDoc[1] + ' innehåller',
+                                        html: true,
+                                        content:
+                                            '<div><img src=' + thumnailsImgParam + '</div>'
+                                    }).on('mouseenter', function () {
+                                        var _this = this;
+                                        $(this).popover('show');
+                                        $('.popover').on('mouseleave', function () {
+                                            $(_this).popover('hide');
+                                        });
+                                        $('.popover').find('span').on('click', function () {
+
+                                            $('<div class="modal" tabindex="-1"><div class="modal-dialog modal-wide modal-dialog-centered"><div class="modal-content"><img style="width:100%;" src="' + urlBasePath + valueDoc[8] + valueDoc[1].replace(/\.[^/.]+$/, "") + '_thumnail-l.jpg" /></div></div></div>').modal({
+                                                keyboard: true
+                                            });
+
+                                            $(this).closest('.popover').popover('hide');
+                                        });
+                                        }).on('mouseleave', function () {
+                                            var _this = this;
+                                            setTimeout(function () {
+                                                if (!$('.popover:hover').length) {
+                                                    $(_this).popover('hide');
+                                                }
+                                            }, 200);
+                                        });
+                                }
+                                else {
+                                    $docLink.attr("title", valueDoc[1]);
+                                }
                                 if (valueDoctype.Dokumenttypsgrupp) {
                                     var isOneFilePerFormat = false;
                                     valueDoctype.DokumenttypFormatAntal.forEach(function (item, index) {
