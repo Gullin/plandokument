@@ -122,6 +122,29 @@ namespace Plan.Plandokument
                                 false);
 
             // Alias
+            routes.MapPageRoute("AdminKontrollpanel",
+                                "dokument/kontrollpanel",
+                                "~/kontrollpanel.aspx",
+                                false);
+            routes.MapPageRoute("Admin",
+                                "dokument/admin",
+                                "~/kontrollpanel.aspx",
+                                false);
+            routes.MapPageRoute("Administration",
+                                "dokument/administration",
+                                "~/kontrollpanel.aspx",
+                                false);
+            routes.MapPageRoute("AdminDashboard",
+                                "dokument/dashboard",
+                                "~/kontrollpanel.aspx",
+                                false);
+            routes.MapPageRoute("AdminSystem",
+                                "dokument/system",
+                                "~/kontrollpanel.aspx",
+                                false);
+
+
+            // Alias
             routes.MapPageRoute("PlandokumentOm",
                                 "dokument/om",
                                 "~/om.aspx",
