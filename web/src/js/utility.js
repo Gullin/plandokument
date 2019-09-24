@@ -55,3 +55,33 @@ function toggleLoadingImage(on) {
     }
 
 } // SLUT toggleLoadingImage
+
+
+
+
+function hover(element) {
+
+    var filePathPart = splitFilePath(element.getAttribute('src'));
+
+    element.setAttribute('src', Lkr.Plan.Dokument.resolvedClientUrl + 'pic/' + filePathPart[1] + '-invers.' + filePathPart[2]);
+
+}
+
+function unhover(element) {
+
+    var filePathPart = splitFilePath(element.getAttribute('src'));
+    var fileName = filePathPart[1].substring(0, filePathPart[1].lastIndexOf('-'));
+
+    element.setAttribute('src', Lkr.Plan.Dokument.resolvedClientUrl + 'pic/' + fileName + '.' + filePathPart[2]);
+
+}
+
+function splitFilePath(filePath) {
+    var fullFilePath = filePath;
+    var path = fullFilePath.substring(0, fullFilePath.lastIndexOf('/'));
+    var fullFileName = fullFilePath.substring(fullFilePath.lastIndexOf('/') + 1);
+    var fileName = fullFileName.substring(0, fullFileName.lastIndexOf('.'));
+    var fileExtension = fullFileName.substring(fullFileName.lastIndexOf('.') + 1);
+
+    return [path, fileName, fileExtension]
+}
