@@ -12,26 +12,6 @@ namespace Plan.Plandokument
     public static class PlanCache
     {
         /// <summary>
-        /// Returnerar plandokumenttyperna från cache. Existerar cachen ej skapas den.
-        /// </summary>
-        /// <returns></returns>
-        public static List<Documenttype> GetPlandocumenttypesCache()
-        {
-            List<Documenttype> cachedDocumenttypes = (List<Documenttype>)HttpRuntime.Cache["Documenttypes"];
-
-            if (cachedDocumenttypes != null)
-            {
-                return cachedDocumenttypes;
-            }
-            else
-            {
-                setDocumenttypesCache();
-                return (List<Documenttype>)HttpRuntime.Cache["Documenttypes"];
-            }
-        }
-
-
-        /// <summary>
         /// Returnerar basinformationen för planern från cache. Existerar cachen ej skapas den.
         /// </summary>
         /// <returns></returns>
@@ -47,6 +27,26 @@ namespace Plan.Plandokument
             {
                 setPlanCache();
                 return (DataTable)HttpRuntime.Cache["Plans"];
+            }
+        }
+
+
+        /// <summary>
+        /// Returnerar plandokumenttyperna från cache. Existerar cachen ej skapas den.
+        /// </summary>
+        /// <returns></returns>
+        public static List<Documenttype> GetPlandocumenttypesCache()
+        {
+            List<Documenttype> cachedDocumenttypes = (List<Documenttype>)HttpRuntime.Cache["Documenttypes"];
+
+            if (cachedDocumenttypes != null)
+            {
+                return cachedDocumenttypes;
+            }
+            else
+            {
+                setDocumenttypesCache();
+                return (List<Documenttype>)HttpRuntime.Cache["Documenttypes"];
             }
         }
 
@@ -90,6 +90,55 @@ namespace Plan.Plandokument
             }
         }
 
+
+
+
+        /// <summary>
+        /// Plockar bort cachen för planregistrets grundläggande information
+        /// </summary>
+        public static void RemoveCachedPlanBasis()
+        {
+            if (CacheExistsPlanBasis())
+            {
+                HttpRuntime.Cache.Remove("Plans");
+            }
+        }
+
+
+        /// <summary>
+        /// Plockar bort cachen för dokumenttyper
+        /// </summary>
+        public static void RemoveCachePlandocumenttypes()
+        {
+            if (CacheExistsPlanBasis())
+            {
+                HttpRuntime.Cache.Remove("Documenttypes");
+            }
+        }
+
+
+        /// <summary>
+        /// Plockar bort cachen för planers berörskretsar till fastigheter
+        /// </summary>
+        public static void RemoveCachedPlanBerorFastighet()
+        {
+            if (CacheExistsPlanBasis())
+            {
+                HttpRuntime.Cache.Remove("PlanBerorFastighet");
+            }
+        }
+
+
+        /// <summary>
+        /// Plockar bort cache för planers påverkan på varandra
+        /// </summary>
+        public static void RemoveCachedPlanBerorPlan()
+        {
+            if (CacheExistsPlanBasis())
+            {
+                HttpRuntime.Cache.Remove("PlanBerorPlan");
+            }
+        }
 
 
 
@@ -279,41 +328,6 @@ namespace Plan.Plandokument
         
 
         /// <summary>
-        /// Skapa cache för plandokumenttyper
-        /// </summary>
-        private static void setDocumenttypesCache()
-        {
-            initDocumenttypesCache();
-        }
-        /// <summary>
-        /// Skapa cache för plandokumenttyper med samma signatur som för delegate CacheItemRemovedCallback.
-        /// Existerar p.g.a. callback och reinitiering av cache när cache slutar existera.
-        /// </summary>
-        private static void setDocumenttypesCache(string key, object value, CacheItemRemovedReason reason)
-        {
-            LogCacheRemovedReason(key, reason);
-            initDocumenttypesCache();
-        }
-        /// <summary>
-        /// Initierar cache för dokumenttyper
-        /// </summary>
-        private static void initDocumenttypesCache()
-        {
-            DateTime cacheExpiration = setCacheExpiration();
-
-            Documenttypes documenttypes = new Documenttypes();
-            List<Documenttype> listOfDocumenttypes = documenttypes.GetDocumenttypes;
-
-            // Callback för när cache försvinner
-            CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setDocumenttypesCache);
-
-            // Skapa cach av alla planer
-            Cache cache = HttpRuntime.Cache;
-            cache.Insert("Documenttypes", listOfDocumenttypes, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
-        }
-        
-
-        /// <summary>
         /// Skapar cache för basinformationen till planer
         /// </summary>
         public static void setPlanCache()
@@ -383,6 +397,41 @@ namespace Plan.Plandokument
 
 
         /// <summary>
+        /// Skapa cache för plandokumenttyper
+        /// </summary>
+        public static void setDocumenttypesCache()
+        {
+            initDocumenttypesCache();
+        }
+        /// <summary>
+        /// Skapa cache för plandokumenttyper med samma signatur som för delegate CacheItemRemovedCallback.
+        /// Existerar p.g.a. callback och reinitiering av cache när cache slutar existera.
+        /// </summary>
+        private static void setDocumenttypesCache(string key, object value, CacheItemRemovedReason reason)
+        {
+            LogCacheRemovedReason(key, reason);
+            initDocumenttypesCache();
+        }
+        /// <summary>
+        /// Initierar cache för dokumenttyper
+        /// </summary>
+        private static void initDocumenttypesCache()
+        {
+            DateTime cacheExpiration = setCacheExpiration();
+
+            Documenttypes documenttypes = new Documenttypes();
+            List<Documenttype> listOfDocumenttypes = documenttypes.GetDocumenttypes;
+
+            // Callback för när cache försvinner
+            CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setDocumenttypesCache);
+
+            // Skapa cach av alla planer
+            Cache cache = HttpRuntime.Cache;
+            cache.Insert("Documenttypes", listOfDocumenttypes, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
+        }
+        
+
+        /// <summary>
         /// Skapar cache med fastigheter som berörs av resp. plan
         /// </summary>
         public static void setPlanBerorFastighetCache()
@@ -401,7 +450,7 @@ namespace Plan.Plandokument
         /// <summary>
         /// Initierar cache med fastigheter som berörs av resp. plan
         /// </summary>
-        public static void initPlanBerorFastighetCache()
+        private static void initPlanBerorFastighetCache()
         {
             //string conStr = ConfigurationManager.AppSettings["OracleOleDBConString"].ToString();
             string sql = string.Empty;
@@ -449,7 +498,7 @@ namespace Plan.Plandokument
         /// Skapa cache med planer som berörs eller har berörts av andra planer med samma signatur som för delegate CacheItemRemovedCallback.
         /// Existerar p.g.a. callback och reinitiering av cache när cache slutar existera.
         /// </summary>
-        public static void setPlanBerorPlanCache(string key, object value, CacheItemRemovedReason reason)
+        private static void setPlanBerorPlanCache(string key, object value, CacheItemRemovedReason reason)
         {
             LogCacheRemovedReason(key, reason);
             initPlanBerorPlanCache();
@@ -457,7 +506,7 @@ namespace Plan.Plandokument
         /// <summary>
         /// Initierar cache med planer som berör eller har berörts av andra planer
         /// </summary>
-        public static void initPlanBerorPlanCache()
+        private static void initPlanBerorPlanCache()
         {
             string sql = string.Empty;
 

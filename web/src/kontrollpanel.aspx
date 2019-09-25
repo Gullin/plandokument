@@ -23,6 +23,17 @@
         .modal-spinner-width {
             width: 48px;
         }
+
+        .spinner-hide {
+            display: none;
+        }
+        .spinner-visible {
+            display: inline;
+        }
+
+        td {
+            padding: 0em 1em;
+        }
     </style>
 
     <!-- Inställningar Klient -->
@@ -52,6 +63,37 @@
                 $('.modal').modal('hide');
             }, 3000);
         }
+
+
+        // Antal sökta planer som kommit in till servern i URL:n
+        function RefreshCachePlanBasis(element) {
+            var $spinner = $(element).children("span");
+            $spinner.prop('disabled', true);
+            $spinner.removeClass("spinner-hide");
+            $spinner.next().remove();
+            $spinner.after("<span> Loading...</span>");
+
+            $.ajax({
+                type: "POST",
+                url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheRefreshPlanBasis',
+                contentType: "application/json; charset=UTF-8",
+                dataType: "json",
+                success: function (msg) {
+                    var data = msg.d;
+                    if (data = "true") {
+                        $spinner.addClass("spinner-hide");
+                        $spinner.next().remove();
+                        $spinner.after("<span> Förnya cache</span>");
+                        $spinner.prop('disabled', false);
+                    }
+
+                },
+                error: function () {
+                    alert("Fel!\nRefreshCachePlanBasis");
+                }
+            })
+        }; // SLUT RefreshCachePlanBasis
+
     </script>
 </head>
 <body>
@@ -83,7 +125,60 @@
             <div class="tab-content" id="menu-content">
                 <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="tab-overview">...</div>
                 <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="tab-logs">...</div>
-                <div class="tab-pane fade" id="cache" role="tabpanel" aria-labelledby="tab-cache">...</div>
+
+                <div class="tab-pane fade" id="cache" role="tabpanel" aria-labelledby="tab-cache">
+                    <button class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanAll(this)">
+                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                        <span>Förnya ALLA cacher</span>
+                    </button>
+                    <table>
+                        <tr>
+                            <td>
+                                <button class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBasis(this)">
+                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true">
+                                    </span>
+                                    <span>Förnya cache</span>
+                                </button>
+                            </td>
+                            <td></td>
+                            <td>Grundläggande planregisterinformation</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlandocumenttypes(this)">
+                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true">
+                                    </span>
+                                    <span>Förnya cache</span>
+                                </button>
+                            </td>
+                            <td></td>
+                            <td>Dokumenttyper</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorFastighet(this)">
+                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true">
+                                    </span>
+                                    <span>Förnya cache</span>
+                                </button>
+                            </td>
+                            <td></td>
+                            <td>Planers berörkrets (fastigheter relation till plan)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorPlan(this)">
+                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true">
+                                    </span>
+                                    <span>Förnya cache</span>
+                                </button>
+                            </td>
+                            <td></td>
+                            <td>Planpåverkan (planers relation)</td>
+                        </tr>
+                    </table>
+                </div>
+
                 <div class="tab-pane fade" id="validate" role="tabpanel" aria-labelledby="tab-validate">...</div>
                 <div class="tab-pane fade" id="thumnails" role="tabpanel" aria-labelledby="tab-thumnails">...</div>
                 <div class="tab-pane fade" id="system" role="tabpanel" aria-labelledby="tab-system">...</div>
@@ -91,7 +186,9 @@
 
 
 
-            <button type="button" class="btn btn-primary" onclick="modal();">Open and close in 3 secs</button>
+
+
+            <button type="button" style="position: absolute; bottom: 5px;" class="btn btn-outline-primary" onclick="modal();">Open spinner, close in 3 secs</button>
 
             <div class="modal" data-backdrop="static" data-keyboard="false" tabindex="-1">
                 <div class="modal-dialog modal-spinner-width modal-dialog-centered" style="text-align: center;">
