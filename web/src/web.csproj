@@ -213,6 +213,7 @@
     <Content Include="js\utility.js" />
     <Content Include="lib\bootstrap-4.1.2-dist\css\bootstrap.min.css" />
     <Content Include="lib\bootstrap-4.1.2-dist\js\bootstrap.bundle.min.js" />
+    <Content Include="lib\octicons-9.1.1\screen-full.svg" />
     <Content Include="om.aspx" />
     <Content Include="pic\animated_windows8_64.GIF" />
     <Content Include="pic\doc-bw.png" />
@@ -380,9 +381,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="lib\octicons-9.1.1\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
