@@ -17,8 +17,13 @@
         .center {
             text-align: center;
         }
-        .check {
-            background-image: url();
+        .clear {
+            content: url('../lib/octicons-9.1.1/check.svg');
+            fill: green;
+        }
+        .no {
+            content: url('../lib/octicons-9.1.1/circle-slash.svg');
+            color: red;
         }
         .error {
             color: red;
@@ -101,7 +106,7 @@
     <!-- Misc -->
     <script src="<%= ResolveUrl("~/") %>js/utility.js" type="text/javascript"></script>
 
-    <script src="<%= ResolveUrl("~/") %>js/kontrollpanel.js" type="text/javascript"></script>
+    <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-cache.js" type="text/javascript"></script>
     <script type="text/javascript">
 
         function modal() {
@@ -206,7 +211,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3">
+                            <td></td>
+                            <td colspan="2">
                                 <button id="btnRefreshCacheAll" style="width: 100%;" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanAll(this)">
                                     <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
                                     <span>Förnya ALLA cacher</span>
