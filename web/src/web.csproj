@@ -91,6 +91,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="js\kontrollpanel.js" />
     <Content Include="services\kontrollpanel.asmx" />
     <Content Include="checkFileaccess.aspx" />
     <Content Include="css\file-images-li.css" />

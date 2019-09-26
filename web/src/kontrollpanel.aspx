@@ -11,6 +11,22 @@
     <link href="css/page-UI-core.css" rel="stylesheet" />
     <link href="css/page-UI-kontrollpanel.css" rel="stylesheet" />
     <style type="text/css">
+        .right{
+            text-align: right;
+        }
+        .center {
+            text-align: center;
+        }
+        .check {
+            background-image: url();
+        }
+        .error {
+            color: red;
+        }
+        .amplify {
+            font-weight: bolder;
+        }
+
         .modal {
             background-color: rgba(255,255,255,0.5);
         }
@@ -24,9 +40,14 @@
             width: 48px;
         }
 
+        .tab-pane {
+            margin: 0 3em;
+        }
+
         .spinner-hide {
             display: none;
         }
+
         .spinner-visible {
             display: inline;
         }
@@ -34,6 +55,30 @@
         td {
             padding: 0em 1em;
         }
+
+        ul {
+            list-style-type: disc;
+            list-style-position: inside;
+            margin: 0 2em;
+        }
+
+        ol {
+            list-style-type: decimal;
+            list-style-position: inside;
+            margin: 0 2em;
+        }
+
+            ul ul, ol ul {
+                list-style-type: circle;
+                list-style-position: inside;
+                margin-left: 15px;
+            }
+
+            ol ol, ul ol {
+                list-style-type: lower-latin;
+                list-style-position: inside;
+                margin-left: 15px;
+            }
     </style>
 
     <!-- Inställningar Klient -->
@@ -42,8 +87,8 @@
 
         if (location.protocol == 'https:') {
             Lkr.Plan.Dokument.resolvedClientUrl = "https://" + '<%=Request.Url.Host%>' + '<%=ResolveUrl("~")%>';
-            } else if (location.protocol == 'http:') {
-                Lkr.Plan.Dokument.resolvedClientUrl = "http://" + '<%=Request.Url.Host%>' + '<%=ResolveUrl("~")%>';
+        } else if (location.protocol == 'http:') {
+            Lkr.Plan.Dokument.resolvedClientUrl = "http://" + '<%=Request.Url.Host%>' + '<%=ResolveUrl("~")%>';
         } else {
             console.error("Protokoll " + location.protocol + " stöds ej.");
         }
@@ -56,43 +101,15 @@
     <!-- Misc -->
     <script src="<%= ResolveUrl("~/") %>js/utility.js" type="text/javascript"></script>
 
+    <script src="<%= ResolveUrl("~/") %>js/kontrollpanel.js" type="text/javascript"></script>
     <script type="text/javascript">
+
         function modal() {
             $('.modal').modal('show');
             setTimeout(function () {
                 $('.modal').modal('hide');
             }, 3000);
         }
-
-
-        // Antal sökta planer som kommit in till servern i URL:n
-        function RefreshCachePlanBasis(element) {
-            var $spinner = $(element).children("span");
-            $spinner.prop('disabled', true);
-            $spinner.removeClass("spinner-hide");
-            $spinner.next().remove();
-            $spinner.after("<span> Loading...</span>");
-
-            $.ajax({
-                type: "POST",
-                url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheRefreshPlanBasis',
-                contentType: "application/json; charset=UTF-8",
-                dataType: "json",
-                success: function (msg) {
-                    var data = msg.d;
-                    if (data = "true") {
-                        $spinner.addClass("spinner-hide");
-                        $spinner.next().remove();
-                        $spinner.after("<span> Förnya cache</span>");
-                        $spinner.prop('disabled', false);
-                    }
-
-                },
-                error: function () {
-                    alert("Fel!\nRefreshCachePlanBasis");
-                }
-            })
-        }; // SLUT RefreshCachePlanBasis
 
     </script>
 </head>
@@ -127,54 +144,74 @@
                 <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="tab-logs">...</div>
 
                 <div class="tab-pane fade" id="cache" role="tabpanel" aria-labelledby="tab-cache">
-                    <button class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanAll(this)">
-                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
-                        <span>Förnya ALLA cacher</span>
-                    </button>
+                    <p>
+                        Automatisk förnyande av cache sker
+                    </p>
+                    <ul>
+                        <li><asp:Label ID="NyCacheEfterAntalDagar" runat="server"></asp:Label></li>
+                        <li><asp:Label ID="NyCacheKlockan" runat="server"></asp:Label></li>
+                    </ul>
+
+                    <hr />
+
+                    <p>
+                        Systemet cachar fyra informationsdelar för snabbare svarstider.
+                        <br />
+                        Sker förändringar av den underliggande informationen och som ska slå igenom innan systemet gör en egen schemalagd cache-ning kan manuell om-cache-ning göras nedan.
+                    </p>
                     <table>
                         <tr>
-                            <td>
-                                <button class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBasis(this)">
-                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true">
-                                    </span>
-                                    <span>Förnya cache</span>
-                                </button>
-                            </td>
-                            <td></td>
-                            <td>Grundläggande planregisterinformation</td>
+                            <th></th>
+                            <th>Existerar</th>
+                            <th></th>
                         </tr>
                         <tr>
+                            <td class="right">Grundläggande planregisterinformation</td>
+                            <td class="center"></td>
                             <td>
-                                <button class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlandocumenttypes(this)">
-                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true">
-                                    </span>
+                                <button id="btnRefreshCachePlan" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBasis(this)">
+                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
                                     <span>Förnya cache</span>
                                 </button>
                             </td>
-                            <td></td>
-                            <td>Dokumenttyper</td>
                         </tr>
                         <tr>
+                            <td class="right">Dokumenttyper</td>
+                            <td class="center"></td>
                             <td>
-                                <button class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorFastighet(this)">
-                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true">
-                                    </span>
+                                <button id="btnRefreshCacheDocumenttypes" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlandocumenttypes(this)">
+                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
                                     <span>Förnya cache</span>
                                 </button>
                             </td>
-                            <td></td>
-                            <td>Planers berörkrets (fastigheter relation till plan)</td>
                         </tr>
                         <tr>
+                            <td class="right">Planers berörkrets (fastigheter relation till plan)</td>
+                            <td class="center"></td>
                             <td>
-                                <button class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorPlan(this)">
-                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true">
-                                    </span>
+                                <button id="btnRefreshCachePlanBerorFastighet" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorFastighet(this)">
+                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
                                     <span>Förnya cache</span>
                                 </button>
                             </td>
-                            <td></td>
-                            <td>Planpåverkan (planers relation)</td>
+                        </tr>
+                        <tr>
+                            <td class="right">Planpåverkan (planers relation)</td>
+                            <td class="center"></td>
+                            <td>
+                                <button id="btnRefreshCachePlanBerorPlan" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorPlan(this)">
+                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                    <span>Förnya cache</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button id="btnRefreshCacheAll" style="width: 100%;" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanAll(this)">
+                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                    <span>Förnya ALLA cacher</span>
+                                </button>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -221,7 +258,8 @@
             </div>
 
             <div id="copyrightWrapper">
-                2013 - <asp:Label ID="lblCopyrightYear" runat="server" /> 
+                2013 -
+                <asp:Label ID="lblCopyrightYear" runat="server" />
             </div>
 
 

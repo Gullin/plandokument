@@ -22,6 +22,24 @@ namespace Plan.Plandokument {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
+        /// NyCacheEfterAntalDagar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label NyCacheEfterAntalDagar;
+        
+        /// <summary>
+        /// NyCacheKlockan control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label NyCacheKlockan;
+        
+        /// <summary>
         /// lblVersion control.
         /// </summary>
         /// <remarks>

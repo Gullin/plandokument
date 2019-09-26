@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Globalization;
 
 namespace Plan.Plandokument
 {
@@ -38,6 +39,35 @@ namespace Plan.Plandokument
                 // Copyright på sida
                 DateTime dateTime = DateTime.Now;
                 lblCopyrightYear.Text = dateTime.Year.ToString() + " " + ApplicationAssemblyUtility.GetApplicationCopyright().ToString();
+
+
+                // Cache-dagar
+                if (int.TryParse(ConfigurationManager.AppSettings["CacheNbrOfDays"], out int _result))
+                {
+                    if (_result < 1 || _result > 1)
+                    {
+                        NyCacheEfterAntalDagar.Text = $"Efter antal dagar: {_result} st. dagar";
+                    }
+                    else
+                    {
+                        NyCacheEfterAntalDagar.Text = $"Efter dag: <span class=\"amplify\">{_result} st. dag</span>";
+                    }
+                }
+                else
+                {
+                    NyCacheEfterAntalDagar.CssClass = "error";
+                    NyCacheEfterAntalDagar.Text = "fel, antalet dagar innan cache kunde inte parsas";
+                }
+                // Cache-klockslag
+                if (DateTime.TryParseExact(ConfigurationManager.AppSettings["CacheTime"], "HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime cachTime))
+                {
+                    NyCacheKlockan.Text = "Tid på dygnet: <span class=\"amplify\">" + cachTime.ToString("HH:mm:ss") + "</span>";
+                }
+                else
+                {
+                    NyCacheKlockan.CssClass = "error";
+                    NyCacheKlockan.Text = "Klockslag för cache är inte inställd. System sätter applikationens starttid som klockslag.";
+                }
             }
         }
     }
