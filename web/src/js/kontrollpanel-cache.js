@@ -1,16 +1,33 @@
-﻿// Cachar om planernas grundinformation
+﻿// kontrollerar vid page-load om cacher existerar och indikerar i så fall status med bild för resp. cache
+$(document).ready(
+    function () {
+
+        CacheExistsPlanBasis();
+        CacheExistsPlandocumenttypes();
+        CacheExistsPlanBerorFastighet();
+        CacheExistsPlanBerorPlan();
+
+    }
+);
+
+
+
+//#region Re-caching, alla och individuellt
+// Cachar om alla
 function RefreshCachePlanAll(element) {
-    console.log("id",$(element).attr("id"));
+    // Diablar knappen, tänder spinning och bytar ut text på knappen
     var $spinner = $(element).children("span");
     $spinner.prop('disabled', true);
     $spinner.removeClass("spinner-hide");
     $spinner.next().remove();
     $spinner.after("<span> Loading...</span>");
 
-    $.when(RefreshCachePlanBasis($('#btnRefreshCachePlan')),
+    $.when(
+        RefreshCachePlanBasis($('#btnRefreshCachePlan')),
         RefreshCachePlandocumenttypes($('#btnRefreshCacheDocumenttypes')),
         RefreshCachePlanBerorFastighet($('#btnRefreshCachePlanBerorFastighet')),
         RefreshCachePlanBerorPlan($('#btnRefreshCachePlanBerorPlan'))).then(function () {
+            // Ställer tillbaka knappen till ursprungsläget
             $spinner.addClass("spinner-hide");
             $spinner.next().remove();
             $spinner.after("<span> Förnya ALLA cacher</span>");
@@ -18,14 +35,6 @@ function RefreshCachePlanAll(element) {
         });
 
 }; // SLUT RefreshCachePlanAll
-
-function RefreshCachePlanAllExecute(callback) {
-    RefreshCachePlanBasis($('#btnRefreshCachePlan'));
-    RefreshCachePlandocumenttypes($('#btnRefreshCacheDocumenttypes'));
-    RefreshCachePlanBerorFastighet($('#btnRefreshCachePlanBerorFastighet'));
-    RefreshCachePlanBerorPlan($('#btnRefreshCachePlanBerorPlan'));
-    callback();
-}
 
 
 
@@ -66,7 +75,7 @@ function RefreshCachePlanBasis(element) {
 
 
 
-// Cachar om planernas grundinformation
+// Cachar om dokumenttyperna
 function RefreshCachePlandocumenttypes(element) {
     var $spinner = $(element).children("span");
     $spinner.prop('disabled', true);
@@ -102,7 +111,7 @@ function RefreshCachePlandocumenttypes(element) {
 
 
 
-// Cachar om planernas grundinformation
+// Cachar om planernas berörskretsar till fastigheter
 function RefreshCachePlanBerorFastighet(element) {
     var $spinner = $(element).children("span");
     $spinner.prop('disabled', true);
@@ -138,7 +147,7 @@ function RefreshCachePlanBerorFastighet(element) {
 
 
 
-// Cachar om planernas grundinformation
+// Cachar om planernas påverkan på varandra
 function RefreshCachePlanBerorPlan(element) {
     var $spinner = $(element).children("span");
     $spinner.prop('disabled', true);
@@ -171,8 +180,11 @@ function RefreshCachePlanBerorPlan(element) {
         }
     })
 }; // SLUT RefreshCachePlanBerorPlan
+//#endregion
 
 
+//#region Cache Existerar
+// Kontrollera så att cache för planers grundinformation existerar
 function CacheExistsPlanBasis() {
     $.ajax({
         type: "POST",
@@ -195,9 +207,11 @@ function CacheExistsPlanBasis() {
             //alert("Fel!\nRefreshCachePlanBerorFastighet");
         }
     })
-}
+} // SLUT CacheExistsPlanBasis
 
 
+
+// Kontrollerar så att cache för dokumenttyper existerar
 function CacheExistsPlandocumenttypes() {
     $.ajax({
         type: "POST",
@@ -220,7 +234,7 @@ function CacheExistsPlandocumenttypes() {
             //alert("Fel!\nRefreshCachePlanBerorFastighet");
         }
     })
-};
+}; // SLUT CacheExistsPlandocumenttypes
 
 
 function CacheExistsPlanBerorFastighet() {
@@ -271,14 +285,4 @@ function CacheExistsPlanBerorPlan() {
         }
     })
 };
-
-$(document).ready(
-    function () {
-
-        CacheExistsPlanBasis();
-        CacheExistsPlandocumenttypes();
-        CacheExistsPlanBerorFastighet();
-        CacheExistsPlanBerorPlan();
-
-    }
-);
+//#endregion
