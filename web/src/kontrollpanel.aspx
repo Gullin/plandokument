@@ -106,15 +106,11 @@
     <!-- Misc -->
     <script src="<%= ResolveUrl("~/") %>js/utility.js" type="text/javascript"></script>
 
+    <script src="<%= ResolveUrl("~/") %>js/kontrollpanel.js" type="text/javascript"></script>
     <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-cache.js" type="text/javascript"></script>
     <script type="text/javascript">
 
-        function modal() {
-            $('.modal').modal('show');
-            setTimeout(function () {
-                $('.modal').modal('hide');
-            }, 3000);
-        }
+
 
     </script>
 </head>

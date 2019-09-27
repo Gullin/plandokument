@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="js\kontrollpanel-cache.js" />
+    <Content Include="js\kontrollpanel.js" />
     <Content Include="lib\octicons-9.1.1\check.svg" />
     <Content Include="lib\octicons-9.1.1\circle-slash.svg" />
     <Content Include="services\kontrollpanel.asmx" />
