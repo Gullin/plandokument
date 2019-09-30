@@ -14,8 +14,20 @@
         .right{
             text-align: right;
         }
+        table {
+            border-spacing: 0.5em 0px;
+            border-collapse: separate;
+            /*border: 1px solid red;*/
+        }
+        td {
+            /*border: 1px solid red;*/
+        }
         .center {
             text-align: center;
+            background-position: center;
+            align-content: center;
+            -webkit-align-content: center;
+            margin: 0px auto;
         }
         .clear {
             content: url('../lib/octicons-9.1.1/check.svg');
@@ -57,9 +69,6 @@
             display: inline;
         }
 
-        td {
-            padding: 0em 1em;
-        }
 
         ul {
             list-style-type: disc;
@@ -146,6 +155,10 @@
 
                 <div class="tab-pane fade" id="cache" role="tabpanel" aria-labelledby="tab-cache">
                     <p>
+                        Systemet cachar fyra informationsdelar för snabbare svarstider.
+                        </p>
+                    <hr />
+                    <p>
                         Automatisk förnyande av cache sker
                     </p>
                     <ul>
@@ -155,66 +168,76 @@
 
                     <hr />
 
+                    <div id="CacheMeta">
+
+                    </div>
+
+                    <hr />
+
                     <p>
-                        Systemet cachar fyra informationsdelar för snabbare svarstider.
-                        <br />
                         Sker förändringar av den underliggande informationen och som ska slå igenom innan systemet gör en egen schemalagd cache-ning kan manuell om-cache-ning göras nedan.
                     </p>
-                    <table>
-                        <tr>
-                            <th></th>
-                            <th>Existerar</th>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <td class="right">Grundläggande planregisterinformation</td>
-                            <td class="center"></td>
-                            <td>
-                                <button id="btnRefreshCachePlan" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBasis(this)">
-                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
-                                    <span>Förnya cache</span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="right">Dokumenttyper</td>
-                            <td class="center"></td>
-                            <td>
-                                <button id="btnRefreshCacheDocumenttypes" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlandocumenttypes(this)">
-                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
-                                    <span>Förnya cache</span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="right">Planers berörkrets (fastigheter relation till plan)</td>
-                            <td class="center"></td>
-                            <td>
-                                <button id="btnRefreshCachePlanBerorFastighet" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorFastighet(this)">
-                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
-                                    <span>Förnya cache</span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="right">Planpåverkan (planers relation)</td>
-                            <td class="center"></td>
-                            <td>
-                                <button id="btnRefreshCachePlanBerorPlan" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorPlan(this)">
-                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
-                                    <span>Förnya cache</span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td colspan="2">
-                                <button id="btnRefreshCacheAll" style="width: 100%;" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanAll(this)">
-                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
-                                    <span>Förnya ALLA cacher</span>
-                                </button>
-                            </td>
-                        </tr>
+                    <table id="ReCacheTable">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Existerar</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="right">Grundläggande planregisterinformation</td>
+                                <td class="center"></td>
+                                <td>
+                                    <button id="btnRefreshCachePlan" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBasis(this)">
+                                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                        <span>Förnya cache</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="right">Dokumenttyper</td>
+                                <td class="center"></td>
+                                <td>
+                                    <button id="btnRefreshCacheDocumenttypes" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlandocumenttypes(this)">
+                                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                        <span>Förnya cache</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="right">Planers berörkrets (fastigheter relation till plan)</td>
+                                <td class="center"></td>
+                                <td>
+                                    <button id="btnRefreshCachePlanBerorFastighet" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorFastighet(this)">
+                                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                        <span>Förnya cache</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="right">Planpåverkan (planers relation)</td>
+                                <td class="center"></td>
+                                <td>
+                                    <button id="btnRefreshCachePlanBerorPlan" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorPlan(this)">
+                                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                        <span>Förnya cache</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">
+                                    <button id="btnRefreshCacheAll" style="width: 100%;" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanAll(this)">
+                                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                        <span>Förnya ALLA cacher</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
 

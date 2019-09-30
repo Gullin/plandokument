@@ -6,18 +6,78 @@ using System.Data.OleDb;
 using System.Globalization;
 using System.Web;
 using System.Web.Caching;
+using System.Collections;
 
 namespace Plan.Plandokument
 {
-    public static class PlanCache
+
+    public class CacheMeta
     {
+        public int NumberOfTotalCaches { get; set; }
+        public int NumberOfApplicationCaches { get; set; }
+        public long AvailableBytes { get; set; }
+        public long AvailablePhysicalMemory { get; set; }
+        public List<Caches> Caches { get; set; }
+    }
+
+    public class Caches
+    {
+        public string Key { get; set; }
+        public string Type { get; set; }
+    }
+
+
+    public class PlanCache
+    {
+
+        public static CacheMeta GetCacheMeta()
+        {
+            Cache cache = new Cache();
+            CacheMeta cacheMeta = new CacheMeta
+            {
+                NumberOfTotalCaches = cache.Count,
+                AvailableBytes = cache.EffectivePrivateBytesLimit,
+                AvailablePhysicalMemory = cache.EffectivePercentagePhysicalMemoryLimit
+            };
+
+            int nbrOfApplicationCaches = 0;
+            IDictionaryEnumerator en = HttpContext.Current.Cache.GetEnumerator();
+            cacheMeta.Caches = new List<Caches>();
+            while (en.MoveNext())
+            {
+
+                // Lägger endast till cachar som är skapad explicit i applikationen (eliminera systemcachar)
+                if (en.Key.ToString().Contains("C_"))
+                {
+                    cacheMeta.Caches.Add(new Caches()
+                    {
+                        Key = en.Key.ToString(),
+                        Type = "Application"
+                    });
+                    nbrOfApplicationCaches++;
+                }
+                else
+                {
+                    cacheMeta.Caches.Add(new Caches()
+                    {
+                        Key = en.Key.ToString(),
+                        Type = "System"
+                    });
+                }
+            }
+
+            cacheMeta.NumberOfApplicationCaches = nbrOfApplicationCaches;
+
+            return cacheMeta;
+        }
+
         /// <summary>
         /// Returnerar basinformationen för planern från cache. Existerar cachen ej skapas den.
         /// </summary>
         /// <returns></returns>
         public static DataTable GetPlanBasisCache()
         {
-            DataTable cachedPlans = (DataTable)HttpRuntime.Cache["Plans"];
+            DataTable cachedPlans = (DataTable)HttpRuntime.Cache["C_Plans"];
 
             if (cachedPlans != null)
             {
@@ -26,7 +86,7 @@ namespace Plan.Plandokument
             else
             {
                 setPlanCache();
-                return (DataTable)HttpRuntime.Cache["Plans"];
+                return (DataTable)HttpRuntime.Cache["C_Plans"];
             }
         }
 
@@ -37,7 +97,7 @@ namespace Plan.Plandokument
         /// <returns></returns>
         public static List<Documenttype> GetPlandocumenttypesCache()
         {
-            List<Documenttype> cachedDocumenttypes = (List<Documenttype>)HttpRuntime.Cache["Documenttypes"];
+            List<Documenttype> cachedDocumenttypes = (List<Documenttype>)HttpRuntime.Cache["C_Documenttypes"];
 
             if (cachedDocumenttypes != null)
             {
@@ -46,7 +106,7 @@ namespace Plan.Plandokument
             else
             {
                 setDocumenttypesCache();
-                return (List<Documenttype>)HttpRuntime.Cache["Documenttypes"];
+                return (List<Documenttype>)HttpRuntime.Cache["C_Documenttypes"];
             }
         }
 
@@ -57,7 +117,7 @@ namespace Plan.Plandokument
         /// <returns></returns>
         public static DataTable GetPlanBerorFastighetCache()
         {
-            DataTable cachedPlanBerorFastighet = (DataTable)HttpRuntime.Cache["PlanBerorFastighet"];
+            DataTable cachedPlanBerorFastighet = (DataTable)HttpRuntime.Cache["C_PlanBerorFastighet"];
 
             if (cachedPlanBerorFastighet != null)
             {
@@ -66,7 +126,7 @@ namespace Plan.Plandokument
             else
             {
                 setPlanBerorFastighetCache();
-                return (DataTable)HttpRuntime.Cache["PlanBerorFastighet"];
+                return (DataTable)HttpRuntime.Cache["C_PlanBerorFastighet"];
             }
         }
 
@@ -77,7 +137,7 @@ namespace Plan.Plandokument
         /// <returns></returns>
         public static DataTable GetPlanBerorPlanCache()
         {
-            DataTable cachedPlanBerorPlan = (DataTable)HttpRuntime.Cache["PlanBerorPlan"];
+            DataTable cachedPlanBerorPlan = (DataTable)HttpRuntime.Cache["C_PlanBerorPlan"];
 
             if (cachedPlanBerorPlan != null)
             {
@@ -86,7 +146,7 @@ namespace Plan.Plandokument
             else
             {
                 setPlanBerorPlanCache();
-                return (DataTable)HttpRuntime.Cache["PlanBerorPlan"];
+                return (DataTable)HttpRuntime.Cache["C_PlanBerorPlan"];
             }
         }
 
@@ -149,7 +209,7 @@ namespace Plan.Plandokument
         /// <returns></returns>
         public static bool CacheExistsPlanBasis()
         {
-            var cache = HttpRuntime.Cache["Plans"];
+            var cache = HttpRuntime.Cache["C_Plans"];
 
             if (cache != null)
             {
@@ -168,7 +228,7 @@ namespace Plan.Plandokument
         /// <returns></returns>
         public static bool CacheExistsPlandocumenttypes()
         {
-            var cache = HttpRuntime.Cache["Documenttypes"];
+            var cache = HttpRuntime.Cache["C_Documenttypes"];
 
             if (cache != null)
             {
@@ -187,7 +247,7 @@ namespace Plan.Plandokument
         /// <returns></returns>
         public static bool CacheExistsPlanBerorFastighet()
         {
-            var cache = HttpRuntime.Cache["PlanBerorFastighet"];
+            var cache = HttpRuntime.Cache["C_PlanBerorFastighet"];
 
             if (cache != null)
             {
@@ -206,7 +266,7 @@ namespace Plan.Plandokument
         /// <returns></returns>
         public static bool CacheExistsPlanBerorPlan()
         {
-            var cache = HttpRuntime.Cache["PlanBerorPlan"];
+            var cache = HttpRuntime.Cache["C_PlanBerorPlan"];
 
             if (cache != null)
             {
@@ -346,7 +406,7 @@ namespace Plan.Plandokument
         /// <summary>
         /// Initierar cache för basinformationen till planer
         /// </summary>
-        public static void initPlanCache()
+        private static void initPlanCache()
         {
             //string conStr = ConfigurationManager.AppSettings["OracleOleDBConString"].ToString();
             string sql = string.Empty;
@@ -388,7 +448,7 @@ namespace Plan.Plandokument
 
             // Skapa cach av alla planer
             Cache cache = HttpRuntime.Cache;
-            cache.Insert("Plans", dtPlans, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
+            cache.Insert("C_Plans", dtPlans, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
 
             dtPlans.Dispose();
             con.Close();
@@ -427,7 +487,7 @@ namespace Plan.Plandokument
 
             // Skapa cach av alla planer
             Cache cache = HttpRuntime.Cache;
-            cache.Insert("Documenttypes", listOfDocumenttypes, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
+            cache.Insert("C_Documenttypes", listOfDocumenttypes, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
         }
         
 
@@ -479,7 +539,7 @@ namespace Plan.Plandokument
 
             // Skapa cach av alla planer
             Cache cache = HttpRuntime.Cache;
-            cache.Insert("PlanBerorFastighet", dtPlanBerorFastighet, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
+            cache.Insert("C_PlanBerorFastighet", dtPlanBerorFastighet, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
 
             dtPlanBerorFastighet.Dispose();
             con.Close();
@@ -534,7 +594,7 @@ namespace Plan.Plandokument
 
             // Skapa cach av alla planer
             Cache cache = HttpRuntime.Cache;
-            cache.Insert("PlanBerorPlan", dtPlanBerorPlan, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
+            cache.Insert("C_PlanBerorPlan", dtPlanBerorPlan, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
 
             dtPlanBerorPlan.Dispose();
             con.Close();

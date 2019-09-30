@@ -15,12 +15,10 @@ namespace Plan.Plandokument
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.Web.Script.Services.ScriptService]
     [System.ComponentModel.ToolboxItem(false)]
-    // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
-    // [System.Web.Script.Services.ScriptService]
     public class Kontrollpanel : System.Web.Services.WebService
     {
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheExistsPlanBasis()
         {
@@ -32,7 +30,7 @@ namespace Plan.Plandokument
         }
 
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheExistsPlanBerorFastighet()
         {
@@ -44,7 +42,7 @@ namespace Plan.Plandokument
         }
 
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheExistsPlandocumenttypes()
         {
@@ -56,7 +54,7 @@ namespace Plan.Plandokument
         }
 
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheExistsPlanBerorPlan()
         {
@@ -68,7 +66,7 @@ namespace Plan.Plandokument
         }
 
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheExistsAll()
         {
@@ -92,7 +90,7 @@ namespace Plan.Plandokument
 
 
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheRefreshPlanBasis()
         {
@@ -119,7 +117,7 @@ namespace Plan.Plandokument
         }
 
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheRefreshPlanBerorFastighet()
         {
@@ -146,7 +144,7 @@ namespace Plan.Plandokument
         }
 
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheRefreshPlandocumenttypes()
         {
@@ -173,7 +171,7 @@ namespace Plan.Plandokument
         }
 
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheRefreshPlanBerorPlan()
         {
@@ -202,7 +200,19 @@ namespace Plan.Plandokument
 
 
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string CacheMeta()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.GetCacheMeta());
+
+        }
+
+
+        [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheTimeDuration()
         {
@@ -214,7 +224,7 @@ namespace Plan.Plandokument
         }
 
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheTimeElapsed()
         {

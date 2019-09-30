@@ -7,6 +7,40 @@ $(document).ready(
         CacheExistsPlanBerorFastighet();
         CacheExistsPlanBerorPlan();
 
+        $.ajax({
+            type: "POST",
+            url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheMeta',
+            contentType: "application/json; charset=UTF-8",
+            dataType: "json",
+            success: function (msg) {
+
+                var cacheMeta = JSON.parse(msg.d);
+                console.log(JSON.parse(msg.d));
+
+                var text = [];
+                text[0] = "Antal applikations-cachar: " + cacheMeta.NumberOfApplicationCaches;
+                text[1] = "Totalt antal cachar: " + cacheMeta.NumberOfTotalCaches;
+                text[2] = "Tillgängligt minne för cachar: " + bytesToSize(cacheMeta.AvailableBytes);
+                text[3] = "Outnyttjat minne för webbapplikation: " + cacheMeta.AvailablePhysicalMemory + " %";
+
+                text.forEach(function (element, index) {
+                    console.log(element);
+                    if (index != text.length) {
+                        $('#CacheMeta').append(element + "<br />")
+                    }
+                    else {
+                        $('#CacheMeta').append(element)
+                    }
+                });
+
+
+            },
+            error: function () {
+                alert("FEL!");
+            }
+        })
+
+
     }
 );
 
