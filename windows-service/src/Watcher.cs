@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
@@ -9,6 +8,9 @@ using System.Threading;
 
 namespace Plan.WindowsService
 {
+    /// <summary>
+    /// Håller inställningar för windows-tjänsten. Både hårdkodat och hämtade från AppSettings.
+    /// </summary>
     class ConfigWatcher
     {
         public static string WatchedFolder { get; } = @ConfigurationManager.AppSettings["WatchedFolder"].ToString();
@@ -26,13 +28,16 @@ namespace Plan.WindowsService
         public static int[] MaxDimensions { get; } = { 2000, 150 };
     }
 
+    /// <summary>
+    /// Hanterar katalogbevakningen
+    /// </summary>
     public class Watcher
     {
-        public Watcher()
-        {
-
-        }
-
+        /// <summary>
+        /// Initierar bevakning av katalog för ändrade filer.
+        /// Katalog tas från konfiguration.
+        /// </summary>
+        /// <param name="watcher">Filbevakningsobjekt</param>
         public static void Init(FileSystemWatcher watcher)
         {
             watcher.Path = ConfigWatcher.WatchedFolder;
@@ -59,6 +64,9 @@ namespace Plan.WindowsService
             watcher.EnableRaisingEvents = true;
         }
 
+        /// <summary>
+        /// Event för när fil raderas. Båda humnails bilder large (l) och small (s) raderas
+        /// </summary>
         private static void OnDeleted(object sender, FileSystemEventArgs e)
         {
             if (!Directory.Exists(ConfigWatcher.ThumnailsFolder))
@@ -85,6 +93,9 @@ namespace Plan.WindowsService
             }
         }
 
+        /// <summary>
+        /// Event för när fil ändras. Thumnails Bildfiler skapas om.
+        /// </summary>
         private static void OnChanged(object source, FileSystemEventArgs e)
         {
             Thread.Sleep(500);
@@ -159,6 +170,9 @@ namespace Plan.WindowsService
             }
         }
 
+        /// <summary>
+        /// Event för när fil döps om. Ändrar thumnails bildfilers namn för large (l) och small (s) därefter.
+        /// </summary>
         private static void OnRenamed(object source, RenamedEventArgs e)
         {
             FileInfo _oldFile = new FileInfo(e.OldFullPath);
@@ -189,11 +203,17 @@ namespace Plan.WindowsService
             }
         }
 
+        /// <summary>
+        /// Event för när filbevakningsobjektet återvinns av GC:n. Loggar händelsen.
+        /// </summary>
         private static void OnDisposed(object sender, EventArgs e)
         {
             LoggEvent.Logger.WriteEntry("FileSystemWatcher har återvunnits (disposed)", EventLogEntryType.Warning, LoggEvent.LoggEventID++);
         }
 
+        /// <summary>
+        /// Event för när filbevakningsobjektet returnerar fel. Felet loggas.
+        /// </summary>
         private static void OnError(object sender, ErrorEventArgs e)
         {
             Exception ex = e.GetException();
@@ -203,7 +223,11 @@ namespace Plan.WindowsService
         }
 
 
-
+        /// <summary>
+        /// Kontrollerar om fil är åtkomlig, indikerar att skrivningen av filen är färdig
+        /// </summary>
+        /// <param name="fullPath">Full sökväg till fil</param>
+        /// <returns>Sant om filen är åtkomlig, annars falskt</returns>
         private static bool IsFileReady(string fullPath)
         {
             // Ett fel per fil istället för flera när polling-metoden används
@@ -227,6 +251,13 @@ namespace Plan.WindowsService
         }
 
 
+        /// <summary>
+        /// Skalar bilden proportionellt
+        /// </summary>
+        /// <param name="image">Bild</param>
+        /// <param name="maxWidth">Maximal bredd som önskas</param>
+        /// <param name="maxHeight">Maximal höjd som önskas</param>
+        /// <returns>Bild</returns>
         public static Image ScaleImage(Image image, int maxWidth, int maxHeight)
         {
             var ratioX = (double)maxWidth / image.Width;
@@ -253,6 +284,11 @@ namespace Plan.WindowsService
         }
 
 
+        /// <summary>
+        /// Returnerar bildformatets Codec
+        /// </summary>
+        /// <param name="format">Bildformat som Codec önskas för</param>
+        /// <returns>Bildformatets Codec</returns>
         private static ImageCodecInfo GetEncoderInfo(ImageFormat format)
         {
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();

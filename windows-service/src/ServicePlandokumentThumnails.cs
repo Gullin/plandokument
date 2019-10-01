@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
 
 namespace Plan.WindowsService
 {
+    /// <summary>
+    /// Logg-förutsättningar till Event Viewer
+    /// </summary>
     class LoggEvent
     {
         public static EventLog Logger { get; set; } = new EventLog();
@@ -37,6 +33,8 @@ namespace Plan.WindowsService
             LoggEvent.Logger.Log = LoggEvent.LogName;
         }
 
+
+
         protected override void OnStart(string[] args)
         {
             LoggEvent.Logger.WriteEntry("Start av " + this.ServiceName, EventLogEntryType.Information, LoggEvent.LoggEventID++);
@@ -53,6 +51,8 @@ namespace Plan.WindowsService
                 throw;
             }
         }
+
+
 
         protected override void OnStop()
         {
