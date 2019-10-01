@@ -92,6 +92,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="js\kontrollpanel-cache.js" />
+    <Content Include="js\kontrollpanel.js" />
+    <Content Include="lib\octicons-9.1.1\check.svg" />
+    <Content Include="lib\octicons-9.1.1\circle-slash.svg" />
+    <Content Include="services\kontrollpanel.asmx" />
     <Content Include="checkFileaccess.aspx" />
     <Content Include="css\file-images-li.css" />
     <Content Include="css\jquery-ui-1.10.3-smoothness\images\animated-overlay.gif" />
@@ -113,6 +118,7 @@
     <Content Include="css\page-UI-centering.css" />
     <Content Include="css\page-UI-core.css" />
     <Content Include="css\page-UI-help.css" />
+    <Content Include="css\page-UI-kontrollpanel.css" />
     <Content Include="css\page-UI-plan-alla-jtable-custom.css" />
     <Content Include="css\page-UI-plan-alla.css" />
     <Content Include="css\page-UI-plan.css" />
@@ -212,9 +218,20 @@
     <Content Include="Global.asax" />
     <Content Include="js\namespaceTopLevelLkrExtend.js" />
     <Content Include="js\utility.js" />
+    <Content Include="kontrollpanel.aspx" />
     <Content Include="lib\bootstrap-4.1.2-dist\css\bootstrap.min.css" />
     <Content Include="lib\bootstrap-4.1.2-dist\js\bootstrap.bundle.min.js" />
     <Content Include="lib\octicons-9.1.1\screen-full.svg" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap-grid.css" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap-grid.min.css" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap-reboot.css" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap-reboot.min.css" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap.css" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap.min.css" />
+    <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.bundle.js" />
+    <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.bundle.min.js" />
+    <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.js" />
+    <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.min.js" />
     <Content Include="om.aspx" />
     <Content Include="pic\animated_windows8_64.GIF" />
     <Content Include="pic\doc-bw.png" />
@@ -277,6 +294,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="services\kontrollpanel.asmx.cs">
+      <DependentUpon>kontrollpanel.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="checkFileaccess.aspx.cs">
       <DependentUpon>checkFileaccess.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -303,6 +324,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="class\PlanCache.cs" />
+    <Compile Include="kontrollpanel.aspx.cs">
+      <DependentUpon>kontrollpanel.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="kontrollpanel.aspx.designer.cs">
+      <DependentUpon>kontrollpanel.aspx</DependentUpon>
+    </Compile>
     <Compile Include="om.aspx.cs">
       <DependentUpon>om.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -370,6 +398,17 @@
     <Content Include="dokumenttyper.csv" />
     <Content Include="lib\bootstrap-4.1.2-dist\css\bootstrap.min.css.map" />
     <Content Include="lib\bootstrap-4.1.2-dist\js\bootstrap.bundle.min.js.map" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap-grid.css.map" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap-grid.min.css.map" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap-reboot.css.map" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap-reboot.min.css.map" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap.css.map" />
+    <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap.min.css.map" />
+    <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.bundle.js.map" />
+    <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.bundle.min.js.map" />
+    <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.js.map" />
+    <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.min.js.map" />
+    <Content Include="lib\popper.js-1.14.7\popper.min.js" />
     <None Include="Properties\PublishProfiles\AIMS2016x64.pubxml" />
     <Content Include="Settings.config.skarp" />
     <None Include="Properties\PublishProfiles\Deploy Debug x64.pubxml" />
