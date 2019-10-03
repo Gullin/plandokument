@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="js\kontrollpanel-cache.js" />
+    <Content Include="js\kontrollpanel-service.js" />
     <Content Include="js\kontrollpanel.js" />
     <Content Include="lib\octicons-9.1.1\check.svg" />
     <Content Include="lib\octicons-9.1.1\circle-slash.svg" />
@@ -296,7 +297,6 @@
   <ItemGroup>
     <Compile Include="services\kontrollpanel.asmx.cs">
       <DependentUpon>kontrollpanel.asmx</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="checkFileaccess.aspx.cs">
       <DependentUpon>checkFileaccess.aspx</DependentUpon>
@@ -409,6 +409,10 @@
     <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.js.map" />
     <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.min.js.map" />
     <Content Include="lib\popper.js-1.14.7\popper.min.js" />
+    <Content Include="..\..\shared\ThumnailsService.config">
+      <Link>ThumnailsService.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\AIMS2016x64.pubxml" />
     <Content Include="Settings.config.skarp" />
     <None Include="Properties\PublishProfiles\Deploy Debug x64.pubxml" />

@@ -5,9 +5,17 @@ using System.Web;
 using System.Web.Services;
 using System.Web.Script.Serialization;
 using System.Threading;
+using System.Configuration;
+using System.Collections.Specialized;
 
 namespace Plan.Plandokument
 {
+
+    class ServiceConfig
+    {
+        public static string ServiceName { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceName"];
+    }
+
     /// <summary>
     /// Summary description for cache
     /// </summary>
@@ -244,7 +252,7 @@ namespace Plan.Plandokument
 
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
-            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.ServiceExists("ServiceName"));
+            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.ServiceExists(ServiceConfig.ServiceName));
 
         }
 
@@ -255,7 +263,7 @@ namespace Plan.Plandokument
 
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
-            return jsonSerializer.Serialize(PlanCache.CacheElapsed());
+            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.StartService(ServiceConfig.ServiceName));
 
         }
 
@@ -266,7 +274,7 @@ namespace Plan.Plandokument
 
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
-            return jsonSerializer.Serialize(PlanCache.CacheElapsed());
+            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.StopService(ServiceConfig.ServiceName));
 
         }
 
@@ -277,7 +285,7 @@ namespace Plan.Plandokument
 
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
-            return jsonSerializer.Serialize(PlanCache.CacheElapsed());
+            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.ServiceIsRunning(ServiceConfig.ServiceName));
 
         }
 
@@ -288,7 +296,7 @@ namespace Plan.Plandokument
 
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
-            return jsonSerializer.Serialize(PlanCache.CacheElapsed());
+            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.RebootService(ServiceConfig.ServiceName));
 
         }
 

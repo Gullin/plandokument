@@ -117,9 +117,10 @@
 
     <script src="<%= ResolveUrl("~/") %>js/kontrollpanel.js" type="text/javascript"></script>
     <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-cache.js" type="text/javascript"></script>
+    <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-service.js" type="text/javascript"></script>
     <script type="text/javascript">
 
-
+        Test();
 
     </script>
 </head>

@@ -14,7 +14,7 @@ namespace Plan.Plandokument
         /// </summary>
         /// <param name="ServiceName">Windows tjänstenamn</param>
         /// <returns>Sant om Windows tjänst existerar, annars falskt </returns>
-        public bool ServiceExists(string ServiceName)
+        public static bool ServiceExists(string ServiceName)
         {
             return ServiceController.GetServices().Any(serviceController => serviceController.ServiceName.Equals(ServiceName));
         }
@@ -24,7 +24,7 @@ namespace Plan.Plandokument
         /// Startar en Windows tjänst genom dess namn
         /// </summary>
         /// <param name="ServiceName">Windows tjänstenamn</param>
-        public void StartService(string ServiceName)
+        public static bool StartService(string ServiceName)
         {
             ServiceController sc = new ServiceController();
             sc.ServiceName = ServiceName;
@@ -41,8 +41,13 @@ namespace Plan.Plandokument
                 catch (InvalidOperationException ex)
                 {
                     UtilityException.LogException(ex, "Plandokument Thumnails : StartService", false);
+                    return false;
                 }
+
+                return true;
             }
+
+            return false;
         }
 
 
@@ -50,7 +55,7 @@ namespace Plan.Plandokument
         /// Stoppar Windows tjänst som kör
         /// </summary>
         /// <param name="ServiceName">Windows tjänstenamn</param>
-        public void StopService(string ServiceName)
+        public static bool StopService(string ServiceName)
         {
             ServiceController sc = new ServiceController();
             sc.ServiceName = ServiceName;
@@ -67,8 +72,13 @@ namespace Plan.Plandokument
                 catch (InvalidOperationException ex)
                 {
                     UtilityException.LogException(ex, "Plandokument Thumnails : StopService", false);
+                    return false;
                 }
+
+                return true;
             }
+
+            return false;
         }
 
 
@@ -76,7 +86,7 @@ namespace Plan.Plandokument
         /// Verifierar om Windows tjänsten kör
         /// </summary>
         /// <param name="ServiceName">Windows tjänstenamn</param>
-        public bool ServiceIsRunning(string ServiceName)
+        public static bool ServiceIsRunning(string ServiceName)
         {
             ServiceController sc = new ServiceController();
             sc.ServiceName = ServiceName;
@@ -96,7 +106,7 @@ namespace Plan.Plandokument
         /// Startar om Windows tjänst
         /// </summary>
         /// <param name="ServiceName"></param>
-        public void RebootService(string ServiceName)
+        public static bool RebootService(string ServiceName)
         {
             if (ServiceExists(ServiceName))
             {
@@ -106,7 +116,11 @@ namespace Plan.Plandokument
                 }
 
                 StartService(ServiceName);
+
+                return true;
             }
+
+            return false;
         }
     }
 }
