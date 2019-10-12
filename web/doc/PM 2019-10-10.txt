@@ -1,0 +1,6 @@
+visa plankarta thumnail som Bootstrap Carousel
+  ==> för tiff-bilder, ev. ändra så att den stora öppnas som carousel
+  ==> för pdf-fil små carousel roterande och med valbara
+  ==> Eventuellt alla stora som Carousel
+    ==> rotera endast när pdf-fil klickats
+    ==> fast (ej roterande) när tif-bild klickas
