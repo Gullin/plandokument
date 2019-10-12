@@ -14,6 +14,8 @@ namespace Plan.Plandokument
     class ServiceConfig
     {
         public static string ServiceName { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceName"];
+        public static string ServiceDisplayName { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceDisplayName"];
+        public static string ServiceDescription { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceDescription"];
     }
 
     /// <summary>
@@ -26,6 +28,7 @@ namespace Plan.Plandokument
     public class Kontrollpanel : System.Web.Services.WebService
     {
 
+        #region Cache
         [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheExistsPlanBasis()
@@ -242,8 +245,21 @@ namespace Plan.Plandokument
             return jsonSerializer.Serialize(PlanCache.CacheElapsed());
 
         }
+        #endregion
 
 
+
+        #region Service
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string ServiceMeta()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.GetServiceMeta());
+
+        }
 
         [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
@@ -299,6 +315,7 @@ namespace Plan.Plandokument
             return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.RebootService(ServiceConfig.ServiceName));
 
         }
+        #endregion
 
 
     }

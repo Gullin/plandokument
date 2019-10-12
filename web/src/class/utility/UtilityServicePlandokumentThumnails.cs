@@ -7,8 +7,27 @@ using System.Web;
 namespace Plan.Plandokument
 {
 
+    public class ServiceMeta
+    {
+        public string ServiceName { get; set; }
+        public string ServiceDisplayName { get; set; }
+        public string ServiceDescription { get; set; }
+    }
+
     public class UtilityServicePlandokumentThumnails
     {
+        public static ServiceMeta GetServiceMeta()
+        {
+            ServiceMeta serviceMeta = new ServiceMeta
+            {
+                ServiceName = ServiceConfig.ServiceName,
+                ServiceDisplayName = ServiceConfig.ServiceDisplayName,
+                ServiceDescription = ServiceConfig.ServiceDescription
+            };
+
+            return serviceMeta;
+        }
+
         /// <summary>
         /// Verifierar om Windows tjänst existerar
         /// </summary>
@@ -112,10 +131,16 @@ namespace Plan.Plandokument
             {
                 if (ServiceIsRunning(ServiceName))
                 {
-                    StopService(ServiceName);
+                    if (!StopService(ServiceName))
+                    {
+                        return false;
+                    }
                 }
 
-                StartService(ServiceName);
+                if (!StartService(ServiceName))
+                {
+                    return false;
+                }
 
                 return true;
             }
@@ -123,4 +148,5 @@ namespace Plan.Plandokument
             return false;
         }
     }
+
 }
