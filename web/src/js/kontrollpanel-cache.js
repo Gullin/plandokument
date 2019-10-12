@@ -15,7 +15,6 @@ $(document).ready(
             success: function (msg) {
 
                 var cacheMeta = JSON.parse(msg.d);
-                console.log(JSON.parse(msg.d));
 
                 var text = [];
                 text[0] = "Antal applikations-cachar: " + cacheMeta.NumberOfApplicationCaches;
@@ -24,7 +23,6 @@ $(document).ready(
                 text[3] = "Outnyttjat minne för webbapplikation: " + cacheMeta.AvailablePhysicalMemory + " %";
 
                 text.forEach(function (element, index) {
-                    console.log(element);
                     if (index != text.length) {
                         $('#CacheMeta').append(element + "<br />")
                     }

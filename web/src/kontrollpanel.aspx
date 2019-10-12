@@ -120,7 +120,6 @@
     <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-service.js" type="text/javascript"></script>
     <script type="text/javascript">
 
-        Test();
 
     </script>
 </head>
@@ -151,16 +150,28 @@
             </ul>
 
             <div class="tab-content" id="menu-content">
-                <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="tab-overview">...</div>
-                <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="tab-logs">...</div>
+                <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
+                    Kommer senare
+                </div>
+
+
+
+                <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="tab-logs">
+                    Kommer senare
+                </div>
+
+
 
                 <div class="tab-pane fade" id="cache" role="tabpanel" aria-labelledby="tab-cache">
                     <p>
                         Systemet cachar fyra informationsdelar för snabbare svarstider.
                         </p>
                     <hr />
+                    <h3>
+                        Automatisk förnyande av cache
+                    </h3>
                     <p>
-                        Automatisk förnyande av cache sker
+                        Sker
                     </p>
                     <ul>
                         <li><asp:Label ID="NyCacheEfterAntalDagar" runat="server"></asp:Label></li>
@@ -169,12 +180,19 @@
 
                     <hr />
 
+                    <h3>
+                        Metadata
+                    </h3>
+                    <!-- Byggs upp av javascript //-->
                     <div id="CacheMeta">
 
                     </div>
 
                     <hr />
 
+                    <h3>
+                        Förnya Cache
+                    </h3>
                     <p>
                         Sker förändringar av den underliggande informationen och som ska slå igenom innan systemet gör en egen schemalagd cache-ning kan manuell om-cache-ning göras nedan.
                     </p>
@@ -242,9 +260,67 @@
                     </table>
                 </div>
 
-                <div class="tab-pane fade" id="validate" role="tabpanel" aria-labelledby="tab-validate">...</div>
-                <div class="tab-pane fade" id="thumnails" role="tabpanel" aria-labelledby="tab-thumnails">...</div>
-                <div class="tab-pane fade" id="system" role="tabpanel" aria-labelledby="tab-system">...</div>
+
+
+                <div class="tab-pane fade" id="validate" role="tabpanel" aria-labelledby="tab-validate">
+                    Kommer senare
+                </div>
+
+
+                <div class="tab-pane fade" id="thumnails" role="tabpanel" aria-labelledby="tab-thumnails">
+
+                    <div id="ThumnailsContent" style="display: none;">
+                        <p>
+                            Respektive plans plankarta lagras som pdf-fil och georefererad tiff-fil. Tiff-filen konverteras till två generella bilder, en större och en mindre,
+                        som översikter.
+                        Konverteringen till mindre bilder sker med automatik av en Windows-tjänst.
+                        </p>
+
+                        <hr />
+
+                        <h3>
+                            Windows Tjänsteuppgifter
+                        </h3>
+                        <div id="ServiceMeta">
+                        </div>
+
+                        <hr />
+                        <h3>
+                            Status
+                        </h3>
+                        <p>
+                            Kör: <span id="status">N/A</span>
+                        </p>
+                        <hr />
+
+                        <button id="btnServiceRestart" class="btn btn-primary btn-sm" type="button" onclick="ServiceRestart(this)">
+                            <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                            <span>Starta om tjänst</span>
+                        </button>
+
+                        <button id="btnServiceStart" class="btn btn-primary btn-sm" type="button" onclick="ServiceStart(this)">
+                            <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                            <span>Starta tjänst</span>
+                        </button>
+
+                        <button id="btnServiceStop" class="btn btn-primary btn-sm" type="button" onclick="ServiceStop(this)">
+                            <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                            <span>Stoppa tjänst</span>
+                        </button>
+                        <p style="font-size: 0.8em;">
+                            För att ovan funktioner ska fungera behöver webbapplikationen köras av användare på server som har administratörsrättigheter.
+                            <br />
+                            Hanteras enklast med att ändra för applikationspoolen på servern under "Avancerade inställningar >> Processmodell >> Identitet" till "LocalSystem".
+                        </p>
+                    </div>
+
+                </div>
+
+
+
+                <div class="tab-pane fade" id="system" role="tabpanel" aria-labelledby="tab-system">
+                    Kommer senare
+                </div>
             </div>
 
 
