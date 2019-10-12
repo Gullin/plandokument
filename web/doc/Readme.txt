@@ -1,5 +1,5 @@
-SETUP
- * Förinstallationer
+﻿SETUP
+ * Förutsättningar
     + Beroende av kartmotor AIMS eller MGOS
     + Beroende till två objekt i databas med namn och kolumner
        - Vyer
@@ -40,7 +40,13 @@ SETUP
     + Inskannade plandokuments virtuella eller fysiska katalognamn skrivs in i applikationens "Settings.config"
       Kan antingen vara fysisk katalog som ligger under applikationsinstallationen eller
       en virtuell katalog under applikationsinstallationen om den fysiska platsen är annan (behöver dock vara åtkomlig från servern)
-    + jQuery 1.9
+    + Ändra IIS applikationspool rättigheter under "Avancerade inställningar >> Processmodell >> Identitet" till LocalSystem.
+      Behövs administratörsrättigheter för om Windows-tjänsten för thumnails ska kunna administreras från dashboard-sidan.
+ * Beroenden
+    + Windows-tjänst för tillverkning av thumnails-bilder till plankartorna
+    + jQuery 3.4.1
     + jQuery UI 1.9.2
     + JSON 3
-    + jTable
+    + jTable 2.4.0
+    + Bootstrap 4.1.2
+    + Bootstrap 4.3.1

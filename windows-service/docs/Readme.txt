@@ -1,6 +1,6 @@
 
 Var kompilerad exe-fil finns
-cd \dev\plandokument\windows-service\obj\release
+cd \dev\plandokument\windows-service\src\obj\release
 
 
 Installation via 

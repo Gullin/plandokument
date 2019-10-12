@@ -33,7 +33,7 @@
             // 
             // ServicePlandokumentThumnails
             // 
-            this.ServiceName = "ServicePlandokumentThumnails";
+            this.ServiceName = Utility.GetServiceParamConfig("serviceName");
             ((System.ComponentModel.ISupportInitialize)(this.eventLog)).EndInit();
 
         }

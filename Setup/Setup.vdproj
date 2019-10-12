@@ -68,6 +68,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
         "Release"
@@ -266,7 +274,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Plandokument Thumnails Service"
         "ProductCode" = "8:{7286326D-F3DF-4409-BD94-F3DA52AF6C46}"
-        "PackageCode" = "8:{F48550AA-54FC-4597-AB10-B9CF4F30ED18}"
+        "PackageCode" = "8:{AE8A412E-8FFD-48D0-9266-AEF7744B7768}"
         "UpgradeCode" = "8:{8C9AA9FD-51B8-4174-8721-658D958E9D60}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -787,7 +795,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_65C131AFA82B4298BA2F37C5DC620A36"
             {
-            "SourcePath" = "8:..\\windows-service\\src\\obj\\Release\\Plan.WindowsService.exe"
+            "SourcePath" = "8:..\\windows-service\\src\\obj\\Debug\\Plan.WindowsService.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C7C099C564DC4659BAD1FEB9523FAE79"
