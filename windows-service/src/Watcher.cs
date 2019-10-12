@@ -103,6 +103,11 @@ namespace Plan.WindowsService
             if (!IsFileReady(e.FullPath)) return; //first notification the file is arriving
 
             LoggEvent.Logger.WriteEntry("Ändrad fil: " + e.FullPath, EventLogEntryType.Information, LoggEvent.LoggEventID++);
+            CreateThumnailFiles(e);
+        }
+
+        private static void CreateThumnailFiles(FileSystemEventArgs e)
+        {
             string _newFile = ConfigWatcher.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(e.Name) + "_thumnail";
 
 
