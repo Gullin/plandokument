@@ -96,11 +96,6 @@
     <Compile Include="Watcher.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\shared\ThumnailsService.config">
-      <Link>ThumnailsService.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
@@ -128,6 +123,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="icons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Plan.Shared\Plan.Shared.csproj">
+      <Project>{0bf2e8f8-1e74-430e-bbda-0a37288c6518}</Project>
+      <Name>Plan.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
