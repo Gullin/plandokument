@@ -12,6 +12,8 @@ namespace Plan.Plandokument
         public string ServiceName { get; set; }
         public string ServiceDisplayName { get; set; }
         public string ServiceDescription { get; set; }
+        public string WatchedFolder { get; set; }
+        public string ThumnailsFolder { get; set; }
     }
 
     public class UtilityServicePlandokumentThumnails
@@ -22,7 +24,9 @@ namespace Plan.Plandokument
             {
                 ServiceName = ServiceConfig.ServiceName,
                 ServiceDisplayName = ServiceConfig.ServiceDisplayName,
-                ServiceDescription = ServiceConfig.ServiceDescription
+                ServiceDescription = ServiceConfig.ServiceDescription,
+                WatchedFolder = ServiceConfig.WatchedFolder,
+                ThumnailsFolder = ServiceConfig.ThumnailsFolder
             };
 
             return serviceMeta;

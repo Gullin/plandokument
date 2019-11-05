@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plan.Shared.Thumnails;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.ServiceProcess;
@@ -41,7 +42,7 @@ namespace Plan.WindowsService
 
             try
             {
-                LoggEvent.Logger.WriteEntry("Initierar bevakning av " + ConfigWatcher.WatchedFolder, EventLogEntryType.Information, LoggEvent.LoggEventID++);
+                LoggEvent.Logger.WriteEntry("Initierar bevakning av " + ConfigShared.WatchedFolder, EventLogEntryType.Information, LoggEvent.LoggEventID++);
                 Watcher.Init(fileWatcher);
             }
             catch (Exception ex)

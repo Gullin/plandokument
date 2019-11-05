@@ -409,10 +409,6 @@
     <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.js.map" />
     <Content Include="lib\bootstrap-4.3.1-dist\js\bootstrap.min.js.map" />
     <Content Include="lib\popper.js-1.14.7\popper.min.js" />
-    <Content Include="..\..\shared\ThumnailsService.config">
-      <Link>ThumnailsService.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Properties\PublishProfiles\AIMS2016x64.pubxml" />
     <Content Include="Settings.config.skarp" />
     <None Include="Properties\PublishProfiles\Deploy Debug x64.pubxml" />
@@ -426,7 +422,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Plan.Shared\Plan.Shared.csproj">
+      <Project>{0bf2e8f8-1e74-430e-bbda-0a37288c6518}</Project>
+      <Name>Plan.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
