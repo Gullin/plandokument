@@ -97,6 +97,7 @@
     <Content Include="js\kontrollpanel.js" />
     <Content Include="lib\octicons-9.1.1\check.svg" />
     <Content Include="lib\octicons-9.1.1\circle-slash.svg" />
+    <Content Include="not-authenticated.aspx" />
     <Content Include="services\kontrollpanel.asmx" />
     <Content Include="checkFileaccess.aspx" />
     <Content Include="css\file-images-li.css" />
@@ -295,6 +296,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="not-authenticated.aspx.cs">
+      <DependentUpon>not-authenticated.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="not-authenticated.aspx.designer.cs">
+      <DependentUpon>not-authenticated.aspx</DependentUpon>
+    </Compile>
     <Compile Include="services\kontrollpanel.asmx.cs">
       <DependentUpon>kontrollpanel.asmx</DependentUpon>
     </Compile>

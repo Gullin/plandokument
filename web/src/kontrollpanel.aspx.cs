@@ -13,6 +13,14 @@ namespace Plan.Plandokument
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            string _user = Plandokument.User.GetLogin(System.Web.HttpContext.Current.User.Identity.Name);
+
+            if (!(HttpContext.Current.User.Identity.IsAuthenticated && Plandokument.User.Admins.Contains(_user)))
+            {
+                Response.Redirect("~/not-authenticated.aspx", true);
+            }
+
+
             if (!IsPostBack)
             {
                 // AssemblyVersionOverride Version VersionPrefix VersionSuffix
@@ -71,4 +79,41 @@ namespace Plan.Plandokument
             }
         }
     }
+
+    public static class User
+    {
+        public static List<string> Admins
+        {
+            get
+            {
+                return AdminlistInConfig.Split(',').ToList();
+            }
+        }
+
+        public static List<string> GetDomains()
+        {
+            List<string> _list = new List<string>();
+            foreach (string item in Admins)
+            {
+                int stop = item.IndexOf("\\");
+                _list.Add((stop > -1) ? item.Substring(0, stop) : string.Empty);
+            }
+            return _list;
+        }
+
+        public static string GetLogin(string user)
+        {
+            int stop = user.IndexOf("\\");
+            return (stop > -1) ? user.Substring(stop + 1, user.Length - stop - 1) : string.Empty;
+        }
+
+        private static string AdminlistInConfig
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["admins"];
+            }
+        }
+    }
+
 }
