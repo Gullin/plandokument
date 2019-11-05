@@ -16,6 +16,8 @@ namespace Plan.Plandokument
         public static string ServiceName { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceName"];
         public static string ServiceDisplayName { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceDisplayName"];
         public static string ServiceDescription { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceDescription"];
+        public static string WatchedFolder { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["WatchedFolder"];
+        public static string ThumnailsFolder { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ThumnailsFolder"];
     }
 
     /// <summary>

@@ -69,6 +69,8 @@ $(document).ready(
                     text[0] = "Namn: " + serviceMeta.ServiceName;
                     text[1] = "Visningsnamn: " + serviceMeta.ServiceDisplayName;
                     text[2] = "Beskrivning: " + serviceMeta.ServiceDescription;
+                    text[3] = "Bevakad katalog: " + serviceMeta.WatchedFolder;
+                    text[4] = "Katalog med miniatyrbilder: " + serviceMeta.ThumnailsFolder;
 
                     text.forEach(function (element, index) {
                         if (index != text.length) {
