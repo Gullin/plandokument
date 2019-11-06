@@ -42,6 +42,9 @@
       en virtuell katalog under applikationsinstallationen om den fysiska platsen är annan (behöver dock vara åtkomlig från servern)
     + Ändra IIS applikationspool rättigheter under "Avancerade inställningar >> Processmodell >> Identitet" till LocalSystem.
       Behövs administratörsrättigheter för om Windows-tjänsten för thumnails ska kunna administreras från dashboard-sidan.
+    + Aktivera "Windows-autentisering" för webbapplikationen.
+      Saknas alternativet installeras det under "Program och funktioner > Aktivera eller inaktivera Windows-funktioner > Internet Information Services > World Wide Web-tjänster > Säkerhet > Windows-autentisering"
+    + Avaktivera "Anonym autentisering"
  * Beroenden
     + Windows-tjänst för tillverkning av thumnails-bilder till plankartorna
     + jQuery 3.4.1
