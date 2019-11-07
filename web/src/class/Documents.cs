@@ -97,20 +97,20 @@ namespace Plan.Plandokument
             cl = new DataColumn("THUMNAILINDICATION", System.Type.GetType("System.String"));
             dtFileResult.Columns.Add(cl);
 
-            string[] rotes = ConfigurationManager.AppSettings["filesRotDirectory"].ToString().Split(',');
 
-            string documentPrefix = "DP";
-            string documentSuffix = (string)Session["PlanHandling"];
 
             // Hämtar alla dokumenttyper från cache
             Cache cache = HttpRuntime.Cache;
             List<Documenttype> listDocumenttyper = PlanCache.GetPlandocumenttypesCache();
 
 
+
+            string documentPrefix = "DP";
+            string documentSuffix = (string)Session["PlanHandling"];
+
             // Sökning av filnamn sker efter två olika namnkonventioner,
             // ena grundar sig på formell aktbeteckning (yngre dokument) och andra på nummerserie (äldre dokument).
             // Prioritering görs i ordningen formell aktbeteckning och nummerserie.
-
             #region Söker efter filer på formell aktbeteckning
             foreach (DataRow dr in dtSearchedPlans.Rows)
             {
@@ -130,7 +130,7 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -148,7 +148,7 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -169,7 +169,7 @@ namespace Plan.Plandokument
                     // Om sökt begrepp inte är tomt
                     if (!string.IsNullOrWhiteSpace(documentAkt))
                     {
-                        findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                        findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                     }
                 }
             }
@@ -206,7 +206,7 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -223,7 +223,7 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -244,16 +244,18 @@ namespace Plan.Plandokument
                     // Om sökt begrepp inte är tomt
                     if (!string.IsNullOrWhiteSpace(documentAkt))
                     {
-                        findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                        findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                     }
                 }
             }
             #endregion
 
 
+
+            // Komplettera med sökt plans plankartas ev. thumnails
             try
             {
-                // Hitta ev. thumnails till plankarta
+                // För varje hittat dokument, hitta ev. thumnails till plankarta
                 foreach (DataRow row in dtFileResult.Rows)
                 {
                     string thumnailsRotDirectory = @ConfigurationManager.AppSettings["thumnailsRotDirectory"].ToString();
@@ -261,9 +263,10 @@ namespace Plan.Plandokument
                         Server.MapPath(thumnailsRotDirectory)
                         );
 
+                    // För dokumenten plankartor
                     if (row["DOCUMENTTYPE"].ToString() == "Karta")
                     {
-                        // Se om thumnail existerar och indikera passande
+                        // Söker thumnails och spara temporärt filinformationen i en lista
                         string fileFilter = Path.GetFileNameWithoutExtension(
                                 thumnailDirectory.FullName + @"\" + row["NAME"].ToString()
                                 ) + "_thumnail-*.jpg";
@@ -278,6 +281,8 @@ namespace Plan.Plandokument
                         List<FileInfo> filesFoundExact = thumnailDirectory.EnumerateFiles(fileFilter)
                             .Where(f => regex.IsMatch(@f.FullName)).ToList();
 
+
+                        // Indikera i sökresultatet vilken typ av thumnails som hittades
                         bool thumnailS = false, thumnailL = false;
                         foreach (FileInfo file in filesFoundExact)
                         {
@@ -290,7 +295,6 @@ namespace Plan.Plandokument
                                 thumnailL = true;
                             }
                         }
-
                         if (thumnailS && thumnailL)
                         {
                             row["THUMNAILINDICATION"] = "s,l";
@@ -343,13 +347,15 @@ namespace Plan.Plandokument
         /// <param name="searchedFile">Sökt filnamn (utan filändelse)</param>
         /// <param name="planId">Plannyckel som referens till sökt plan</param>
         /// <param name="dtFileResult">Resultattabell att fylla på med hittade filer</param>
-        private void findFile(string[] rotes, string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
+        private void findFile(string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
         {
-            foreach (string rote in rotes)
+            string[] directoryRoots = ConfigurationManager.AppSettings["filesRotDirectory"].ToString().Split(',');
+
+            foreach (string root in directoryRoots)
             {
-                DirectoryInfo di = new DirectoryInfo(Server.MapPath(@rote));
-                //DirectoryInfo di = new DirectoryInfo(rote); 
-                getFileToDataTable(di, rote, searchedFile, planId, dokumentAkt, dtFileResult);
+                DirectoryInfo searchedDirectory = new DirectoryInfo(Server.MapPath(root));
+                //DirectoryInfo searchedDirectory = new DirectoryInfo(root); 
+                getFileToDataTable(searchedDirectory, root, searchedFile, planId, dokumentAkt, dtFileResult);
             }
         }
 
@@ -357,18 +363,19 @@ namespace Plan.Plandokument
         /// <summary>
         /// Metod för att rekursivt söka efter fil
         /// </summary>
-        /// <param name="root">Rotkatalog av ramverket löst</param>
-        /// <param name="rote">Katalog/sökväg som sökta filer kan existera i</param>
+        /// <param name="searchedDirectory">Rotkatalog av ramverket löst</param>
+        /// <param name="virtualFilePath">Katalog/sökväg som sökta filer kan existera i</param>
         /// <param name="searchedFile">Sökt filnamn (utan filändelse)</param>
         /// <param name="planId">Plannyckel som referens till sökt plan</param>
         /// <param name="dtFileResult">Resultattabell att fylla på med hittade filer</param>
         // Metod för att rekursivt söka efter fil
-        private void getFileToDataTable(DirectoryInfo root, string rote, string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
+        private void getFileToDataTable(DirectoryInfo searchedDirectory, string virtualFilePath, string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
         {
             List<FileInfo> files = null;
             DirectoryInfo[] subDirs = null;
 
-            // Process all the files directly under this folder 
+
+            // Sök fil
             try
             {
                 // Hanterar filändelser konfigurerade i applikationsinställningarna (AppSettings), 
@@ -376,14 +383,14 @@ namespace Plan.Plandokument
                 string[] searchedFileExtentions = ConfigurationManager.AppSettings["fileExtentions"].ToString().Split(',');
                 if (searchedFileExtentions == null || string.IsNullOrWhiteSpace(searchedFileExtentions[0]))
                 {
-                    files = root.EnumerateFiles(searchedFile + ".*").ToList();
-                    files.AddRange(root.EnumerateFiles(searchedFile + ",*.*").ToList());
+                    files = searchedDirectory.EnumerateFiles(searchedFile + ".*").ToList();
+                    files.AddRange(searchedDirectory.EnumerateFiles(searchedFile + ",*.*").ToList());
                 }
                 else
                 {
                     foreach (string ext in searchedFileExtentions)
                     {
-                        List<FileInfo> filesFoundExact = root.EnumerateFiles(searchedFile + ext).ToList();
+                        List<FileInfo> filesFoundExact = searchedDirectory.EnumerateFiles(searchedFile + ext).ToList();
 
                         if (files != null)
                         {
@@ -395,10 +402,8 @@ namespace Plan.Plandokument
                                      select f).ToList();
                         }
 
-                        List<FileInfo> filesFoundPart = root.EnumerateFiles(searchedFile + ",*" + ext).ToList();
+                        List<FileInfo> filesFoundPart = searchedDirectory.EnumerateFiles(searchedFile + ",*" + ext).ToList();
                         files.AddRange(filesFoundPart);
-
-
                     }
                 }
             }
@@ -421,18 +426,21 @@ namespace Plan.Plandokument
                 UtilityException.LogException(ex, className + " : " + methodName, true);
             }
 
+
+
             // Om hittade filer
             if (files != null && files.Count > 0)
             {
                 // ser till så att kataloger slutar med slash
-                string rotePathEnd = rote.Substring(rote.Length - 1, 1);
-                if (!(rotePathEnd == "/" || rotePathEnd == "\\"))
+                string pathEnd = virtualFilePath.Substring(virtualFilePath.Length - 1, 1);
+                if (!(pathEnd == "/" || pathEnd == "\\"))
                 {
-                    rote += "/";
+                    virtualFilePath += "/";
                 }
 
+
                 DataRow drFile;
-                // För varje fil lagra information i publik datatabell
+                // För varje hittad fil lagra information i publik datatabell
                 foreach (FileInfo fi in files)
                 {
                     string[] fileNameParts = fi.Name.Replace(dokumentAkt, "").Split('_');
@@ -477,11 +485,6 @@ namespace Plan.Plandokument
                                     findtypePart = findtypeParts[1].ToString();
                                     findtype = FindTypes.IsPart;
                                 }
-                                //else if (int.TryParse(findtypeParts[1], out int findtypePartResult))
-                                //{
-                                //    findtypePart = findtypePartResult.ToString();
-                                //    findtype = FindTypes.IsPart;
-                                //}
                                 else
                                 {
                                     findtype = FindTypes.Unmanaged;
@@ -545,14 +548,11 @@ namespace Plan.Plandokument
 
 
 
-                    // We only access the existing FileInfo object. If we 
-                    // want to open, delete or modify the file, then 
-                    // a try-catch block is required here to handle the case 
-                    // where the file has been deleted since the call to TraverseTree().
+                    // Adderar fil och dess information till datatabell med sökresultat
                     drFile = dtFileResult.NewRow();
                     // Fysisk fil-sökväg, fungerar ej för hyperlänk. Dokument behöver finnas som relativ sökväg till webbapplikationen.
-                    //drFile["PATH"] = root.FullName;
-                    drFile["PATH"] = rote;
+                    //drFile["PATH"] = searchedDirectory.FullName;
+                    drFile["PATH"] = virtualFilePath;
                     drFile["NAME"] = fi.Name;
                     drFile["EXTENTION"] = fi.Extension;
                     // Filstorlek i Byte
@@ -567,6 +567,7 @@ namespace Plan.Plandokument
             }
 
 
+
             // Val genom applikationsinställningarna (AppSettings) om underkataloger ska genomsökas
             bool subDirCrawl = true;
             string appSetSubDirCrawl = ConfigurationManager.AppSettings["subDirectoryCrawl"].ToString();
@@ -579,18 +580,20 @@ namespace Plan.Plandokument
             if (subDirCrawl)
             {
                 // Alla underkataloger i gällande sökt katalog
-                subDirs = root.GetDirectories();
+                subDirs = searchedDirectory.GetDirectories();
 
                 foreach (DirectoryInfo dirInfo in subDirs)
                 {
                     // Rekursivt sök i alla underkataloger
-                    getFileToDataTable(dirInfo, rote + "/" + dirInfo.Name, searchedFile, planId, dokumentAkt, dtFileResult);
+                    getFileToDataTable(dirInfo, virtualFilePath + "/" + dirInfo.Name, searchedFile, planId, dokumentAkt, dtFileResult);
                 }
             }
-
+            
 
 
         }
+
+
 
     }
 }
