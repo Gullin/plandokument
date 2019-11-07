@@ -49,6 +49,7 @@ namespace Plan.Plandokument
         /// <returns>Tabell med funna dokument för egna tidigare beteckning och formell aktbeteckning</returns>
         private DataTable plansDocs(List<object> planIds)
         {
+            //IEnumerable<FileInfo> test = PlanCache.GetPlanDocumentsCache();
             // Alla planer från cach
             DataTable cachedPlans = PlanCache.GetPlanBasisCache();
 
