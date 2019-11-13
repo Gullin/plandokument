@@ -3,6 +3,7 @@ $(document).ready(
     function () {
 
         CacheExistsPlanBasis();
+        CacheExistsPlanDocuments();
         CacheExistsPlandocumenttypes();
         CacheExistsPlanBerorFastighet();
         CacheExistsPlanBerorPlan();
@@ -53,9 +54,11 @@ function RefreshCachePlanAll(element) {
     $spinner.removeClass("spinner-hide");
     $spinner.next().remove();
     $spinner.after("<span> Loading...</span>");
+    console.log("Alla");
 
     $.when(
         RefreshCachePlanBasis($('#btnRefreshCachePlan')),
+        RefreshCachePlanDocuments($('#btnRefreshCachePlanDocuments')),
         RefreshCachePlandocumenttypes($('#btnRefreshCacheDocumenttypes')),
         RefreshCachePlanBerorFastighet($('#btnRefreshCachePlanBerorFastighet')),
         RefreshCachePlanBerorPlan($('#btnRefreshCachePlanBerorPlan'))).then(function () {
@@ -104,6 +107,43 @@ function RefreshCachePlanBasis(element) {
         }
     })
 }; // SLUT RefreshCachePlanBasis
+
+
+
+// Cachar om plandokumenten
+function RefreshCachePlanDocuments(element) {
+    var $spinner = $(element).children("span");
+    $spinner.prop('disabled', true);
+    $spinner.removeClass("spinner-hide");
+    $spinner.next().remove();
+    $spinner.after("<span> Loading...</span>");
+    console.log("Dokument");
+
+    $("#btnRefreshCachePlanDocuments").parent().prev().removeClass("clear no");
+
+
+    return $.ajax({
+        type: "POST",
+        url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheRefreshPlanDocuments',
+        contentType: "application/json; charset=UTF-8",
+        dataType: "json",
+        success: function (msg) {
+            var data = msg.d;
+            if (data = "true") {
+                $spinner.addClass("spinner-hide");
+                $spinner.next().remove();
+                $spinner.after("<span> Förnya cache</span>");
+                $spinner.prop('disabled', false);
+            }
+        },
+        complete: function () {
+            CacheExistsPlanDocuments();
+        },
+        error: function () {
+            alert("Fel!\nRefreshCachePlanDocuments");
+        }
+    })
+}; // SLUT RefreshCachePlanDocuments
 
 
 
@@ -240,6 +280,33 @@ function CacheExistsPlanBasis() {
         }
     })
 } // SLUT CacheExistsPlanBasis
+
+
+
+// Kontrollera så att cache för plandokument existerar
+function CacheExistsPlanDocuments() {
+    $.ajax({
+        type: "POST",
+        url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheExistsPlanDocuments',
+        contentType: "application/json; charset=UTF-8",
+        dataType: "json",
+        success: function (msg) {
+            var data = msg.d;
+            var $td = $("#btnRefreshCachePlanDocuments").parent().prev();
+            if (data == "true") {
+                $td.addClass('clear');
+                $td.attr('title', "Godkänt");
+            }
+            else {
+                $td.addClass('no');
+                $td.attr('title', "Underkänd");
+            }
+        },
+        error: function () {
+            //alert("Fel!\nRefreshCachePlanBerorFastighet");
+        }
+    })
+} // SLUT CacheExistsPlanDocuments
 
 
 

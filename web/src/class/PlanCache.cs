@@ -29,7 +29,7 @@ namespace Plan.Plandokument
     }
 
 
-    public class PlanCache
+    public class PlanCache : System.Web.Services.WebService
     {
 
         public static CacheMeta GetCacheMeta()
@@ -662,7 +662,9 @@ namespace Plan.Plandokument
         /// </summary>
         public static void setPlanDocumentsCache()
         {
-            initPlanDocumentsCache();
+            PlanCache pc = new PlanCache();
+            pc.initPlanDocumentsCache();
+            pc.Dispose();
         }
         /// <summary>
         /// Skapar cache med plandokument från kataloger definierade i inställningar med samma signatur som för delegate CacheItemRemovedCallback.
@@ -671,12 +673,15 @@ namespace Plan.Plandokument
         private static void setPlanDocumentsCache(string key, object value, CacheItemRemovedReason reason)
         {
             LogCacheRemovedReason(key, reason);
-            initPlanDocumentsCache();
+
+            PlanCache pc = new PlanCache();
+            pc.initPlanDocumentsCache();
+            pc.Dispose();
         }
         /// <summary>
         /// Initierar cache med plandokument från kataloger definierade i inställningar
         /// </summary>
-        private static void initPlanDocumentsCache()
+        private void initPlanDocumentsCache()
         {
             string[] directoryRoots = ConfigurationManager.AppSettings["filesRotDirectory"].ToString().Split(',');
             string[] searchedFileExtentions = ConfigurationManager.AppSettings["fileExtentions"].ToString().Split(',');
@@ -685,7 +690,7 @@ namespace Plan.Plandokument
             List<FileInfo> filesInRootDirectoriesTemp = new List<FileInfo>();
             foreach (string root in directoryRoots)
             {
-                DirectoryInfo searchedDirectory = new DirectoryInfo(HostingEnvironment.MapPath(root));
+                DirectoryInfo searchedDirectory = new DirectoryInfo(Server.MapPath("~") + "\\" + root);
 
                 foreach (string ext in searchedFileExtentions)
                 {
