@@ -84,6 +84,7 @@ function RefreshCachePlanBasis(element) {
     $("#btnRefreshCachePlan").parent().prev().removeClass("clear no");
 
 
+    var t0 = new Date().getTime();
     return $.ajax({
         type: "POST",
         url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheRefreshPlanBasis',
@@ -91,11 +92,14 @@ function RefreshCachePlanBasis(element) {
         dataType: "json",
         success: function (msg) {
             var data = msg.d;
-            if (data = "true") {
-                $spinner.addClass("spinner-hide");
-                $spinner.next().remove();
-                $spinner.after("<span> Förnya cache</span>");
-                $spinner.prop('disabled', false);
+            if (data) {
+                var t1 = new Date().getTime();
+                setTimeout(function () {
+                    $spinner.addClass("spinner-hide");
+                    $spinner.next().remove();
+                    $spinner.after("<span> Förnya cache</span>");
+                    $spinner.prop('disabled', false);
+                }, (t1 - t0 < Lkr.Plan.AjaxCalls.Delay) ? (Lkr.Plan.AjaxCalls.Delay - (t1 - t0)) : 0);
             }
 
         },
@@ -117,11 +121,11 @@ function RefreshCachePlanDocuments(element) {
     $spinner.removeClass("spinner-hide");
     $spinner.next().remove();
     $spinner.after("<span> Loading...</span>");
-    console.log("Dokument");
 
     $("#btnRefreshCachePlanDocuments").parent().prev().removeClass("clear no");
 
 
+    var t0 = new Date().getTime();
     return $.ajax({
         type: "POST",
         url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheRefreshPlanDocuments',
@@ -129,11 +133,14 @@ function RefreshCachePlanDocuments(element) {
         dataType: "json",
         success: function (msg) {
             var data = msg.d;
-            if (data = "true") {
-                $spinner.addClass("spinner-hide");
-                $spinner.next().remove();
-                $spinner.after("<span> Förnya cache</span>");
-                $spinner.prop('disabled', false);
+            if (data) {
+                var t1 = new Date().getTime();
+                setTimeout(function () {
+                    $spinner.addClass("spinner-hide");
+                    $spinner.next().remove();
+                    $spinner.after("<span> Förnya cache</span>");
+                    $spinner.prop('disabled', false);
+                }, (t1 - t0 < Lkr.Plan.AjaxCalls.Delay) ? (Lkr.Plan.AjaxCalls.Delay - (t1 - t0)) : 0);
             }
         },
         complete: function () {
@@ -158,6 +165,7 @@ function RefreshCachePlandocumenttypes(element) {
     $("#btnRefreshCacheDocumenttypes").parent().prev().removeClass("clear no");
 
 
+    var t0 = new Date().getTime();
     return $.ajax({
         type: "POST",
         url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheRefreshPlandocumenttypes',
@@ -165,11 +173,14 @@ function RefreshCachePlandocumenttypes(element) {
         dataType: "json",
         success: function (msg) {
             var data = msg.d;
-            if (data = "true") {
-                $spinner.addClass("spinner-hide");
-                $spinner.next().remove();
-                $spinner.after("<span> Förnya cache</span>");
-                $spinner.prop('disabled', false);
+            if (data) {
+                var t1 = new Date().getTime();
+                setTimeout(function () {
+                    $spinner.addClass("spinner-hide");
+                    $spinner.next().remove();
+                    $spinner.after("<span> Förnya cache</span>");
+                    $spinner.prop('disabled', false);
+                }, (t1 - t0 < Lkr.Plan.AjaxCalls.Delay) ? (Lkr.Plan.AjaxCalls.Delay - (t1 - t0)) : 0);
             }
         },
         complete: function () {
@@ -194,6 +205,7 @@ function RefreshCachePlanBerorFastighet(element) {
     $("#btnRefreshCachePlanBerorFastighet").parent().prev().removeClass("clear no");
 
 
+    var t0 = new Date().getTime();
     return $.ajax({
         type: "POST",
         url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheRefreshPlanBerorFastighet',
@@ -201,11 +213,14 @@ function RefreshCachePlanBerorFastighet(element) {
         dataType: "json",
         success: function (msg) {
             var data = msg.d;
-            if (data = "true") {
-                $spinner.addClass("spinner-hide");
-                $spinner.next().remove();
-                $spinner.after("<span> Förnya cache</span>");
-                $spinner.prop('disabled', false);
+            if (data) {
+                var t1 = new Date().getTime();
+                setTimeout(function () {
+                    $spinner.addClass("spinner-hide");
+                    $spinner.next().remove();
+                    $spinner.after("<span> Förnya cache</span>");
+                    $spinner.prop('disabled', false);
+                }, (t1 - t0 < Lkr.Plan.AjaxCalls.Delay) ? (Lkr.Plan.AjaxCalls.Delay - (t1 - t0)) : 0);
             }
         },
         complete: function () {
@@ -230,6 +245,7 @@ function RefreshCachePlanBerorPlan(element) {
     $("#btnRefreshCachePlanBerorPlan").parent().prev().removeClass("clear no");
 
 
+    var t0 = new Date().getTime();
     return $.ajax({
         type: "POST",
         url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheRefreshPlanBerorPlan',
@@ -237,11 +253,14 @@ function RefreshCachePlanBerorPlan(element) {
         dataType: "json",
         success: function (msg) {
             var data = msg.d;
-            if (data = "true") {
-                $spinner.addClass("spinner-hide");
-                $spinner.next().remove();
-                $spinner.after("<span> Förnya cache</span>");
-                $spinner.prop('disabled', false);
+            if (data) {
+                var t1 = new Date().getTime();
+                setTimeout(function () {
+                    $spinner.addClass("spinner-hide");
+                    $spinner.next().remove();
+                    $spinner.after("<span> Förnya cache</span>");
+                    $spinner.prop('disabled', false);
+                }, (t1 - t0 < Lkr.Plan.AjaxCalls.Delay) ? (Lkr.Plan.AjaxCalls.Delay - (t1 - t0)) : 0);
             }
         },
         complete: function () {
