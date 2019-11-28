@@ -6,7 +6,6 @@
         dataType: "json",
         success: function (msg) {
             var data = msg.d;
-            console.log(data);
             if (data) {
                 $("#status").text("Ja");
             }
