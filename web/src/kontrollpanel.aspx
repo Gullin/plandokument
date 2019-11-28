@@ -256,7 +256,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <tfoot>
+<%--                        <tfoot>
                             <tr>
                                 <td></td>
                                 <td colspan="2">
@@ -266,7 +266,7 @@
                                     </button>
                                 </td>
                             </tr>
-                        </tfoot>
+                        </tfoot>--%>
                     </table>
                 </div>
 
