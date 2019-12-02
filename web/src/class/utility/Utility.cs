@@ -8,7 +8,9 @@ namespace Plan.Plandokument
         private static string appPath = HttpRuntime.AppDomainAppPath;
         //public static string logDirectory = "~/log/";
         public static string logDirectory = appPath + "log\\";
-        protected static string zipDirectory = appPath + "zipTemp\\";
+        //protected static string zipDirectory = appPath + "zipTemp\\";
+        // Behöver vara virtuell/relativ p.g.a. att den används i länkning på webbsida
+        protected static string zipDirectory = "~/zipTemp/";
         public enum LogLevel
         {
             INFORM,
@@ -35,10 +37,12 @@ namespace Plan.Plandokument
         /// </summary>
         protected static void zipDirectoryExist()
         {
+            string zipPathToCreate = appPath + zipDirectory.Replace("~/", "").Replace(@"/", "\\");
+
             // Get the absolute path to the log directory, skapa katalogen om den inte finns
-            if (!Directory.Exists(zipDirectory))
+            if (!Directory.Exists(zipPathToCreate))
             {
-                Directory.CreateDirectory(zipDirectory);
+                Directory.CreateDirectory(zipPathToCreate);
             }
         }
     }

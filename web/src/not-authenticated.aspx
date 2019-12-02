@@ -9,7 +9,9 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            Ej behörig
+            Ej behörig! <br />
+            <br />
+            Alternativt och kontroll kan vara att autentiseringsmetoder för webbapplikationen i IIS:n är "Windows-autentisering". "Anonym autentisering" ska vara inaktiverad.
         </div>
     </form>
 </body>

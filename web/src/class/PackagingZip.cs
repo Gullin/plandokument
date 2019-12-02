@@ -48,6 +48,8 @@ namespace Plan.Plandokument
                             file.Substring(file.LastIndexOf('/') + 1)
                             );
                     }
+
+                    UtilityLog.Log($"Paket med plandokument skapat, {ZipFileToCreate} ({files.Count.ToString()} st. filer)", Utility.LogLevel.INFORM);
                 }
 
                 // Kontrollerar tiden det tar att paka filerna. Om kortare tid än i if-satsen fördröjs processen
@@ -87,6 +89,8 @@ namespace Plan.Plandokument
                         {
                             FileInfo file = new FileInfo(zipFile);
                             file.Delete();
+
+                            UtilityLog.Log($"Paket med plandokument raderat, {zipFile}", Utility.LogLevel.INFORM);
                         }
                     }
                 }
