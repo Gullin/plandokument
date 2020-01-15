@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Diagnostics;
 using System.Net;
+using System.Security.Principal;
 using System.Threading;
 
 namespace Plan.Plandokument
@@ -77,8 +78,14 @@ namespace Plan.Plandokument
         {
             try
             {
-                WebClient http = new WebClient();
-                string Result = http.DownloadString(ConfigurationManager.AppSettings["pingUrl"].ToString());
+                WindowsIdentity identity = WindowsIdentity.GetCurrent();
+                using (identity.Impersonate())
+                {
+                    WebClient http = new WebClient();
+                    http.Credentials = CredentialCache.DefaultNetworkCredentials;
+                    http.UseDefaultCredentials = true;
+                    string Result = http.DownloadString(ConfigurationManager.AppSettings["pingUrl"].ToString());
+                }
             }
             catch
             {
