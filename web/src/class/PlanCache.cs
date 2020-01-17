@@ -7,6 +7,8 @@ using System.Globalization;
 using System.Web;
 using System.Web.Caching;
 using System.Collections;
+using System.IO;
+using System.Web.Hosting;
 
 namespace Plan.Plandokument
 {
@@ -27,7 +29,7 @@ namespace Plan.Plandokument
     }
 
 
-    public class PlanCache
+    public class PlanCache : System.Web.Services.WebService
     {
 
         public static CacheMeta GetCacheMeta()
@@ -151,6 +153,26 @@ namespace Plan.Plandokument
         }
 
 
+        /// <summary>
+        /// Returnerar plans plandokument från cache. Existerar cachen ej skapas den.
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<FileInfo> GetPlanDocumentsCache()
+        {
+            IEnumerable<FileInfo> cachedPlanDocuments = (IEnumerable<FileInfo>)HttpRuntime.Cache["C_PlanDocuments"];
+
+            if (cachedPlanDocuments != null)
+            {
+                return cachedPlanDocuments;
+            }
+            else
+            {
+                setPlanDocumentsCache();
+                return (IEnumerable<FileInfo>)HttpRuntime.Cache["C_PlanDocuments"];
+            }
+        }
+
+
 
 
         /// <summary>
@@ -160,7 +182,7 @@ namespace Plan.Plandokument
         {
             if (CacheExistsPlanBasis())
             {
-                HttpRuntime.Cache.Remove("Plans");
+                HttpRuntime.Cache.Remove("C_Plans");
             }
         }
 
@@ -172,7 +194,7 @@ namespace Plan.Plandokument
         {
             if (CacheExistsPlanBasis())
             {
-                HttpRuntime.Cache.Remove("Documenttypes");
+                HttpRuntime.Cache.Remove("C_Documenttypes");
             }
         }
 
@@ -184,7 +206,7 @@ namespace Plan.Plandokument
         {
             if (CacheExistsPlanBasis())
             {
-                HttpRuntime.Cache.Remove("PlanBerorFastighet");
+                HttpRuntime.Cache.Remove("C_PlanBerorFastighet");
             }
         }
 
@@ -196,7 +218,19 @@ namespace Plan.Plandokument
         {
             if (CacheExistsPlanBasis())
             {
-                HttpRuntime.Cache.Remove("PlanBerorPlan");
+                HttpRuntime.Cache.Remove("C_PlanBerorPlan");
+            }
+        }
+
+
+        /// <summary>
+        /// Plockar bort cache för planers plandokument
+        /// </summary>
+        public static void RemoveCachedPlanDocuments()
+        {
+            if (CacheExistsPlanBasis())
+            {
+                HttpRuntime.Cache.Remove("C_PlanDocuments");
             }
         }
 
@@ -277,6 +311,26 @@ namespace Plan.Plandokument
                 return false;
             }
         }
+
+
+        /// <summary>
+        /// Kontrollerar om plandokumenten är cachade 
+        /// </summary>
+        /// <returns></returns>
+        public static bool CacheExistsPlanDocuments()
+        {
+            var cache = HttpRuntime.Cache["C_PlanDocuments"];
+
+            if (cache != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 
 
 
@@ -599,6 +653,75 @@ namespace Plan.Plandokument
             dtPlanBerorPlan.Dispose();
             con.Close();
             con.Dispose();
+        }
+
+
+
+        /// <summary>
+        /// Skapar cache med plandokument från kataloger definierade i inställningar
+        /// </summary>
+        public static void setPlanDocumentsCache()
+        {
+            PlanCache pc = new PlanCache();
+            pc.initPlanDocumentsCache();
+            pc.Dispose();
+        }
+        /// <summary>
+        /// Skapar cache med plandokument från kataloger definierade i inställningar med samma signatur som för delegate CacheItemRemovedCallback.
+        /// Existerar p.g.a. callback och reinitiering av cache när cache slutar existera.
+        /// </summary>
+        private static void setPlanDocumentsCache(string key, object value, CacheItemRemovedReason reason)
+        {
+            LogCacheRemovedReason(key, reason);
+
+            PlanCache pc = new PlanCache();
+            pc.initPlanDocumentsCache();
+            pc.Dispose();
+        }
+        /// <summary>
+        /// Initierar cache med plandokument från kataloger definierade i inställningar
+        /// </summary>
+        private void initPlanDocumentsCache()
+        {
+            string[] directoryRoots = ConfigurationManager.AppSettings["filesRotDirectory"].ToString().Split(',');
+            string[] searchedFileExtentions = ConfigurationManager.AppSettings["fileExtentions"].ToString().Split(',');
+            string appSetSubDirCrawl = ConfigurationManager.AppSettings["subDirectoryCrawl"].ToString();
+
+            List<FileInfo> filesInRootDirectoriesTemp = new List<FileInfo>();
+            foreach (string root in directoryRoots)
+            {
+                DirectoryInfo searchedDirectory = new DirectoryInfo(Server.MapPath("~") + "\\" + root);
+
+                foreach (string ext in searchedFileExtentions)
+                {
+                    if (Boolean.TryParse(appSetSubDirCrawl, out bool searchSubDirectory))
+                    {
+                        if (searchSubDirectory)
+                        {
+                            filesInRootDirectoriesTemp.AddRange(searchedDirectory.EnumerateFiles("*" + ext, SearchOption.AllDirectories));
+                        }
+                        else
+                        {
+                            filesInRootDirectoriesTemp.AddRange(searchedDirectory.EnumerateFiles("*" + ext));
+                        }
+                    }
+                    else
+                    {
+                        filesInRootDirectoriesTemp.AddRange(searchedDirectory.EnumerateFiles("*" + ext, SearchOption.AllDirectories));
+                    }
+                }
+            }
+
+            IEnumerable<FileInfo> filesInRootDirectories = filesInRootDirectoriesTemp;
+
+            DateTime cacheExpiration = setCacheExpiration();
+
+            // Callback för när cache försvinner
+            CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setPlanDocumentsCache);
+
+            // Skapa cach av alla planer
+            Cache cache = HttpRuntime.Cache;
+            cache.Insert("C_PlanDocuments", filesInRootDirectories, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
         }
 
 

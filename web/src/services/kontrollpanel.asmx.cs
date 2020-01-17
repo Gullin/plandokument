@@ -81,15 +81,28 @@ namespace Plan.Plandokument
 
         [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string CacheExistsPlanDocuments()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlanDocuments());
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheExistsAll()
         {
             bool planBasis = PlanCache.CacheExistsPlanBasis();
             bool planBerorFastighet = PlanCache.CacheExistsPlanBerorFastighet();
             bool planDocumenttypes = PlanCache.CacheExistsPlandocumenttypes();
             bool planBerorPlan = PlanCache.CacheExistsPlanBerorPlan();
+            bool planDocuments = PlanCache.CacheExistsPlanDocuments();
             bool exists = false;
 
-            if (planBasis && planBerorFastighet && planDocumenttypes && planBerorPlan)
+            if (planBasis && planBerorFastighet && planDocumenttypes && planBerorPlan && planDocuments)
             {
                 exists = true;
             }
@@ -200,6 +213,33 @@ namespace Plan.Plandokument
                 else
                 {
                     PlanCache.setPlanBerorPlanCache();
+                }
+                return jsonSerializer.Serialize(true.ToString());
+            }
+            catch
+            {
+                return jsonSerializer.Serialize(false.ToString());
+            }
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string CacheRefreshPlanDocuments()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            try
+            {
+                if (PlanCache.CacheExistsPlanDocuments())
+                {
+                    PlanCache.RemoveCachedPlanDocuments();
+                }
+                else
+                {
+                    PlanCache.setPlanDocumentsCache();
                 }
                 return jsonSerializer.Serialize(true.ToString());
             }

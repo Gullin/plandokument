@@ -216,6 +216,16 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td class="right">Plandokument</td>
+                                <td class="center"></td>
+                                <td>
+                                    <button id="btnRefreshCachePlanDocuments" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanDocuments(this)">
+                                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                        <span>Förnya cache</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td class="right">Dokumenttyper</td>
                                 <td class="center"></td>
                                 <td>
@@ -246,7 +256,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <tfoot>
+<%--                        <tfoot>
                             <tr>
                                 <td></td>
                                 <td colspan="2">
@@ -256,7 +266,7 @@
                                     </button>
                                 </td>
                             </tr>
-                        </tfoot>
+                        </tfoot>--%>
                     </table>
                 </div>
 

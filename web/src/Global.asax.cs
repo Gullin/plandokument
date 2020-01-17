@@ -35,7 +35,9 @@ namespace Plan.Plandokument
             Plan.Plandokument.PlanCache.GetPlanBasisCache();
             Plan.Plandokument.PlanCache.GetPlanBerorFastighetCache();
             Plan.Plandokument.PlanCache.GetPlanBerorPlanCache();
-            
+            Plan.Plandokument.PlanCache.GetPlanDocumentsCache();
+
+
             RegisterRoutes(RouteTable.Routes);
         }
 

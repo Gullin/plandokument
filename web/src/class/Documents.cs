@@ -97,20 +97,20 @@ namespace Plan.Plandokument
             cl = new DataColumn("THUMNAILINDICATION", System.Type.GetType("System.String"));
             dtFileResult.Columns.Add(cl);
 
-            string[] rotes = ConfigurationManager.AppSettings["filesRotDirectory"].ToString().Split(',');
 
-            string documentPrefix = "DP";
-            string documentSuffix = (string)Session["PlanHandling"];
 
             // Hämtar alla dokumenttyper från cache
             Cache cache = HttpRuntime.Cache;
             List<Documenttype> listDocumenttyper = PlanCache.GetPlandocumenttypesCache();
 
 
+
+            string documentPrefix = "DP";
+            string documentSuffix = (string)Session["PlanHandling"];
+
             // Sökning av filnamn sker efter två olika namnkonventioner,
             // ena grundar sig på formell aktbeteckning (yngre dokument) och andra på nummerserie (äldre dokument).
             // Prioritering görs i ordningen formell aktbeteckning och nummerserie.
-
             #region Söker efter filer på formell aktbeteckning
             foreach (DataRow dr in dtSearchedPlans.Rows)
             {
@@ -130,7 +130,7 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -148,7 +148,8 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                findFileInCache(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                //findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -169,7 +170,7 @@ namespace Plan.Plandokument
                     // Om sökt begrepp inte är tomt
                     if (!string.IsNullOrWhiteSpace(documentAkt))
                     {
-                        findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                        findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                     }
                 }
             }
@@ -187,7 +188,7 @@ namespace Plan.Plandokument
             }
 
 
-            #region Söker efter filer på tidiare egen aktbeteckning
+            #region Söker efter filer på tidigare egen aktbeteckning
             foreach (DataRow dr in dtSearchedPlans.Rows)
             {
                 string documentAkt = dr["akttidigare"].ToString().Replace("1282K-", "");
@@ -206,7 +207,7 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -223,7 +224,7 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -244,16 +245,18 @@ namespace Plan.Plandokument
                     // Om sökt begrepp inte är tomt
                     if (!string.IsNullOrWhiteSpace(documentAkt))
                     {
-                        findFile(rotes, searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                        findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                     }
                 }
             }
             #endregion
 
 
+
+            // Komplettera med sökt plans plankartas ev. thumnails
             try
             {
-                // Hitta ev. thumnails till plankarta
+                // För varje hittat dokument, hitta ev. thumnails till plankarta
                 foreach (DataRow row in dtFileResult.Rows)
                 {
                     string thumnailsRotDirectory = @ConfigurationManager.AppSettings["thumnailsRotDirectory"].ToString();
@@ -261,9 +264,10 @@ namespace Plan.Plandokument
                         Server.MapPath(thumnailsRotDirectory)
                         );
 
+                    // För dokumenten plankartor
                     if (row["DOCUMENTTYPE"].ToString() == "Karta")
                     {
-                        // Se om thumnail existerar och indikera passande
+                        // Söker thumnails och spara temporärt filinformationen i en lista
                         string fileFilter = Path.GetFileNameWithoutExtension(
                                 thumnailDirectory.FullName + @"\" + row["NAME"].ToString()
                                 ) + "_thumnail-*.jpg";
@@ -278,6 +282,8 @@ namespace Plan.Plandokument
                         List<FileInfo> filesFoundExact = thumnailDirectory.EnumerateFiles(fileFilter)
                             .Where(f => regex.IsMatch(@f.FullName)).ToList();
 
+
+                        // Indikera i sökresultatet vilken typ av thumnails som hittades
                         bool thumnailS = false, thumnailL = false;
                         foreach (FileInfo file in filesFoundExact)
                         {
@@ -290,7 +296,6 @@ namespace Plan.Plandokument
                                 thumnailL = true;
                             }
                         }
-
                         if (thumnailS && thumnailL)
                         {
                             row["THUMNAILINDICATION"] = "s,l";
@@ -339,36 +344,56 @@ namespace Plan.Plandokument
         /// <summary>
         /// Funktion för att både söka på akt och tidigareakt (fastighetsregistrets kommunala) 
         /// </summary>
-        /// <param name="rotes">Vektor med kataloger/sökvägar som sökta filer kan existera i</param>
-        /// <param name="searchedFile">Sökt filnamn (utan filändelse)</param>
+        /// <param name="searchedFile">Sökt filnamn (utan filändelse, inkl. ev. suffix)</param>
         /// <param name="planId">Plannyckel som referens till sökt plan</param>
+        /// <param name="dokumentAkt">Akt filnamnsbaserat (exkl. ev. suffix)</param>
         /// <param name="dtFileResult">Resultattabell att fylla på med hittade filer</param>
-        private void findFile(string[] rotes, string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
+        private void findFile(string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
         {
-            foreach (string rote in rotes)
+            string[] directoryRoots = ConfigurationManager.AppSettings["filesRotDirectory"].ToString().Split(',');
+
+            foreach (string root in directoryRoots)
             {
-                DirectoryInfo di = new DirectoryInfo(Server.MapPath(@rote));
-                //DirectoryInfo di = new DirectoryInfo(rote); 
-                getFileToDataTable(di, rote, searchedFile, planId, dokumentAkt, dtFileResult);
+                DirectoryInfo searchedDirectory = new DirectoryInfo(Server.MapPath(root));
+                //DirectoryInfo searchedDirectory = new DirectoryInfo(root); 
+                getFileToDataTable(searchedDirectory, root, searchedFile, planId, dokumentAkt, dtFileResult);
             }
         }
 
 
         /// <summary>
-        /// Metod för att rekursivt söka efter fil
+        /// Söker plandokumentsfiler från cache
         /// </summary>
-        /// <param name="root">Rotkatalog av ramverket löst</param>
-        /// <param name="rote">Katalog/sökväg som sökta filer kan existera i</param>
-        /// <param name="searchedFile">Sökt filnamn (utan filändelse)</param>
+        /// <param name="searchedFile">Sökt filnamn (utan filändelse, inkl. ev. suffix)</param>
         /// <param name="planId">Plannyckel som referens till sökt plan</param>
+        /// <param name="dokumentAkt">Akt filnamnsbaserat (exkl. ev. suffix)</param>
         /// <param name="dtFileResult">Resultattabell att fylla på med hittade filer</param>
-        // Metod för att rekursivt söka efter fil
-        private void getFileToDataTable(DirectoryInfo root, string rote, string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
+        private void findFileInCache(string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
+        {
+            Regex regEx = SearchFilter(searchedFile);
+            IEnumerable<FileInfo> files = PlanCache.GetPlanDocumentsCache();
+            List<FileInfo> searchFileResult = files.Where(f => regEx.IsMatch(f.Name)).ToList();
+            CreateFileResult("test", planId, dokumentAkt, searchFileResult, dtFileResult);
+
+        }
+
+
+        /// <summary>
+        /// Rekursiv sökning efter plandokumentsfil direkt från disk
+        /// </summary>
+        /// <param name="searchedDirectory">Rotkatalog av ramverket löst</param>
+        /// <param name="virtualFilePath">Katalog/sökväg som sökta filer kan existera i</param>
+        /// <param name="searchedFile">Sökt filnamn (utan filändelse, inkl. ev. suffix)</param>
+        /// <param name="planId">Plannyckel som referens till sökt plan</param>
+        /// <param name="dokumentAkt">Akt filnamnsbaserat (exkl. ev. suffix)</param>
+        /// <param name="dtFileResult">Resultattabell att fylla på med hittade filer</param>
+        private void getFileToDataTable(DirectoryInfo searchedDirectory, string virtualFilePath, string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
         {
             List<FileInfo> files = null;
             DirectoryInfo[] subDirs = null;
 
-            // Process all the files directly under this folder 
+
+            // Sök fil
             try
             {
                 // Hanterar filändelser konfigurerade i applikationsinställningarna (AppSettings), 
@@ -376,14 +401,14 @@ namespace Plan.Plandokument
                 string[] searchedFileExtentions = ConfigurationManager.AppSettings["fileExtentions"].ToString().Split(',');
                 if (searchedFileExtentions == null || string.IsNullOrWhiteSpace(searchedFileExtentions[0]))
                 {
-                    files = root.EnumerateFiles(searchedFile + ".*").ToList();
-                    files.AddRange(root.EnumerateFiles(searchedFile + ",*.*").ToList());
+                    files = searchedDirectory.EnumerateFiles(searchedFile + ".*").ToList();
+                    files.AddRange(searchedDirectory.EnumerateFiles(searchedFile + ",*.*").ToList());
                 }
                 else
                 {
                     foreach (string ext in searchedFileExtentions)
                     {
-                        List<FileInfo> filesFoundExact = root.EnumerateFiles(searchedFile + ext).ToList();
+                        List<FileInfo> filesFoundExact = searchedDirectory.EnumerateFiles(searchedFile + ext).ToList();
 
                         if (files != null)
                         {
@@ -395,10 +420,8 @@ namespace Plan.Plandokument
                                      select f).ToList();
                         }
 
-                        List<FileInfo> filesFoundPart = root.EnumerateFiles(searchedFile + ",*" + ext).ToList();
+                        List<FileInfo> filesFoundPart = searchedDirectory.EnumerateFiles(searchedFile + ",*" + ext).ToList();
                         files.AddRange(filesFoundPart);
-
-
                     }
                 }
             }
@@ -421,150 +444,17 @@ namespace Plan.Plandokument
                 UtilityException.LogException(ex, className + " : " + methodName, true);
             }
 
+
+
             // Om hittade filer
             if (files != null && files.Count > 0)
             {
-                // ser till så att kataloger slutar med slash
-                string rotePathEnd = rote.Substring(rote.Length - 1, 1);
-                if (!(rotePathEnd == "/" || rotePathEnd == "\\"))
-                {
-                    rote += "/";
-                }
+                virtualFilePath = EnsureEndingSlash(virtualFilePath);
 
-                DataRow drFile;
-                // För varje fil lagra information i publik datatabell
-                foreach (FileInfo fi in files)
-                {
-                    string[] fileNameParts = fi.Name.Replace(dokumentAkt, "").Split('_');
-
-                    // Väljer ut sista delen av delad textsträng
-                    string lasFileNamePart = fileNameParts[fileNameParts.Length - 1];
-                    string documentType = string.Empty;
-
-                    // Klipper bort filändelsen genom att vända på textsträng samt vänder tillbaka för jämförelsen
-                    string potentialDocumentType = new string(lasFileNamePart.ToCharArray()
-                                                    .Reverse()
-                                                    .ToArray())
-                                                    .Substring(
-                                                                (fi.Extension.Length),
-                                                                (lasFileNamePart.Length - fi.Extension.Length));
-                    potentialDocumentType = new string(potentialDocumentType.ToCharArray().Reverse().ToArray());
-
-
-
-                    // Hanterar och kontrollerar för flera dokumentdelar
-                    string findtype = string.Empty;
-                    string findtypePart = string.Empty;
-                    try
-                    {
-                        if (potentialDocumentType.Contains(","))
-                        {
-                            string[] findtypeParts = potentialDocumentType.Split(',');
-
-                            // Följer ej namnkonventionen, för många möjligheter till dokumentdelar
-                            if (findtypeParts.Length > 2)
-                            {
-                                findtype = FindTypes.Unmanaged;
-                                throw new Exception("För många signaler om dokumentdelar. Kommatecken får utelämnas eller endast förekomma en gång.");
-                            }
-                            else if (findtypeParts.Length == 2) {
-                                if (string.IsNullOrWhiteSpace(findtypeParts[1]))
-                                {
-                                    findtype = FindTypes.IsPart;
-                                }
-                                else if (!string.IsNullOrWhiteSpace(findtypeParts[1]))
-                                {
-                                    findtypePart = findtypeParts[1].ToString();
-                                    findtype = FindTypes.IsPart;
-                                }
-                                //else if (int.TryParse(findtypeParts[1], out int findtypePartResult))
-                                //{
-                                //    findtypePart = findtypePartResult.ToString();
-                                //    findtype = FindTypes.IsPart;
-                                //}
-                                else
-                                {
-                                    findtype = FindTypes.Unmanaged;
-                                }
-                            }
-                            else
-                            {
-                                throw new Exception("Innehåller kommatecken som signal om dokumentdelar, men kan inte hantera formen.");
-                            }
-
-                            potentialDocumentType = findtypeParts[0];
-                        }
-                        else
-                        {
-                            findtype = FindTypes.Exact;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-
-                        // Klassens namn för loggning
-                        string className = this.GetType().Name;
-                        // Metod i klassen som används
-                        string methodName = MethodBase.GetCurrentMethod().Name;
-
-                        UtilityException.LogException(ex, className + " : " + methodName, true);
-                    }
-
-
-
-                    // Hämtar alla dokumenttyper från cache
-                    Cache cache = HttpRuntime.Cache;
-                    List<Documenttype> listDocumenttyper = PlanCache.GetPlandocumenttypesCache();
-
-
-                    // Jämför mot alla suffix i dokumenttypdomänen
-                    // Två filnamnssuffix ovr och handling är för samling av bl.a. ej sorterade dokument och arv
-                    if (potentialDocumentType == "")
-                    {
-                        documentType = "Karta";
-                    }
-                    else
-                    {
-                        foreach (var item in listDocumenttyper)
-                        {
-                            if (potentialDocumentType == item.Suffix)
-                            {
-                                documentType = item.Type;
-                            }
-                        }
-                        if (potentialDocumentType == "ovr" || potentialDocumentType == "handling")
-                        {
-                            documentType = "Övriga";
-                        }
-                    }
-                    if (string.IsNullOrEmpty(documentType))
-                    {
-                        //TODO: DOKUMENTTYP: Vad händer om dokumenttyp inte kan fastställas vid sökträff
-                    }
-
-
-
-
-                    // We only access the existing FileInfo object. If we 
-                    // want to open, delete or modify the file, then 
-                    // a try-catch block is required here to handle the case 
-                    // where the file has been deleted since the call to TraverseTree().
-                    drFile = dtFileResult.NewRow();
-                    // Fysisk fil-sökväg, fungerar ej för hyperlänk. Dokument behöver finnas som relativ sökväg till webbapplikationen.
-                    //drFile["PATH"] = root.FullName;
-                    drFile["PATH"] = rote;
-                    drFile["NAME"] = fi.Name;
-                    drFile["EXTENTION"] = fi.Extension;
-                    // Filstorlek i Byte
-                    drFile["SIZE"] = fi.Length;
-                    drFile["PLAN_ID"] = planId;
-                    drFile["DOCUMENTTYPE"] = documentType;
-                    drFile["FINDTYPE"] = findtype;
-                    drFile["DOCUMENTPART"] = findtypePart;
-                    dtFileResult.Rows.Add(drFile);
-                }
+                CreateFileResult(virtualFilePath, planId, dokumentAkt, files, dtFileResult);
 
             }
+
 
 
             // Val genom applikationsinställningarna (AppSettings) om underkataloger ska genomsökas
@@ -579,18 +469,207 @@ namespace Plan.Plandokument
             if (subDirCrawl)
             {
                 // Alla underkataloger i gällande sökt katalog
-                subDirs = root.GetDirectories();
+                subDirs = searchedDirectory.GetDirectories();
 
                 foreach (DirectoryInfo dirInfo in subDirs)
                 {
                     // Rekursivt sök i alla underkataloger
-                    getFileToDataTable(dirInfo, rote + "/" + dirInfo.Name, searchedFile, planId, dokumentAkt, dtFileResult);
+                    getFileToDataTable(dirInfo, virtualFilePath + "/" + dirInfo.Name, searchedFile, planId, dokumentAkt, dtFileResult);
                 }
             }
-
+            
 
 
         }
 
+
+        /// <summary>
+        /// Bygger sökfilter enligt namnkonvention
+        /// </summary>
+        /// <param name="searchedFile">Sökt plandokument enl. namnkonvention</param>
+        /// <returns>Sökfilter som reguljärt uttryck</returns>
+        private static Regex SearchFilter(string searchedFile)
+        {
+            string[] searchedFileExtentions = ConfigurationManager.AppSettings["fileExtentions"].ToString().Split(',');
+            string filter = "";
+            if (searchedFileExtentions == null || string.IsNullOrWhiteSpace(searchedFileExtentions[0]))
+            {
+                filter = @"(\.[0-9a-öA-Ö]+)";
+            }
+            else
+            {
+                bool isFirst = true;
+                foreach (string ext in searchedFileExtentions)
+                {
+                    if (isFirst)
+                    {
+                        filter = @"\" + @ext.ToLower() + @"|\" + @ext.ToUpper();
+                        isFirst = false;
+                    }
+                    else
+                    {
+                        filter += "|" + @"\" + @ext.ToLower() + @"|\" + @ext.ToUpper();
+                    }
+                }
+            }
+            filter = @searchedFile + "(,[0-9a-öA-Ö]+)*(" + filter + ")";
+            return new Regex(@filter);
+        }
+
+
+        /// <summary>
+        /// Fyller global datatabell med sökresultat 
+        /// </summary>
+        /// <param name="virtualFilePath">Katalog/sökväg som sökta filer kan existera i</param>
+        /// <param name="planId">Plannyckel som referens till sökt plan</param>
+        /// <param name="dokumentAkt">Akt filnamnsbaserat (exkl. ev. suffix)</param>
+        /// <param name="files">Lista med funna plandokument</param>
+        /// <param name="dtFileResult">Global datatabell med sökresultat</param>
+        private void CreateFileResult(string virtualFilePath, string planId, string dokumentAkt, List<FileInfo> files, DataTable dtFileResult)
+        {
+            DataRow drFile;
+            // För varje hittad fil lagra information i publik datatabell
+            foreach (FileInfo fi in files)
+            {
+                // Hantera suffix i filnamn
+                string[] fileNameParts = fi.Name.Replace(dokumentAkt, "").Split('_');
+
+                // Väljer ut sista delen av delad textsträng
+                string lasFileNamePart = fileNameParts[fileNameParts.Length - 1];
+                string documentType = string.Empty;
+
+                // Klipper bort filändelsen genom att vända på textsträng samt vänder tillbaka för jämförelsen
+                string potentialDocumentType = new string(lasFileNamePart.ToCharArray()
+                                                .Reverse()
+                                                .ToArray())
+                                                .Substring(
+                                                            (fi.Extension.Length),
+                                                            (lasFileNamePart.Length - fi.Extension.Length));
+                potentialDocumentType = new string(potentialDocumentType.ToCharArray().Reverse().ToArray());
+
+
+
+                // Hanterar och kontrollerar för flera dokumentdelar
+                string findtype = string.Empty;
+                string findtypePart = string.Empty;
+                try
+                {
+                    if (potentialDocumentType.Contains(","))
+                    {
+                        string[] findtypeParts = potentialDocumentType.Split(',');
+
+                        // Följer ej namnkonventionen, för många möjligheter till dokumentdelar
+                        if (findtypeParts.Length > 2)
+                        {
+                            findtype = FindTypes.Unmanaged;
+                            throw new Exception("För många signaler om dokumentdelar. Kommatecken får utelämnas eller endast förekomma en gång.");
+                        }
+                        else if (findtypeParts.Length == 2)
+                        {
+                            if (string.IsNullOrWhiteSpace(findtypeParts[1]))
+                            {
+                                findtype = FindTypes.IsPart;
+                            }
+                            else if (!string.IsNullOrWhiteSpace(findtypeParts[1]))
+                            {
+                                findtypePart = findtypeParts[1].ToString();
+                                findtype = FindTypes.IsPart;
+                            }
+                            else
+                            {
+                                findtype = FindTypes.Unmanaged;
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Innehåller kommatecken som signal om dokumentdelar, men kan inte hantera formen.");
+                        }
+
+                        potentialDocumentType = findtypeParts[0];
+                    }
+                    else
+                    {
+                        findtype = FindTypes.Exact;
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    // Klassens namn för loggning
+                    string className = this.GetType().Name;
+                    // Metod i klassen som används
+                    string methodName = MethodBase.GetCurrentMethod().Name;
+
+                    UtilityException.LogException(ex, className + " : " + methodName, true);
+                }
+
+
+
+                // Hämtar alla dokumenttyper från cache
+                List<Documenttype> listDocumenttyper = PlanCache.GetPlandocumenttypesCache();
+
+
+                // Jämför mot alla suffix i dokumenttypdomänen
+                // Två filnamnssuffix ovr och handling är för samling av bl.a. ej sorterade dokument och arv
+                if (potentialDocumentType == "")
+                {
+                    documentType = "Karta";
+                }
+                else
+                {
+                    foreach (var item in listDocumenttyper)
+                    {
+                        if (potentialDocumentType == item.Suffix)
+                        {
+                            documentType = item.Type;
+                        }
+                    }
+                    if (potentialDocumentType == "ovr" || potentialDocumentType == "handling")
+                    {
+                        documentType = "Övriga";
+                    }
+                }
+                if (string.IsNullOrEmpty(documentType))
+                {
+                    //TODO: DOKUMENTTYP: Vad händer om dokumenttyp inte kan fastställas vid sökträff
+                }
+
+
+
+
+                // Adderar fil och dess information till datatabell med sökresultat
+                drFile = dtFileResult.NewRow();
+                // Fysisk fil-sökväg, fungerar ej för hyperlänk. Dokument behöver finnas som relativ sökväg till webbapplikationen.
+                //drFile["PATH"] = searchedDirectory.FullName;
+                drFile["PATH"] = virtualFilePath;
+                drFile["NAME"] = fi.Name;
+                drFile["EXTENTION"] = fi.Extension;
+                // Filstorlek i Byte
+                drFile["SIZE"] = fi.Length;
+                drFile["PLAN_ID"] = planId;
+                drFile["DOCUMENTTYPE"] = documentType;
+                drFile["FINDTYPE"] = findtype;
+                drFile["DOCUMENTPART"] = findtypePart;
+                dtFileResult.Rows.Add(drFile);
+            }
+        }
+
+
+        /// <summary>
+        /// Tillser att textsträng slutar med front slash
+        /// </summary>
+        /// <param name="virtualFilePath">Sökväg</param>
+        /// <returns>Textsträng med avslutande frontslash</returns>
+        private static string EnsureEndingSlash(string virtualFilePath)
+        {
+            // ser till så att kataloger slutar med slash
+            string pathEnd = virtualFilePath.Substring(virtualFilePath.Length - 1, 1);
+            if (!(pathEnd == "/" || pathEnd == "\\"))
+            {
+                virtualFilePath += "/";
+            }
+
+            return virtualFilePath;
+        }
     }
 }

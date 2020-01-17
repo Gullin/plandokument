@@ -21,8 +21,8 @@ extend(Lkr, {
     Plan: {
         Setting: {
             Map: {
-                mapResizeTolerance: 0.1,  // skillnaden mellan nuvarande och ny storlek på kartbehållare (0 - 1)
-                mapResizeTimespan: 500    // i millisekunder
+                mapResizeTolerance: 0.1,    // skillnaden mellan nuvarande och ny storlek på kartbehållare (0 - 1)
+                mapResizeTimespan: 500      // i millisekunder
             }
         },
         Dokument: {
@@ -37,7 +37,8 @@ extend(Lkr, {
         },
         AjaxCalls: {
             getPlansDocs: null,
-            putMapOfPlan: null
+            putMapOfPlan: null,
+            Delay: 500                      // i millisekunder, saktar ner funktion med max motsvarande angiven tid
         }
     }
 })
