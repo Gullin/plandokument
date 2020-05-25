@@ -14,7 +14,17 @@ namespace Plan.Plandokument
 	{
 
         // Standardvärden
-        private static string BaseFileNameDefult { get; } = "Audit";
+        //private static string BaseFileNameDefult { get; } = "Audit";
+        private static string _name;
+        private static string fileName {
+            get
+            {
+                return string.IsNullOrEmpty(ConfigurationManager.AppSettings["auditLogFileName"].ToString()) ? "Audit" : ConfigurationManager.AppSettings["auditLogFileName"].ToString();
+            }
+
+            set { _name = value; }
+        }
+        public static string logFile = logDirectory + fileName + ".log";
         private static double MaxFileByteSizeDefault { get; } = 10;
         private static int MaxFilesTotalDeafult { get; } = 1;
 
@@ -52,12 +62,12 @@ namespace Plan.Plandokument
             logDirectoryExist();
 
             // Get the absolute path to the log file, skapa logg-fil om den inte finns
-            string baseFileName = ConfigurationManager.AppSettings["auditLogFileName"].ToString();
-            if (string.IsNullOrEmpty(baseFileName))
-            {
-                baseFileName = BaseFileNameDefult;
-            }
-            string logFile = logDirectory + baseFileName + ".log";
+            //string baseFileName = ConfigurationManager.AppSettings["auditLogFileName"].ToString();
+            //if (string.IsNullOrEmpty(baseFileName))
+            //{
+            //    baseFileName = BaseFileNameDefult;
+            //}
+            //string logFile = logDirectory + fileName + ".log";
             if (!File.Exists(logFile))
             {
                 using (FileStream fs = File.Create(logFile))
@@ -101,7 +111,7 @@ namespace Plan.Plandokument
             {
                 //dela upp basfilen men ej till fler delfiler än inställning medger
                 // Skapa felloggfiler enligt "Error.log" som övergripande med "ErrorYYYYMMDDTHHMISS.fff" som dellogfiler med max stycken enligt standard eller parameter
-                string[] logFiles = Directory.GetFiles(logDirectory, baseFileName + "*.log", SearchOption.TopDirectoryOnly);
+                string[] logFiles = Directory.GetFiles(logDirectory, fileName + "*.log", SearchOption.TopDirectoryOnly);
                 int nbrLogFiles = logFiles.Length;
                 int nbrMaxFileItteration = nbrLogFiles;
                 int nbrFileItteration = 0;
@@ -145,10 +155,10 @@ namespace Plan.Plandokument
                         }
 
                         // Om filen inte är basloggfilen
-                        if (tempFileName != baseFileName + ".log")
+                        if (tempFileName != fileName + ".log")
                         {
                             // Om filens 15 tecken efter lika många tecken som basloggfilens antal tecken stämmer med tidsstämpelns teckenuppsättning
-                            string potentialFileTimeSuffix = tempFileName.Substring(baseFileName.Length, 19);
+                            string potentialFileTimeSuffix = tempFileName.Substring(fileName.Length, 19);
                             if (timestampRegex.IsMatch(potentialFileTimeSuffix))
                             {
                                 DateTime tempTimeStamp = new DateTime(Convert.ToInt16(potentialFileTimeSuffix.Substring(0, 4)),     // år
@@ -202,7 +212,7 @@ namespace Plan.Plandokument
                 {
                     // Formatera datum-tids-sträng för unik
                     string fileTimeSuffix = DateTime.Now.ToString("yyyyMMddTHHmmss.fff");
-                    File.Copy(logFile, logDirectory + baseFileName + fileTimeSuffix + ".log");
+                    File.Copy(logFile, logDirectory + fileName + fileTimeSuffix + ".log");
                 }
 
                 // Tömmer basfilen till noll byte
