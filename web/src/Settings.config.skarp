@@ -3,6 +3,8 @@
   <!-- Anslutning Oracle databas; 1:a hand maskinmiljövariabler [topospecialuser|topospecialpassword|topospecialservice], 2:a hand nedan nyckel -->
   <!-- Använder sig av Oracle Provider for OLE DB -->
   <add key="OracleOleDBConString" value="Provider=OraOLEDB.Oracle;Data Source=;User Id=;Password=;" />
+  <add key="PostgreSQLNpgsqlConStringGeodata" value="Host=;Username=;Password=;Database=" />
+  <add key="MSSQLServerConStringFB" value="Server=;Database=;User Id=;Password=;" />
 
   <!-- Versionering -->
   <!-- Sätts till true om inställningen "Version" ska användas istället för versioneringen i assemblyn -->

@@ -1,14 +1,18 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq;
 using System.Web;
 using System.Web.Caching;
 using System.Collections;
 using System.IO;
 using System.Web.Hosting;
+using System.Reflection;
 
 namespace Plan.Plandokument
 {
@@ -460,7 +464,8 @@ namespace Plan.Plandokument
         /// <summary>
         /// Initierar cache för basinformationen till planer
         /// </summary>
-        private static void initPlanCache()
+        [Obsolete("initPlanCacheOld is deprecated due to connection to Oracle.", true)]
+        private static void initPlanCacheOld()
         {
             //string conStr = ConfigurationManager.AppSettings["OracleOleDBConString"].ToString();
             string sql = string.Empty;
@@ -508,6 +513,171 @@ namespace Plan.Plandokument
             con.Close();
             con.Dispose();
         }
+        /// <summary>
+        /// Initierar cache för basinformationen till planer
+        /// </summary>
+        private static void initPlanCache()
+        {
+            string sqlPlanGeometries = string.Empty;
+            string sqlPlanRegister = string.Empty;
+
+            sqlPlanGeometries = "SELECT f.rk_extid AS lmakt, " +
+                                "       CASE i.planavgift " +
+                                "           WHEN 'N' THEN 'Nej' " +
+                                "           WHEN 'J' THEN 'Ja' " +
+                                "       ELSE i.planavgift END AS planavgift, " +
+                                "     i.arkivserie_pb AS akt_pb " +
+                                "FROM        td_drk.rk_plan_y f " +
+                                "  LEFT JOIN td_drk.rk_plan_y_info i " +
+                                "    ON f.rk_extid::TEXT = i.rk_extid::TEXT " +
+                                "WHERE f.rk_dep IN (" +
+                                "   'PLANDP'," +
+                                "   'PLANÄDP'," +
+                                "   'PLANOB'," +
+                                "   'PLANÄOB'," +
+                                "   'PLANBPL'," +
+                                "   'PLANSPL'" +
+                                ") " +
+                                "GROUP BY f.rk_extid, " +
+                                "       CASE i.planavgift " +
+                                "           WHEN 'N' THEN 'Nej' " +
+                                "           WHEN 'J' THEN 'Ja' " +
+                                "       ELSE i.planavgift END, " +
+                                "     i.arkivserie_pb";
+
+            sqlPlanRegister = "SELECT  CAST(fir.plan_id AS VARCHAR(20)) AS plan_id, " +
+                              "        fir.lmakt, " +
+                              "        fir.egn_akt, " +
+                              "	       fir.planfk, " +
+                              "        fir.plannamn, " +
+                              "        fir.status, " +
+                              "        fir.status_text, " +
+                              "        CASE WHEN CAST(GETDATE() AS DATETIME) BETWEEN CONVERT(DATETIME, genomf_fromdat, 112) AND CONVERT(DATETIME, genomf_tilldat, 112) THEN 1 ELSE 0 END AS isgenomf, " +
+                              "        CASE " +
+                              "            WHEN fir.beslutsdat IS NOT NULL THEN CONCAT(SUBSTRING(fir.beslutsdat, 1, 4), '-', SUBSTRING(fir.beslutsdat, 5, 2), '-', SUBSTRING(fir.beslutsdat, 7, 2)) " +
+                              "            ELSE fir.beslutsdat END AS dat_beslut, " +
+                              "        CASE " +
+                              "            WHEN fir.genomf_fromdat IS NOT NULL THEN CONCAT(SUBSTRING(fir.genomf_fromdat, 1, 4), '-', SUBSTRING(fir.genomf_fromdat, 5, 2), '-', SUBSTRING(fir.genomf_fromdat, 7, 2)) " +
+                              "            ELSE fir.genomf_fromdat END AS dat_genomf_f, " +
+                              "        CASE " +
+                              "            WHEN fir.genomf_tilldat IS NOT NULL THEN CONCAT(SUBSTRING(fir.genomf_tilldat, 1, 4), '-', SUBSTRING(fir.genomf_tilldat, 5, 2), '-', SUBSTRING(fir.genomf_tilldat, 7, 2)) " +
+                              "            ELSE fir.genomf_tilldat END AS dat_genomf_t, " +
+                              "        CASE " +
+                              "            WHEN fir.lagakraft_dat IS NOT NULL THEN CONCAT(SUBSTRING(fir.lagakraft_dat, 1, 4), '-', SUBSTRING(fir.lagakraft_dat, 5, 2), '-', SUBSTRING(fir.lagakraft_dat, 7, 2)) " +
+                              "            ELSE fir.lagakraft_dat END AS dat_lagakraft, " +
+                              "        kom.komkod " +
+                              "FROM(SELECT fr.pb AS plan_id, fr.planfk AS planfk, fr.lmakt AS lmakt, pegn.plannr AS egn_akt, fr.plannamn AS plannamn, fr.pstatus AS status, " +
+                              "            CASE fr.pstatus " +
+                              "                WHEN 'A' THEN 'Avregistrerad' " +
+                              "                WHEN 'B' THEN 'Beslut' " +
+                              "                WHEN 'F' THEN 'Förslag' " +
+                              "                WHEN 'P' THEN 'Preliminär registrering' " +
+                              "                ELSE 'n/a' END AS status_text, " +
+                              "             dat.beslutsdat AS beslutsdat, dat.genomf_fromdat AS genomf_fromdat, dat.genomf_tilldat AS genomf_tilldat, dat.gallertill_dat AS gallertill_dat, dat.lagakraft_dat AS lagakraft_dat, dat.sajdat AS sajdat " +
+                              "      FROM   fir_plan fr " +
+                              "        LEFT JOIN fir_plan_egnauppg pegn " +
+                              "            ON fr.pb = pegn.pb " +
+                              "        LEFT JOIN fir_plan_beslut dat " +
+                              "            ON fr.pb = dat.pb " +
+                              "      WHERE fr.planfk IN (" +
+                              "               'DP'," +
+                              "               'ÄDP'," +
+                              "               'OB'," +
+                              "               'ÄOB'," +
+                              "               'BPL'," +
+                              "               'SPL'" +
+                              "            )) fir " +
+                              "    LEFT JOIN(SELECT fr.kodvarde AS status, fr.beskrivning AS status_text " +
+                              "               FROM   fir_firkoder fr " +
+                              "               WHERE  fr.kodtyp = 'PSTATUS') fir_kod " +
+                              "        ON fir.status = fir_kod.status " +
+                              "    LEFT JOIN fir_plan_kommun kom " +
+                              "        ON fir.plan_id = kom.pb";
+
+            // Databasinforamtion från PostgreSQL/PostGIS
+            DataTable dtPlanGeometries = new DataTable();
+            NpgsqlConnection npgsqlCon = UtilityDatabase.GetNpgsqlConnectionForDBGeodata();
+            NpgsqlCommand npgsqlCom = new NpgsqlCommand(sqlPlanGeometries, npgsqlCon);
+            NpgsqlDataReader npgsqlDr;
+
+            npgsqlCom.Connection.Open();
+            npgsqlDr = npgsqlCom.ExecuteReader();
+
+            dtPlanGeometries.Load(npgsqlDr);
+
+            npgsqlDr.CloseAsync();
+            npgsqlDr.DisposeAsync();
+
+
+            // Databasinforamtion från MS SQL Server
+            DataTable dtPlanRegister = new DataTable();
+            SqlConnection msSqlServerCon = UtilityDatabase.GetMSSQLServerConnectionForDBFB();
+            SqlCommand msSqlServerCom = new SqlCommand(sqlPlanRegister, msSqlServerCon);
+            SqlDataReader msSqlServerDr;
+
+            msSqlServerCom.Connection.Open();
+            msSqlServerDr = msSqlServerCom.ExecuteReader();
+
+            dtPlanRegister.Load(msSqlServerDr);
+
+            msSqlServerDr.Close();
+            msSqlServerDr.Dispose();
+
+
+            //Join data from PostgreSQL och MS SQL Server
+            //https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/method-based-query-syntax-examples-join-linq-to-dataset
+            //https://www.c-sharpcorner.com/UploadFile/0c1bb2/join-two-datatable-using-linq-in-Asp-Net-C-Sharp/
+            DataTable dtPlans = new DataTable();
+            dtPlans = LINQResultToDataTable(
+                dtPlanGeometries.AsEnumerable().Join(
+                dtPlanRegister.AsEnumerable().DefaultIfEmpty(),
+                pg => pg.Field<string>("lmakt"),
+                pr => pr.Field<string>("lmakt"),
+                (pg, pr) => new
+                {
+                    NYCKEL = pr.Field<string>("plan_id"),
+                    AKT = pg.Field<string>("lmakt"),
+                    AKTTIDIGARE = pr.Field<string>("egn_akt"),
+                    AKTEGEN = pg.Field<string>("akt_pb"),
+                    PLANFK = pr.Field<string>("planfk"),
+                    PLANNAMN = pr.Field<string>("plannamn"),
+                    ISGENOMF = pr.Field<Int32>("isgenomf"),
+                    DAT_BESLUT = pr.Field<string>("dat_beslut"),
+                    DAT_GENOMF_F = pr.Field<string>("dat_genomf_f"),
+                    DAT_GENOMF_T = pr.Field<string>("dat_genomf_t"),
+                    DAT_LAGAKRAFT = pr.Field<string>("dat_lagakraft"),
+                    PLANAVGIFT = pg.Field<string>("planavgift"),
+                }).GroupBy(g => new
+                {
+                    g.NYCKEL,
+                    g.AKT,
+                    g.AKTTIDIGARE,
+                    g.AKTEGEN,
+                    g.PLANFK,
+                    g.PLANNAMN,
+                    g.ISGENOMF,
+                    g.DAT_BESLUT,
+                    g.DAT_GENOMF_F,
+                    g.DAT_GENOMF_T,
+                    g.DAT_LAGAKRAFT,
+                    g.PLANAVGIFT
+                }).SelectMany(p => p.ToList()));
+
+
+            DateTime cacheExpiration = setCacheExpiration();
+
+            // Callback för när cache försvinner
+            CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setPlanCache);
+
+            // Skapa cach av alla planer
+            Cache cache = HttpRuntime.Cache;
+            cache.Insert("C_Plans", dtPlans, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
+
+            dtPlanGeometries.Dispose();
+            npgsqlCon.Close();
+            npgsqlCon.Dispose();
+        }
+
 
 
         /// <summary>
@@ -564,7 +734,8 @@ namespace Plan.Plandokument
         /// <summary>
         /// Initierar cache med fastigheter som berörs av resp. plan
         /// </summary>
-        private static void initPlanBerorFastighetCache()
+        [Obsolete("initPlanCacheOld is deprecated due to connection to Oracle.", true)]
+        private static void initPlanBerorFastighetCacheOld()
         {
             //string conStr = ConfigurationManager.AppSettings["OracleOleDBConString"].ToString();
             string sql = string.Empty;
@@ -577,6 +748,48 @@ namespace Plan.Plandokument
             OleDbConnection con = UtilityDatabase.GetOleDbConncection();
             OleDbCommand com = new OleDbCommand(sql, con);
             OleDbDataReader dr;
+
+            com.Connection.Open();
+            dr = com.ExecuteReader();
+
+            dtPlanBerorFastighet.Load(dr);
+
+            dr.Close();
+            dr.Dispose();
+
+            DateTime cacheExpiration = setCacheExpiration();
+
+            // Callback för när cache försvinner
+            CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setPlanBerorFastighetCache);
+
+            // Skapa cach av alla planer
+            Cache cache = HttpRuntime.Cache;
+            cache.Insert("C_PlanBerorFastighet", dtPlanBerorFastighet, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
+
+            dtPlanBerorFastighet.Dispose();
+            con.Close();
+            con.Dispose();
+        }
+        /// <summary>
+        /// Initierar cache med fastigheter som berörs av resp. plan
+        /// </summary>
+        private static void initPlanBerorFastighetCache()
+        {
+            //string conStr = ConfigurationManager.AppSettings["OracleOleDBConString"].ToString();
+            string sql = string.Empty;
+
+            sql = "SELECT CAST(b.pb AS VARCHAR(20)) AS NYCKEL, " +
+                  "       f.fnr AS NYCKEL_FASTIGHET, " +
+                  "       UPPER(CONCAT(f.trakt, ' ', f.fbetnr)) AS FASTIGHET " +
+                  "FROM   fir_fastigh f, " +
+                  "       fir_plan_planberor b " +
+                  "WHERE b.fnr = f.fnr " +
+                  "GROUP BY CAST(b.pb AS VARCHAR(20)), f.fnr, UPPER(CONCAT(f.trakt, ' ', f.fbetnr))";
+
+            DataTable dtPlanBerorFastighet = new DataTable();
+            SqlConnection con = UtilityDatabase.GetMSSQLServerConnectionForDBFB();
+            SqlCommand com = new SqlCommand(sql, con);
+            SqlDataReader dr;
 
             com.Connection.Open();
             dr = com.ExecuteReader();
@@ -620,7 +833,8 @@ namespace Plan.Plandokument
         /// <summary>
         /// Initierar cache med planer som berör eller har berörts av andra planer
         /// </summary>
-        private static void initPlanBerorPlanCache()
+        [Obsolete("initPlanCacheOld is deprecated due to connection to Oracle.", true)]
+        private static void initPlanBerorPlanCacheOld()
         {
             string sql = string.Empty;
 
@@ -632,6 +846,77 @@ namespace Plan.Plandokument
             OleDbConnection con = UtilityDatabase.GetOleDbConncection();
             OleDbCommand com = new OleDbCommand(sql, con);
             OleDbDataReader dr;
+
+            com.Connection.Open();
+            dr = com.ExecuteReader();
+
+            dtPlanBerorPlan.Load(dr);
+
+            dr.Close();
+            dr.Dispose();
+
+            DateTime cacheExpiration = setCacheExpiration();
+
+            // Callback för när cache försvinner
+            CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setPlanBerorPlanCache);
+
+            // Skapa cach av alla planer
+            Cache cache = HttpRuntime.Cache;
+            cache.Insert("C_PlanBerorPlan", dtPlanBerorPlan, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
+
+            dtPlanBerorPlan.Dispose();
+            con.Close();
+            con.Dispose();
+        }
+        /// <summary>
+        /// Initierar cache med planer som berör eller har berörts av andra planer
+        /// </summary>
+        private static void initPlanBerorPlanCache()
+        {
+            string sql = string.Empty;
+
+            sql = "    SELECT CAST(p1.pb AS VARCHAR(20)) AS NYCKEL, " +
+                  "           p1.planfk AS PLANFK, " +
+                  "           LOWER(kod.beskrivning) AS BESKRIVNING, " +
+                  "           CAST(han.pb_hanvisn AS VARCHAR(20)) AS NYCKEL_PAVARKAN, " +
+                  "           han.lmakt AS PAVERKAN, " +
+                  "           han.planfk AS PAV_PLANFK, " +
+                  "           han.hanvstatus AS STATUS_PAVARKAN, " +
+                  "           1 AS REGISTRERAT_BESLUT " +
+                  "    FROM fir_plan p1, " +
+                  "        (SELECT h.pb pb, h.pb_hanvisn pb_hanvisn, h.hanvtyp hanvtyp, p2.lmakt lmakt, p2.planfk planfk, p2.pstatus hanvstatus " +
+                  "         FROM fir_plan_hanvisn h " +
+                  "            JOIN fir_plan p2 " +
+                  "                ON h.pb_hanvisn = p2.pb) han, " +
+                  "            fir_firkoder kod " +
+                  "    WHERE p1.pb = han.pb " +
+                  "    AND han.hanvtyp = kod.kodvarde " +
+                  "    AND kod.kodtyp = 'HANVTYP' " +
+                  "UNION ALL " +
+                  "    SELECT CAST(p1.pb AS VARCHAR(20)) AS NYCKEL, " +
+                  "           p1.planfk AS PLANFK, " +
+                  "           LOWER(kod.beskrivning) AS BESKRIVNING, " +
+                  "           hant.pav_pb AS NYCKEL_PAVARKAN, " +
+                  "           hant.hanvtext AS PAVERKAN, " +
+                  "           hant.planfk AS PAV_PLANFK, " +
+                  "           hant.hanvstatus AS STATUS_PAVARKAN, " +
+                  "           0 AS REGISTRERAT_BESLUT " +
+                  "    FROM fir_plan p1, " +
+                  "        (SELECT h.pb pb, p3.pb pav_pb, h.hanvtyp hanvtyp, h.hanvtext hanvtext, p2.planfk planfk, p2.pstatus hanvstatus " +
+                  "            FROM fir_plan_hanvtext h " +
+                  "            JOIN fir_plan p2 " +
+                  "                ON h.pb = p2.pb " +
+                  "            LEFT JOIN fir_plan p3 " +
+                  "                ON h.hanvtext = p3.lmakt) hant, " +
+                  "            fir_firkoder kod " +
+                  "    WHERE p1.pb = hant.pb " +
+                  "    AND hant.hanvtyp = kod.kodvarde " +
+                  "    AND kod.kodtyp = 'HANVTYP'";
+
+            DataTable dtPlanBerorPlan = new DataTable();
+            SqlConnection con = UtilityDatabase.GetMSSQLServerConnectionForDBFB();
+            SqlCommand com = new SqlCommand(sql, con);
+            SqlDataReader dr;
 
             com.Connection.Open();
             dr = com.ExecuteReader();
@@ -690,7 +975,8 @@ namespace Plan.Plandokument
             List<FileInfo> filesInRootDirectoriesTemp = new List<FileInfo>();
             foreach (string root in directoryRoots)
             {
-                DirectoryInfo searchedDirectory = new DirectoryInfo(Server.MapPath("~") + "\\" + root);
+                //DirectoryInfo searchedDirectory = new DirectoryInfo(Server.MapPath("~") + "\\" + root);
+                DirectoryInfo searchedDirectory = new DirectoryInfo(HostingEnvironment.MapPath("~") + "\\" + root);
 
                 foreach (string ext in searchedFileExtentions)
                 {
@@ -781,6 +1067,120 @@ namespace Plan.Plandokument
         private static void LogCacheRemovedReason(string key, CacheItemRemovedReason reason)
         {
             UtilityLog.Log($"Cache '{key}' tömdes med anledningen '{reason.ToString()}'", Utility.LogLevel.WARN);
+        }
+
+        /// <summary>
+        /// Konverterar LINQ-resultat Enumerable Objekt till DataTable
+        /// </summary>
+        /// <typeparam name="T">Objekt</typeparam>
+        /// <param name="items">Resultat från LINQ</param>
+        /// <returns></returns>
+        private static DataTable LINQResultToDataTable<T>(IEnumerable<T> items)
+        {
+            DataTable dt = new DataTable();
+            PropertyInfo[] columns = null;
+            if (items == null) return dt;
+            foreach (T Record in items)
+            {
+                if (columns == null)
+                {
+                    columns = ((Type)Record.GetType()).GetProperties();
+                    foreach (PropertyInfo GetProperty in columns)
+                    {
+                        Type IcolType = GetProperty.PropertyType;
+                        if ((IcolType.IsGenericType) && (IcolType.GetGenericTypeDefinition()
+                        == typeof(Nullable<>)))
+                        {
+                            IcolType = IcolType.GetGenericArguments()[0];
+                        }
+                        dt.Columns.Add(new DataColumn(GetProperty.Name, IcolType));
+                    }
+                }
+                DataRow dr = dt.NewRow();
+                foreach (PropertyInfo p in columns)
+                {
+                    dr[p.Name] = p.GetValue(Record, null) == null ? DBNull.Value : p.GetValue(Record, null);
+                }
+                dt.Rows.Add(dr);
+            }
+            return dt;
+        }
+
+        private static DataTable ToDataTable<T>(List<T> items)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+            //Get all the properties
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                //Setting column names as Property names
+                dataTable.Columns.Add(prop.Name);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                dataTable.Rows.Add(values);
+            }
+            //put a breakpoint here and check datatable
+            return dataTable;
+        }
+
+        private static void DataTableToCSVDefaultOutputDirectory(DataTable table)
+        {
+            DataTableToCSVDefaultOutputDirectory(
+                table,
+                (string.IsNullOrWhiteSpace(table.TableName) ? "DataTableNoName_" + Guid.NewGuid().ToString() : table.TableName)
+                );
+        }
+        private static void DataTableToCSVDefaultOutputDirectory(DataTable table, string filename)
+        {
+            //StreamWriter sw = new StreamWriter(HttpRuntime.AppDomainAppPath, false);
+            //StreamWriter sw = new StreamWriter(HttpContext.Current.Server.MapPath("~"), false);
+            //StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~"), false);
+            //StreamWriter sw = new StreamWriter("c:\\temp\\plandokument\\", false);
+            StreamWriter sw = new StreamWriter(HttpRuntime.AppDomainAppPath + (string.IsNullOrWhiteSpace(filename) ? "DataTableNoName_" + Guid.NewGuid().ToString() : filename) + ".csv", false);
+            // headers    
+            for (int i = 0; i < table.Columns.Count; i++)
+            {
+                sw.Write(table.Columns[i]);
+                if (i < table.Columns.Count - 1)
+                {
+                    sw.Write(";");
+                }
+            }
+            sw.Write(sw.NewLine);
+
+            // content
+            foreach (DataRow dr in table.Rows)
+            {
+                for (int i = 0; i < table.Columns.Count; i++)
+                {
+                    if (!Convert.IsDBNull(dr[i]))
+                    {
+                        string value = dr[i].ToString();
+                        if (value.Contains(';'))
+                        {
+                            value = String.Format("\"{0}\"", value);
+                            sw.Write(value);
+                        }
+                        else
+                        {
+                            sw.Write(dr[i].ToString());
+                        }
+                    }
+                    if (i < table.Columns.Count - 1)
+                    {
+                        sw.Write(";");
+                    }
+                }
+                sw.Write(sw.NewLine);
+            }
+            sw.Close();
         }
     }
 }

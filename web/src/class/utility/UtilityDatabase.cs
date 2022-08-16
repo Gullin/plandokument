@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Configuration;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 
 namespace Plan.Plandokument
 {
-	public class UtilityDatabase : Utility
-	{
+    public class UtilityDatabase : Utility
+    {
         internal static OleDbConnection GetOleDbConncection()
         {
             string user = Environment.GetEnvironmentVariable("lkrgisuser", EnvironmentVariableTarget.Machine);
@@ -32,5 +34,61 @@ namespace Plan.Plandokument
 
             return new OleDbConnection(connectionStr);
         }
+
+
+        internal static NpgsqlConnection GetNpgsqlConnectionForDBGeodata()
+        {
+            return new NpgsqlConnection(ConfigurationManager.AppSettings["PostgreSQLNpgsqlConStringGeodata"].ToString());
+        }
+
+
+        internal static SqlConnection GetMSSQLServerConnectionForDBFB()
+        {
+            return new SqlConnection(ConfigurationManager.AppSettings["MSSQLServerConStringFB"].ToString());
+        }
+
+        /// <summary>
+        /// Testmetod för möjlighet att ansluta till specifik PostgreSQL-databas geodata
+        /// </summary>
+        internal static bool ExistsNpgsqlConnectionForDBGeodata()
+        {
+            NpgsqlConnection con = GetNpgsqlConnectionForDBGeodata();
+            try
+            {
+                con.Open();
+                return true;
+            }
+            catch (Exception exc)
+            {
+                UtilityException.LogException(exc, "Testanslutning", false);
+                return false;
+            }
+            finally
+            {
+                con.Dispose();
+            }
+        }
+        /// <summary>
+        /// Testmetod för möjlighet att ansluta till specifik PostgreSQL-databas geodata
+        /// </summary>
+        internal static bool ExistsMSSQLServerConnectionForDBFB()
+        {
+            SqlConnection con = UtilityDatabase.GetMSSQLServerConnectionForDBFB();
+            try
+            {
+                con.Open();
+                return true;
+            }
+            catch (Exception exc)
+            {
+                UtilityException.LogException(exc, "Testanslutning", false);
+                return false;
+            }
+            finally
+            {
+                con.Dispose();
+            }
+        }
+
     }
 }

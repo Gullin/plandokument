@@ -165,30 +165,12 @@ namespace Plan.Plandokument
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string getStatNbrPlanImplement()
         {
-            string conStr = ConfigurationManager.AppSettings["OracleOleDBConString"].ToString();
-            string sql = string.Empty;
-
-            sql = "SELECT COUNT(*) AS antal " + 
-                  "FROM   gis_v_planytor " + 
-                  "WHERE  SYSDATE BETWEEN TO_DATE(dat_genomf_f, 'YYYY-MM-DD') AND TO_DATE(dat_genomf_t, 'YYYY-MM-DD')";
-            
-            DataTable dtImplement = new DataTable();
-            OleDbConnection con = new OleDbConnection(conStr);
-            OleDbCommand com = new OleDbCommand(sql, con);
-            OleDbDataReader dr;
-
-            com.Connection.Open();
-            dr = com.ExecuteReader();
-
-            dtImplement.Load(dr);
-
-            dr.Close();
-            dr.Dispose();
-
-            //return getDatatableAsJson(dtImplement);
-
-            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(dtImplement.Rows[0]["ANTAL"].ToString());
+            return new JavaScriptSerializer()
+                .Serialize(
+                    PlanCache.GetPlanBasisCache()
+                        .AsEnumerable()
+                        .Where(rows => rows.Field<int>("isgenomf") == 1).Count().ToString()
+                );
         }
 
 
