@@ -594,7 +594,7 @@
                 <h1 id="avsnitt4">4 Inställningar / konfiguration</h1>
                 <h2 id="avsnitt4-1">4.1 Dokumentbegrepp</h2>
                 <p>
-                    Alla plandokument blir klassad som någon dokumenttyp. Dessa dokumenttyper definieras i filen "dokumenttyper.csv". Denna går att hitta i webbapplikationens rotkatalog.
+                    Alla plandokument blir klassad som någon dokumenttyp. Dessa dokumenttyper definieras i filen "dokumenttyper.csv". Denna går att hitta i webbapplikationens katalog "static-resources".
                     csv-filen kan ses som en tabell utan kolumnrubriker och där resp. kolumn separeras av semikolon (;). csv-filen består utav <asp:Label ID="nbrColumnDocumenttypes" runat="server" /> st. kolumner.
                 </p>
                 <ol id="columnsDocumenttypes" runat="server">

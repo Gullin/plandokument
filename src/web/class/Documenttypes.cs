@@ -24,9 +24,9 @@ namespace Plan.Plandokument
             List<Documenttype> documenttypes = new List<Documenttype>();
 
             //string domainFileDocumenttypes = HttpContext.Current.Server.MapPath(
-            //        "~/dokumenttyper.csv"
+            //        "~/static-resources/dokumenttyper.csv"
             //        );
-            string domainFileDocumenttypes = Path.Combine(HttpRuntime.AppDomainAppPath, "dokumenttyper.csv");
+            string domainFileDocumenttypes = Path.Combine(HttpRuntime.AppDomainAppPath, @"static-resources\dokumenttyper.csv");
             try
             {
                 if (File.Exists(domainFileDocumenttypes))
