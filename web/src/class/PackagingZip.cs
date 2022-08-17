@@ -62,8 +62,9 @@ namespace Plan.Plandokument
 
                 return zipDirectory.Replace("~/", "") + zipFile;
             }
-            catch (System.Exception ex)
+            catch (System.Exception exc)
             {
+                UtilityException.LogException(exc, "zipFiles", true);
                 throw;
             }
 
