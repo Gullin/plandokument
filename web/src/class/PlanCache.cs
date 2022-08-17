@@ -1106,6 +1106,12 @@ namespace Plan.Plandokument
             return dt;
         }
 
+        /// <summary>
+        /// Konverterar LINQ-resultat List-objekt till DataTable
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items"></param>
+        /// <returns></returns>
         private static DataTable ToDataTable<T>(List<T> items)
         {
             DataTable dataTable = new DataTable(typeof(T).Name);
@@ -1130,6 +1136,11 @@ namespace Plan.Plandokument
             return dataTable;
         }
 
+        /// <summary>
+        /// Exporterar vald DataTable till CSV-fil. CSV-filen sparas i katalogen till applikationsroten. Filnamn sätts samma som tabellnamnet, annars default unikt enl. formatet "DataTableNoName_{GUID}".
+        /// </summary>
+        /// <param name="table">DataTable som önskas exporteras</param>
+        /// <see cref="DataTableToCSVDefaultOutputDirectory(DataTable, string)"/>
         private static void DataTableToCSVDefaultOutputDirectory(DataTable table)
         {
             DataTableToCSVDefaultOutputDirectory(
@@ -1137,6 +1148,12 @@ namespace Plan.Plandokument
                 (string.IsNullOrWhiteSpace(table.TableName) ? "DataTableNoName_" + Guid.NewGuid().ToString() : table.TableName)
                 );
         }
+        /// <summary>
+        /// Exporterar vald DataTable till CSV-fil. CSV-filen sparas i katalogen till applikationsroten. Om filnamn är tomt sätts default unikt enl. formatet "DataTableNoName_{GUID}".
+        /// </summary>
+        /// <param name="table">DataTable som önskas exporteras</param>
+        /// <param name="filename">Valfritt filnamn på CSV-fil</param>
+        /// <see cref="DataTableToCSVDefaultOutputDirectory(DataTable)"/>
         private static void DataTableToCSVDefaultOutputDirectory(DataTable table, string filename)
         {
             //StreamWriter sw = new StreamWriter(HttpRuntime.AppDomainAppPath, false);
