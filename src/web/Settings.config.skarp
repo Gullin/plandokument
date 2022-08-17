@@ -2,11 +2,10 @@
 <appSettings>
   <!-- Anslutning Oracle databas; 1:a hand maskinmiljövariabler [topospecialuser|topospecialpassword|topospecialservice], 2:a hand nedan nyckel -->
   <!-- Använder sig av Oracle Provider for OLE DB -->
-  <!--<add key="OracleOleDBConString" value="Provider=OraOLEDB.Oracle;Data Source=;User Id=;Password=;" />-->
-  <add key="OracleOleDBConString" value="Provider=OraOLEDB.Oracle;Data Source=(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = LA4257)(PORT = 1521)))(CONNECT_DATA = (SERVICE_NAME = adev)));User Id=lkr_gis;Password=avs;" />
+  <add key="OracleOleDBConString" value="Provider=OraOLEDB.Oracle;Data Source=;User Id=;Password=;" />
   <add key="PostgreSQLNpgsqlConStringGeodata" value="Host=;Username=;Password=;Database=" />
   <add key="MSSQLServerConStringFB" value="Server=;Database=;User Id=;Password=;" />
-  
+
   <!-- Versionering -->
   <!-- Sätts till true om inställningen "Version" ska användas istället för versioneringen i assemblyn -->
   <add key="AssemblyVersionOverride" value="false" />
@@ -18,8 +17,6 @@
   <add key="VersionSuffix" value=" beta" />
   
   <!-- Generella -->
-  <!-- Kommaseparerad lista med användar (Windows-konto) som ses som administratörer och ger tillgång till bl.a. kontrollpanel -->
-  <add key="admins" value="" />
   <!-- Tecken för separering av parametrar i URL-sökningen (sätts globalt och gäller för alla separeringar) -->
   <add key="URLQueryStringSeparator" value="," />
   <!-- Tecken som används mellan fastighetsbeteckningens block och enhet i registernumret vid sökning (tecken som bl.a. kolon : eller asterix * är ej tillåtet av säkerhetsskäl som tecken i URL) -->
@@ -48,7 +45,7 @@
   <add key="UrlParameterDocumentType" value="dokument" />
   <!-- "NYCKEL", "AKT", "AKTTIDIGARE", "AKTEGEN", "FASTIGHET", "FASTIGHETNYCKEL" -->
   <add key="UrlParameterSearchType" value="begrepp" />
-
+  
   <!-- Cachning, registerinformation planer för snabbare sökning och minskat beroende till databas -->
   <!-- Antal dagar från applikationsstart som begränsad planinformation cachas -->
   <add key="CacheNbrOfDays" value="1" />
@@ -59,12 +56,9 @@
   <!-- Rotkatalog för filer relativt till webbapplikationen (fungerar ej med fysiska sökvägar enl. t.ex. UNC), enkel backslash då verbatim string literal används -->
   <add key="filesRotDirectory" value="plandokument" />
   <!-- Underkataloger ska genomsökas, standard är ja om inget anges annars kan variabeln anta value=[true|false] -->
-  <add key="subDirectoryCrawl" value="true" />
+  <add key="subDirectoryCrawl" value="" />
   <!-- Filändelser enligt [.pdf] eller om flera kommaseparerat enligt [.pdf,.tif]. Sätts fältet tomt tas alla filer -->
   <add key="fileExtentions" value=".pdf,.tif" />
-  <!-- Thumnails av plankartor -->
-  <add key="thumnailsRotDirectory" value="plandokument/ThumnailsPlankarta" />
-  
   
   <!-- Karta, MapGuide Open Source -->
   <!-- Bildparametrar -->
@@ -75,21 +69,16 @@
   <!-- Kartvyfaktor, MGMapSurfaceFactor multiplicerar sökta objekts utbredning för en förändring av geografiskt presenterat område (skapar marginal mellan kartram och sökt objekt som presenteras i kartan) -->
   <add key="MGMapSurfaceFactor" value="1.1" />
   <!-- Mapagent, initiering av kartserver -->
-  <add key="MGWebTierInit" value="C:\\Program Files\\OSGeo\\MapGuide\\Web\\www\\webconfig.ini" />
-  <!--<add key="MGWebTierInit" value="C:\\Program Files\\Autodesk\\Autodesk Infrastructure Web Server Extension 2014\\www\\webconfig.ini" />-->
-  <add key="MGUserName" value="Administrator" />
-  <add key="MGUserPass" value="admin" />
+  <add key="MGWebTierInit" value="C:\\Program Files\\Autodesk\\Autodesk Infrastructure Web Server Extension 2016\\www\\webconfig.ini" />
+  <add key="MGUserName" value="" />
+  <add key="MGUserPass" value="" />
   <!--<add key="MGMapResource" value="Library://Samples/Sheboygan/Maps/Sheboygan.MapDefinition" />-->
   <!-- Resurser, resurs-ID till karta och planytor samt nödvändiga planattribut för filtrering och positionering -->
-  <add key="MGMapResource" value="Library://Plankarta.MapDefinition" />
-  <!--<add key="MGMapResource" value="Library://LANDSKRONA/Kartor/Landskrona_farg.MapDefinition" />-->
-  <add key="MGPlanytorResource" value="Library://planytor.FeatureSource" />
-  <!--<add key="MGPlanytorResource" value="Library://LANDSKRONA/Datakallor/oracle/LKR_GIS.FeatureSource" />-->
-  <add key="MGPlanytorClassName" value="rk_plan_y" />
-  <!--<add key="MGPlanytorClassName" value="GIS_V_PLANYTOR" />-->
-  <add key="MGPlanytorFilterColumn" value="td_id" />
+  <add key="MGMapResource" value="Library://LANDSKRONA/Kartor/Bakgrundskartor/Landskrona_farg.MapDefinition" />
+  <add key="MGPlanytorResource" value="Library://LKR_GEMENSAM/Datakalla/sdf/landskrona/anpassat/plan_y.FeatureSource" />
+  <add key="MGPlanytorClassName" value="plan_y" />
+  <add key="MGPlanytorFilterColumn" value="plan_id" />
   <add key="MGPlanytorGeometryColumn" value="Geometry" />
-  <!--<add key="MGPlanytorGeometryColumn" value="GEOM" />-->
   <!-- Lagerutseende -->
   <!-- Färgvärde enligt r,g,b,a (red,green,blue,alpha). Röd, grön och blå antar värde mellan 0 och 255 (0 <= r|g|b <= 255). Alpha (Transparente/opacity) antar värde mellan 0 och 1 med punkt som decimalavgränsare (0 <= a <= 1). -->
   <!-- Konturlinjens färg -->
@@ -98,13 +87,6 @@
   <add key="MGPlanytorForegroundRgbaColor" value="0,127,255,0.4" />
   
   <!-- Loggning, skrivs under applikationens rotkatalog och under "log" -->
-  <!-- Allmän event loggning -->
-  <!-- Filnamn för fellogg (utan filändelse), standard är "Error" om inget anges -->
-  <add key="auditLogFileName" value="Audit" />
-  <!-- Maximal storlek på felfiler (i MB), standard är 10 om inget eller om mindre än 0,005 anges -->
-  <add key="auditLogFileMaxByteSize" value="0,001" />
-  <!-- Maximalt antal filer (möjlighet att dela upp loggning i flera filer), standard är 1 om inget eller noll anges -->
-  <add key="auditLogFileMaxTotal" value="1" />
   <!-- Felhantering -->
   <!-- Filnamn för fellogg (utan filändelse), standard är "Error" om inget anges -->
   <add key="errorFileName" value="Error" />
@@ -123,12 +105,11 @@
 
   <!-- Ping av webbapplikation. Möjliggör för automatisk uppstarta av applikationen efter att IIS rensat resurser. -->
   <!-- Aktivering av funktion [true|false]. Standard är false. -->
-  <add key="shouldPing" value="false" />
+  <add key="shouldPing" value="true" />
   <!-- Tidsintervall mellan ping i sekunder -->
   <add key="pingIntervall" value="30" />
   <!-- URL som ping:as -->
-  <!--<add key="pingUrl" value="https://geodata.landskrona.local/app/plan/dokument/" />-->
-  <add key="pingUrl" value="http://localhost/app/plan/dokument" />
+  <add key="pingUrl" value="" />
 
 
   <!-- E-post, används för signal vid fel i applikationen -->

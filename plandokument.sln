@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web\src\web.csproj", "{DE2A3E7D-9927-4F5A-A58D-E970049E240F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "src\web\web.csproj", "{DE2A3E7D-9927-4F5A-A58D-E970049E240F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "windows-service", "windows-service\src\windows-service.csproj", "{1AE78E73-093C-4BA1-B865-E9229B665592}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "windows-service", "src\windows-service\windows-service.csproj", "{1AE78E73-093C-4BA1-B865-E9229B665592}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "setup", "setup\setup.vdproj", "{66329743-3F34-433C-A20F-859E680F0ABE}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "setup", "src\setup\setup.vdproj", "{66329743-3F34-433C-A20F-859E680F0ABE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plan.Shared", "Plan.Shared\Plan.Shared.csproj", "{0BF2E8F8-1E74-430E-BBDA-0A37288C6518}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plan.shared", "src\plan.shared\plan.shared.csproj", "{0BF2E8F8-1E74-430E-BBDA-0A37288C6518}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
