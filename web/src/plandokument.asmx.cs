@@ -224,7 +224,6 @@ namespace Plan.Plandokument
             dc = new DataColumn("SEARCHEDSTRING");
             dtResult.Columns.Add(dc);
 
-            bool isBegrepp = false;
 
             // Om sökparametrar (sökta planer)
             if (searched != null)
@@ -238,11 +237,9 @@ namespace Plan.Plandokument
                 {
                     IEnumerable<DataRow> queryResult = Enumerable.Empty<DataRow>();
 
-                    //TODO: Vända på forech- och if-satsen, kontrollen om "begrepp" är använt kontrolleras för varje planDoc (onödigt) på samma sätt med boolean-värdet "isBegrepp"
                     // Om kolumn är definierad, söker på definerad kolumn annars mot alla
                     if (!string.IsNullOrWhiteSpace(begrepp))
                     {
-                        isBegrepp = true;
 
                         // Hantera sökning efter planDoc på planinformation eller fastighet
                         DataTable dtFiltered = null;
@@ -334,7 +331,6 @@ namespace Plan.Plandokument
                     }
                     else
                     {
-                        isBegrepp = false;
 
                         // Begrepp (kolumner) att villkora mot
                         string[] columns = { "NYCKEL", "AKT", "AKTTIDIGARE", "AKTEGEN", "FASTIGHET", "FASTIGHETNYCKEL" };
@@ -676,7 +672,7 @@ namespace Plan.Plandokument
 
                 // Filter för planDoc efter planDoc-ID
                 MgFeatureQueryOptions featureQuery = new MgFeatureQueryOptions();
-                featureQuery.SetFilter(planFilterColumn + " = " + planID);
+                featureQuery.SetFilter(planFilterColumn + " = '" + planID + "'");
 
                 MgFeatureReader featureReader = featSvc.SelectFeatures(planResId, planClassName, featureQuery);
                 MgByteReader byteReaderGeometry = null;
