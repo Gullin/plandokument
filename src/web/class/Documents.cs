@@ -354,7 +354,15 @@ namespace Plan.Plandokument
 
             foreach (string root in directoryRoots)
             {
-                DirectoryInfo searchedDirectory = new DirectoryInfo(Server.MapPath(root));
+                DirectoryInfo searchedDirectory;
+                if (Path.IsPathRooted(root))
+                {
+                    searchedDirectory = new DirectoryInfo(Server.MapPath(@root));
+                }
+                else
+                {
+                    searchedDirectory = new DirectoryInfo(Utility.appPath + @root);
+                }
                 //DirectoryInfo searchedDirectory = new DirectoryInfo(root); 
                 getFileToDataTable(searchedDirectory, root, searchedFile, planId, dokumentAkt, dtFileResult);
             }

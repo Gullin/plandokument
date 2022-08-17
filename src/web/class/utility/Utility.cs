@@ -5,7 +5,7 @@ namespace Plan.Plandokument
 {
 	public class Utility
 	{
-        protected static string appPath = HttpRuntime.AppDomainAppPath;
+        internal static string appPath = HttpRuntime.AppDomainAppPath;
         //public static string logDirectory = "~/log/";
         public static string logDirectory = appPath + "log\\";
         //protected static string zipDirectory = appPath + "zipTemp\\";
