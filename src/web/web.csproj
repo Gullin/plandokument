@@ -321,12 +321,16 @@
     <Content Include="services\plandokument.asmx" />
     <Content Include="plandokument.aspx" />
     <Content Include="planlist.aspx" />
+    <Content Include="static-resources\sql\mssqlserver\get-plan-beror-fastighet.sql" />
+    <Content Include="static-resources\sql\mssqlserver\get-plan-beror-plan.sql" />
+    <Content Include="static-resources\sql\mssqlserver\get-plan-register-bas.sql" />
     <Content Include="versioninfo.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="class\utility\UtilityDatabaseSqlTemplates.cs" />
     <Compile Include="not-authenticated.aspx.cs">
       <DependentUpon>not-authenticated.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -434,7 +438,7 @@
     <Content Include="js\jtable.2.4.0\themes\landskrona\metro-lightgray\jtable.less" />
     <Content Include="plandokument.ashx" />
     <Content Include="js\jtable.2.4.0\themes\metro\close.png" />
-    <Content Include="dokumenttyper.csv" />
+    <Content Include="static-resources\dokumenttyper.csv" />
     <Content Include="lib\bootstrap-4.1.2-dist\css\bootstrap.min.css.map" />
     <Content Include="lib\bootstrap-4.1.2-dist\js\bootstrap.bundle.min.js.map" />
     <Content Include="lib\bootstrap-4.3.1-dist\css\bootstrap-grid.css.map" />
@@ -453,6 +457,7 @@
     <Content Include="Settings.config.skarp" />
     <None Include="Properties\PublishProfiles\Deploy Debug x64.pubxml" />
     <None Include="Properties\PublishProfiles\Deploy Release x64.pubxml" />
+    <Content Include="static-resources\sql\postgresql\get-plan-geometri-bas.pgsql" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -468,6 +473,7 @@
       <Name>Plan.Shared</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
