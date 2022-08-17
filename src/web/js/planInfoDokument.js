@@ -4,8 +4,8 @@
 function nbrOfSearchedPlans(isPlansSearched, callback) {
     $.ajax({
         type: "POST",
-        //url: '<%#ResolveClientUrl("~/plandokument.asmx/nbrOfSearchedPlans")%>',
-        url: urlBasePath + 'plandokument.asmx/nbrOfSearchedPlans',
+        //url: '<%#ResolveClientUrl("~/services/plandokument.asmx/nbrOfSearchedPlans")%>',
+        url: urlBasePath + 'services/plandokument.asmx/nbrOfSearchedPlans',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (msg) {
@@ -34,8 +34,8 @@ function nbrOfSearchedPlans(isPlansSearched, callback) {
 function columnConditionOfSearchedPlans() {
     $.ajax({
         type: "POST",
-        //url: '<%#ResolveClientUrl("~/plandokument.asmx/columnConditionOfSearchedPlans")%>',
-        url: urlBasePath + 'plandokument.asmx/columnConditionOfSearchedPlans',
+        //url: '<%#ResolveClientUrl("~/services/plandokument.asmx/columnConditionOfSearchedPlans")%>',
+        url: urlBasePath + 'services/plandokument.asmx/columnConditionOfSearchedPlans',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (msg) {
@@ -58,8 +58,8 @@ function columnConditionOfSearchedPlans() {
 function documentConditionOfSearchedPlans() {
     $.ajax({
         type: "POST",
-        //url: '<%#ResolveClientUrl("~/plandokument.asmx/documentConditionOfSearchedPlans")%>',
-        url: urlBasePath + 'plandokument.asmx/documentConditionOfSearchedPlans',
+        //url: '<%#ResolveClientUrl("~/services/plandokument.asmx/documentConditionOfSearchedPlans")%>',
+        url: urlBasePath + 'services/plandokument.asmx/documentConditionOfSearchedPlans',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (msg) {
@@ -84,8 +84,8 @@ function documentConditionOfSearchedPlans() {
 function searchedPlans() {
     $.ajax({
         type: "POST",
-        //url: '<%#ResolveClientUrl("~/plandokument.asmx/searchedPlans")%>',
-        url: urlBasePath + 'plandokument.asmx/searchedPlans',
+        //url: '<%#ResolveClientUrl("~/services/plandokument.asmx/searchedPlans")%>',
+        url: urlBasePath + 'services/plandokument.asmx/searchedPlans',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (msg) {
@@ -108,8 +108,8 @@ function searchedPlans() {
 function getStatTotNbrPlans() {
     $.ajax({
         type: "POST",
-        //url: '<%#ResolveClientUrl("~/plandokument.asmx/getStatTotNbrPlans")%>',
-        url: urlBasePath + 'plandokument.asmx/getStatTotNbrPlans',
+        //url: '<%#ResolveClientUrl("~/services/plandokument.asmx/getStatTotNbrPlans")%>',
+        url: urlBasePath + 'services/plandokument.asmx/getStatTotNbrPlans',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (msg) {
@@ -144,8 +144,8 @@ function getStatTotNbrPlans() {
 function getStatNbrPlanTypes() {
     $.ajax({
         type: "POST",
-        //url: '<%#ResolveClientUrl("~/plandokument.asmx/getStatNbrPlanTypes")%>',
-        url: urlBasePath + 'plandokument.asmx/getStatNbrPlanTypes',
+        //url: '<%#ResolveClientUrl("~/services/plandokument.asmx/getStatNbrPlanTypes")%>',
+        url: urlBasePath + 'services/plandokument.asmx/getStatNbrPlanTypes',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (msg) {
@@ -182,8 +182,8 @@ function getStatNbrPlanTypes() {
 function getStatNbrPlanImplement() {
     $.ajax({
         type: "POST",
-        //url: '<%#ResolveClientUrl("~/plandokument.asmx/getStatNbrPlanImplement")%>',
-        url: urlBasePath + 'plandokument.asmx/getStatNbrPlanImplement',
+        //url: '<%#ResolveClientUrl("~/services/plandokument.asmx/getStatNbrPlanImplement")%>',
+        url: urlBasePath + 'services/plandokument.asmx/getStatNbrPlanImplement',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (msg) {
@@ -218,8 +218,8 @@ function getStatNbrPlanImplement() {
 function getSearchedPlans() {
     $.ajax({
         type: "POST",
-        //url: '<%#ResolveClientUrl("~/plandokument.asmx/getPlanInfo")%>',
-        url: urlBasePath + 'plandokument.asmx/getPlanInfo',
+        //url: '<%#ResolveClientUrl("~/services/plandokument.asmx/getPlanInfo")%>',
+        url: urlBasePath + 'services/plandokument.asmx/getPlanInfo',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (msg) {
@@ -731,8 +731,8 @@ function putPlanAffected(planid, planAffected) {
 function getPlansDocs(planIds, callback) {
     Lkr.Plan.AjaxCalls.getPlansDocs = $.ajax({
         type: "POST",
-        //url: '<%=ResolveClientUrl("~/plandokument.asmx/getPlansDocs")%>',
-        url: urlBasePath + 'plandokument.asmx/getPlansDocs',
+        //url: '<%=ResolveClientUrl("~/services/plandokument.asmx/getPlansDocs")%>',
+        url: urlBasePath + 'services/plandokument.asmx/getPlansDocs',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         data: JSON.stringify({ planIds: planIds }),
@@ -781,7 +781,7 @@ function getPlansDocs(planIds, callback) {
 function getPlansBerorPlans(planIds, callback) {
     Lkr.Plan.AjaxCalls.getPlansBerorPlans = $.ajax({
         type: "POST",
-        url: urlBasePath + 'plandokument.asmx/getPlansBerorPlans',
+        url: urlBasePath + 'services/plandokument.asmx/getPlansBerorPlans',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         data: JSON.stringify({ planIds: planIds }),
@@ -829,7 +829,7 @@ function getPlansBerorPlans(planIds, callback) {
 function getDocumenttypes(callback) {
     $.ajax({
         type: "POST",
-        url: urlBasePath + 'plandokument.asmx/getDokumenttyper',
+        url: urlBasePath + 'services/plandokument.asmx/getDokumenttyper',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (msg) {
@@ -1499,8 +1499,8 @@ function getFilesZipped(files, zipFileNamePart) {
 
     $.ajax({
         type: "POST",
-        //url: '<%#ResolveClientUrl("~/plandokument.asmx/getDocsZipped")%>',
-        url: urlBasePath + 'plandokument.asmx/getDocsZipped',
+        //url: '<%#ResolveClientUrl("~/services/plandokument.asmx/getDocsZipped")%>',
+        url: urlBasePath + 'services/plandokument.asmx/getDocsZipped',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         data: JSON.stringify({ planDocsPaths: files, zipFileNamePart: zipFileNamePart }),
@@ -1637,7 +1637,7 @@ function putMapOfPlan(planID, imageWidth, imageHeight) {
 
     Lkr.Plan.AjaxCalls.putMapOfPlan = $.ajax({
         type: "POST",
-        url: urlBasePath + 'plandokument.asmx/getPlanMapImageAsBase64String',
+        url: urlBasePath + 'services/plandokument.asmx/getPlanMapImageAsBase64String',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         data: "{planID: '" + planID + "', imageWidth: '" + imageWidth + "', imageHeight: '" + imageHeight + "'}",

@@ -67,7 +67,7 @@
                     data: { checkHasDocument: false }
                 },
                 actions: {
-                    listAction: '<%=ResolveUrl("~/plandokument.asmx/jtGetAllPlanInfo")%>'
+                    listAction: '<%=ResolveUrl("~/services/plandokument.asmx/jtGetAllPlanInfo")%>'
                 },
                 fields: {
                     DatBeslut: {
@@ -141,7 +141,7 @@
                                                 data: { planIds: docsOfPlan }
                                             },
                                             actions: {
-                                                listAction: '<%=ResolveUrl("~/plandokument.asmx/jtGetPlansDocs")%>'
+                                                listAction: '<%=ResolveUrl("~/services/plandokument.asmx/jtGetPlansDocs")%>'
                                             },
                                             fields: {
                                                 files: {
@@ -217,8 +217,8 @@
             console.log(files);
             $.ajax({
                 type: "POST",
-                //url: '<%#ResolveClientUrl("~/plandokument.asmx/getDocsZipped")%>',
-                url: urlBasePath + 'plandokument.asmx/getDocsZipped',
+                //url: '<%#ResolveClientUrl("~/services/plandokument.asmx/getDocsZipped")%>',
+                url: urlBasePath + 'services/plandokument.asmx/getDocsZipped',
                 contentType: "application/json; charset=UTF-8",
                 dataType: "json",
                 data: JSON.stringify({ planDocsPaths: files, zipFileNamePart: zipFileNamePart }),

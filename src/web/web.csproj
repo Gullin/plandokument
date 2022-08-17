@@ -318,7 +318,7 @@
     <Content Include="pic\warning.png" />
     <Content Include="pic\xls.png" />
     <Content Include="pic\xlsx.png" />
-    <Content Include="plandokument.asmx" />
+    <Content Include="services\plandokument.asmx" />
     <Content Include="plandokument.aspx" />
     <Content Include="planlist.aspx" />
     <Content Include="versioninfo.aspx" />
@@ -380,7 +380,7 @@
     <Compile Include="plandokument.ashx.cs">
       <DependentUpon>plandokument.ashx</DependentUpon>
     </Compile>
-    <Compile Include="plandokument.asmx.cs">
+    <Compile Include="services\plandokument.asmx.cs">
       <DependentUpon>plandokument.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
