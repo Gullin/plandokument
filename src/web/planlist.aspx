@@ -5,6 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Alla planer</title>
+    <link rel="icon" type="image/x-icon" href="~/pic/favicon.ico" />
     <link href="css/reset.css" rel="stylesheet" />
     <link href="css/page-UI-core.css" rel="stylesheet" />
     <link href="css/page-UI-centering.css" rel="stylesheet" />

@@ -5,6 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Administrering plandokumentsapplikation</title>
+    <link rel="icon" type="image/x-icon" href="~/pic/favicon.ico" />
 
     <link href="lib/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/reset.css" rel="stylesheet" />

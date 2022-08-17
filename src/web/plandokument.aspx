@@ -6,6 +6,7 @@
 
     <head runat="server">
         <title>Plandokument</title>
+        <link rel="icon" type="image/x-icon" href="~/pic/favicon.ico" />
         <link href="css/jquery-ui-1.10.3-smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
         <link href="lib/bootstrap-4.1.2-dist/css/bootstrap.min.css" rel="stylesheet" />
         <link href="css/reset.css" rel="stylesheet" />

@@ -8,6 +8,7 @@
     <link href="css/page-UI-core.css" rel="stylesheet" />
     <link href="css/page-UI-help.css" rel="stylesheet" />
     <title>Plandokument / Versionsinformation</title>
+    <link rel="icon" type="image/x-icon" href="~/pic/favicon.ico" />
 
     <script src="<%= ResolveUrl("~/") %>js/jquery-3.4.1.min.js" type="text/javascript"></script>
     <script src="<%= ResolveUrl("~/") %>lib/bootstrap-4.1.2-dist/js/bootstrap.bundle.min.js"></script>
