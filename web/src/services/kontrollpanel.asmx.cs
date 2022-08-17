@@ -7,6 +7,8 @@ using System.Web.Script.Serialization;
 using System.Threading;
 using System.Configuration;
 using System.Collections.Specialized;
+using System.IO;
+using System.Text;
 
 namespace Plan.Plandokument
 {
@@ -20,6 +22,7 @@ namespace Plan.Plandokument
         public static string ThumnailsFolder { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ThumnailsFolder"];
     }
 
+
     /// <summary>
     /// Summary description for cache
     /// </summary>
@@ -29,6 +32,102 @@ namespace Plan.Plandokument
     [System.ComponentModel.ToolboxItem(false)]
     public class Kontrollpanel : System.Web.Services.WebService
     {
+
+        #region Logs
+        /// <summary>
+        /// Hämtar logg. Filtreras genom att hämta nödvändiga rader om filstorlek förändrats.
+        /// </summary>
+        /// <param name="latestFileSize">Filstorlek vid tidigare läsning av logg</param>
+        /// <param name="latestRow">Antalet rader vid senaste läsning av logg</param>
+        /// <returns></returns>
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string GetLog(string latestFileSize, string latestRow)
+        {
+
+            // TODO: https://www.nimaara.com/counting-lines-of-a-text-file/
+            // TODO: https://stackoverflow.com/questions/1262965/how-do-i-read-a-specified-line-in-a-text-file
+
+            // Filstorlek
+            long fileSize = 0;
+            Int64 nbrLatestRow = Convert.ToInt64(latestRow);
+            // Nollställer senast läst rad om senast filstorlek är större än logfil
+            if (long.Parse(latestFileSize) > fileSize)
+            {
+                nbrLatestRow = 0;
+            }
+
+            var lineCounter = 0L;
+            var lineDiffCounter = 0L;
+            StringBuilder sb = new StringBuilder();
+            string line = String.Empty;
+            if (File.Exists(UtilityLog.logFile))
+            {
+                using (FileStream fileToReadSizeFrom = File.Open(UtilityLog.logFile, FileMode.Open, FileAccess.Read))
+                {
+                    // Filstorlek
+                    fileSize = fileToReadSizeFrom.Length;
+
+                    // Anvnder samma stream för att inte låsa fil (StreamReader låser som standard fil)
+                    using (var reader = new StreamReader(fileToReadSizeFrom))
+                    {
+
+                        
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            lineCounter++;
+                            if (lineCounter > nbrLatestRow)
+                            {
+                                lineDiffCounter++;
+                                sb.Append(line + "\n");
+                            }
+                        }
+                    }
+
+                    fileToReadSizeFrom.Close();
+                }
+
+            }
+
+
+            //Int64 nbrLatestRow = Convert.ToInt64(latestRow);
+
+
+            // Nollställer senast läst rad om senast filstorlek är större än logfil
+            //if (long.Parse(latestFileSize) > fileSize)
+            //{
+            //    nbrLatestRow = 0;
+            //}
+
+
+
+            // Hämtar rader från logg och adderar radbrytning för javascript
+            //var lineCounter = 0L;
+            //var lineDiffCounter = 0L;
+            //StringBuilder sb = new StringBuilder();
+            //string line = String.Empty;
+            //using (var reader = new StreamReader(UtilityLog.logFile))
+            //{
+            //    while ((line = reader.ReadLine()) != null)
+            //    {
+            //        lineCounter++;
+            //        if (lineCounter > nbrLatestRow)
+            //        {
+            //            lineDiffCounter++;
+            //            sb.Append(line + "\n");
+            //        }
+            //    }
+            //}
+
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer() { MaxJsonLength = 2147483644 };
+
+            return jsonSerializer.Serialize(new { FileSize = fileSize, FileLineCounts = lineCounter, NewLineCounts = lineDiffCounter, Content = sb.ToString() });
+
+        }
+        #endregion
+
+
 
         #region Cache
         [WebMethod]
