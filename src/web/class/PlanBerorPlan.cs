@@ -31,9 +31,9 @@ namespace Plan.Plandokument
             DataTable dtSearchedPlanBeroenderelationer = cachedPlanBerorPlan.Clone();
 
             // Filtrera berörsrelationer från alla planrelationer efter sökta planer
-            IEnumerable<DataRow> drs = from filteringdPlans in cachedPlanBerorPlan.AsEnumerable()
-                                       where planIds.Contains(filteringdPlans.Field<string>("NYCKEL"))
-                                       select filteringdPlans;
+            IEnumerable<DataRow> drs = from filteringPlans in cachedPlanBerorPlan.AsEnumerable()
+                                       where planIds.Contains(filteringPlans.Field<string>("NYCKEL"))
+                                       select filteringPlans;
 
             foreach (DataRow dr in drs)
             {

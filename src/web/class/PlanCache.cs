@@ -885,7 +885,7 @@ namespace Plan.Plandokument
             // Callback för när cache försvinner
             CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setPlanDocumentsCache);
 
-            // Skapa cach av alla planer
+            // Skapa cache av alla plandokument
             Cache cache = HttpRuntime.Cache;
             cache.Insert("C_PlanDocuments", filesInRootDirectories, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
         }

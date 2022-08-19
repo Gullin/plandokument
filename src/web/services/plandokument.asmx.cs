@@ -174,7 +174,7 @@ namespace Plan.Plandokument
         }
 
 
-        //TODO: Kontrollera för om sökning görs mot samma begrepp med värde som finns vid flera tilfällen
+        //TODO: Kontrollera för om sökning görs mot samma begrepp med värde som finns vid flera tillfällen
         [WebMethod(EnableSession = true)]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string getPlanInfo()
