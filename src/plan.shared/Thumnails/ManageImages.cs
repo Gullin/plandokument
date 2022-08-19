@@ -33,9 +33,23 @@ namespace Plan.Shared.Thumnails
 
     public class ManageImages
     {
+        /// <summary>
+        /// Skapar två tumnagelbilder (mindre mer komprimerade kopier av inskickad bild), en mindre och en större.
+        /// </summary>
+        /// <param name="e">Resultat från en event när fil ändras.</param>
         public static void CreateThumnailFiles(FileSystemEventArgs e)
         {
-            string _newFile = ConfigShared.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(e.Name) + "_thumnail";
+            CreateThumnailFiles(e.Name);
+        }
+
+        /// <summary>
+        /// Skapar två tumnagelbilder (mindre mer komprimerade kopier av inskickad bild), en mindre och en större.
+        /// </summary>
+        /// <param name="filePath">Fullständig sökväg till bild som är underlag till tumnagelbilder.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Komprimering till tumnagelbild måste vara mellan 0 och 100.</exception>
+        public static void CreateThumnailFiles(string filePath)
+        {
+            string _newFile = ConfigShared.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(filePath) + "_thumnail";
 
 
             if (ConfigShared.ImageQuality < 0 || ConfigShared.ImageQuality > 100)
@@ -44,7 +58,7 @@ namespace Plan.Shared.Thumnails
 
             try
             {
-                using (FileStream fs = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read))
+                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
 
                     // Komprimering
