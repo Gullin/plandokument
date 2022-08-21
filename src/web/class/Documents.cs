@@ -260,9 +260,20 @@ namespace Plan.Plandokument
                 foreach (DataRow row in dtFileResult.Rows)
                 {
                     string thumnailsRotDirectory = @ConfigurationManager.AppSettings["thumnailsRotDirectory"].ToString();
-                    DirectoryInfo thumnailDirectory = new DirectoryInfo(
-                        Server.MapPath(thumnailsRotDirectory)
+                    DirectoryInfo thumnailDirectory;
+                    // Avgör om sökvägen är absolut eller relativ (det samma som virtuell i denna applikation)
+                    if (Path.IsPathRooted(thumnailsRotDirectory))
+                    {
+                        thumnailDirectory = new DirectoryInfo(
+                            thumnailsRotDirectory
+                            );
+                    }
+                    else
+                    {
+                        thumnailDirectory = new DirectoryInfo(
+                            HostingEnvironment.MapPath(@"~/" + thumnailsRotDirectory)
                         );
+                    }
 
                     // För dokumenten plankartor
                     if (row["DOCUMENTTYPE"].ToString() == "Karta")
@@ -299,21 +310,23 @@ namespace Plan.Plandokument
                         if (thumnailS && thumnailL)
                         {
                             row["THUMNAILINDICATION"] = "s,l";
+                            row["THUMNAILPATH"] = @thumnailsRotDirectory.Replace(@"\\", @"\") + "/";
                         }
                         else if (thumnailS)
                         {
                             row["THUMNAILINDICATION"] = "s";
+                            row["THUMNAILPATH"] = @thumnailsRotDirectory.Replace(@"\\", @"\") + "/";
                         }
                         else if (thumnailL)
                         {
                             row["THUMNAILINDICATION"] = "l";
+                            row["THUMNAILPATH"] = @thumnailsRotDirectory.Replace(@"\\", @"\") + "/";
                         }
                         else
                         {
                             row["THUMNAILINDICATION"] = "N/A";
                         }
 
-                        row["THUMNAILPATH"] = thumnailsRotDirectory + "/";
 
                     }
                     else
