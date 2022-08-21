@@ -36,6 +36,22 @@ namespace Plan.Plandokument
         public DataTable SearchedPlansDocuments { get; private set; }
 
 
+        /// <summary>
+        /// Ger all information om alla plandokument kopplad till resp. plan.
+        /// </summary>
+        public Documents()
+        {
+            this.SearchedPlansDocuments = plansDocs(
+                    PlanCache.GetPlanBasisCache().AsEnumerable()
+                    .Select(plan_id => plan_id.Field<string>("NYCKEL")).ToList<object>()
+                );
+        }
+
+
+        /// <summary>
+        /// Ger all information om önskade plandokument kopplade till resp. plan.
+        /// </summary>
+        /// <param name="planIds">Lista med plannycklar.</param>
         public Documents(List<object> planIds)
         {
             this.SearchedPlansDocuments = plansDocs(planIds);
@@ -49,27 +65,9 @@ namespace Plan.Plandokument
         /// <returns>Tabell med funna dokument för egna tidigare beteckning och formell aktbeteckning</returns>
         private DataTable plansDocs(List<object> planIds)
         {
-            // Alla planer från cach
-            DataTable cachedPlans = PlanCache.GetPlanBasisCache();
-
-            // Tabell för filtrerad sökta planinformationen för vidare sökning
-            DataTable dtSearchedPlans = cachedPlans.Clone();
-
-            // Filtrera alla planer från ej sökta
-            IEnumerable<DataRow> drs = from filteringdPlans in cachedPlans.AsEnumerable()
-                                       where planIds.Contains(filteringdPlans.Field<string>("NYCKEL"))
-                                       select filteringdPlans;
-
-            foreach (DataRow dr in drs)
-            {
-                dtSearchedPlans.ImportRow(dr);
-            }
-
-
-            cachedPlans.Dispose();
+            DataTable dtSearchedPlans = FilterPlanBasisCache(planIds);
 
             
-
             // Definierar tabell med filinformation för returnering av metodens resultat
             DataTable dtFileResult = new DataTable();
             DataColumn cl = new DataColumn("PATH", System.Type.GetType("System.String"));
@@ -356,6 +354,29 @@ namespace Plan.Plandokument
 
 
             return dtFileResult;
+        }
+
+        private static DataTable FilterPlanBasisCache(List<object> planIds)
+        {
+            // Alla planer från cache
+            DataTable cachedPlans = PlanCache.GetPlanBasisCache();
+
+            // Tabell för filtrerad sökta planinformationen för vidare sökning
+            DataTable dtSearchedPlans = cachedPlans.Clone();
+
+            // Filtrera alla planer från ej sökta
+            IEnumerable<DataRow> drs = from filteringPlans in cachedPlans.AsEnumerable()
+                                       where planIds.Contains(filteringPlans.Field<string>("NYCKEL"))
+                                       select filteringPlans;
+
+            foreach (DataRow dr in drs)
+            {
+                dtSearchedPlans.ImportRow(dr);
+            }
+
+
+            cachedPlans.Dispose();
+            return dtSearchedPlans;
         }
 
 
