@@ -505,7 +505,8 @@ namespace Plan.Plandokument
                 foreach (DirectoryInfo dirInfo in subDirs)
                 {
                     // Rekursivt sök i alla underkataloger
-                    getFileToDataTable(dirInfo, virtualFilePath + "/" + dirInfo.Name, searchedFile, planId, dokumentAkt, dtFileResult);
+                    getFileToDataTable(dirInfo, EnsureEndingSlash(directoryRoot) + EnsureEndingSlash(dirInfo.Name)
+                        , searchedFile, planId, dokumentAkt, dtFileResult);
                 }
             }
             

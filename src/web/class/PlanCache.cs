@@ -882,7 +882,7 @@ namespace Plan.Plandokument
                                     {
                                         PathSettingsRoot = EnsureEndingPathCarachter(EnsureCleanPath(root + grp.Key.Replace(searchedDirectory.FullName, ""))),
                                         Documents = grp.ToList()
-                        }
+                                    }
                                     )
                                 );
                         }
@@ -902,13 +902,13 @@ namespace Plan.Plandokument
                                 {
                                     PathSettingsRoot = EnsureEndingPathCarachter(EnsureCleanPath(root + grp.Key.Replace(searchedDirectory.FullName, ""))),
                                     Documents = grp.ToList()
-                    }
+                                }
                                 )
                             );
 
-                }
+                    }
 
-            }
+                }
 
             }
 
@@ -970,6 +970,52 @@ namespace Plan.Plandokument
                                            cachTime.Minute,
                                            cachTime.Second);
             return cacheExpiration;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dirtyPath"></param>
+        /// <returns></returns>
+        private static string EnsureCleanPath(string dirtyPath)
+        {
+            string[] pathPart = dirtyPath.Split(new char[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (Path.IsPathRooted(dirtyPath))
+            {
+                return String.Join("\\", pathPart);
+            }
+            else
+            {
+                return String.Join("/", pathPart);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private static string EnsureEndingPathCarachter(string path)
+        {
+            const string slash = "/";
+            const string backslash = "\\";
+
+            if (!path.EndsWith(slash) && !path.EndsWith(backslash))
+            {
+                if (Path.IsPathRooted(path))
+                {
+                    return path += backslash;
+                }
+                else
+                {
+                    return path += slash;
+                }
+            }
+            else
+            {
+                return path;
+            }
         }
 
         /// <summary>
