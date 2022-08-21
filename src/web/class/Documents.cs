@@ -130,7 +130,8 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                findFileInCache(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                //findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -170,7 +171,8 @@ namespace Plan.Plandokument
                     // Om sökt begrepp inte är tomt
                     if (!string.IsNullOrWhiteSpace(documentAkt))
                     {
-                        findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                        findFileInCache(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                        //findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                     }
                 }
             }
@@ -207,7 +209,8 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                findFileInCache(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                //findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -224,7 +227,8 @@ namespace Plan.Plandokument
                             // Om sökt begrepp inte är tomt
                             if (!string.IsNullOrWhiteSpace(documentAkt))
                             {
-                                findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                findFileInCache(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                                //findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                             }
                         }
                     }
@@ -245,7 +249,8 @@ namespace Plan.Plandokument
                     // Om sökt begrepp inte är tomt
                     if (!string.IsNullOrWhiteSpace(documentAkt))
                     {
-                        findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                        findFileInCache(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
+                        //findFile(searchedFile, dr["nyckel"].ToString(), documentPrefix + documentAkt, dtFileResult);
                     }
                 }
             }
