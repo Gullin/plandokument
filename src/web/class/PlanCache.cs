@@ -32,6 +32,11 @@ namespace Plan.Plandokument
         public string Type { get; set; }
     }
 
+    public class CachedDocuments
+    {
+        public string PathSettingsRoot { get; set; }
+        public List<FileInfo> Documents { get; set; }
+    }
 
     public class PlanCache : System.Web.Services.WebService
     {
@@ -161,9 +166,9 @@ namespace Plan.Plandokument
         /// Returnerar plans plandokument från cache. Existerar cachen ej skapas den.
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<FileInfo> GetPlanDocumentsCache()
+        public static IEnumerable<CachedDocuments> GetPlanDocumentsCache()
         {
-            IEnumerable<FileInfo> cachedPlanDocuments = (IEnumerable<FileInfo>)HttpRuntime.Cache["C_PlanDocuments"];
+            IEnumerable<CachedDocuments> cachedPlanDocuments = (IEnumerable<CachedDocuments>)HttpRuntime.Cache["C_PlanDocuments"];
 
             if (cachedPlanDocuments != null)
             {
@@ -172,7 +177,7 @@ namespace Plan.Plandokument
             else
             {
                 setPlanDocumentsCache();
-                return (IEnumerable<FileInfo>)HttpRuntime.Cache["C_PlanDocuments"];
+                return (IEnumerable<CachedDocuments>)HttpRuntime.Cache["C_PlanDocuments"];
             }
         }
 
@@ -853,6 +858,8 @@ namespace Plan.Plandokument
             string appSetSubDirCrawl = ConfigurationManager.AppSettings["subDirectoryCrawl"].ToString();
 
             List<FileInfo> filesInRootDirectoriesTemp = new List<FileInfo>();
+            CachedDocuments documents;
+            List<CachedDocuments> allDocuments = new List<CachedDocuments>();
             foreach (string root in directoryRoots)
             {
                 //DirectoryInfo searchedDirectory = new DirectoryInfo(Server.MapPath("~") + "\\" + root);
@@ -860,25 +867,52 @@ namespace Plan.Plandokument
 
                 foreach (string ext in searchedFileExtentions)
                 {
+                    documents = new CachedDocuments();
+                    documents.Documents = new List<FileInfo>();
+
                     if (Boolean.TryParse(appSetSubDirCrawl, out bool searchSubDirectory))
                     {
                         if (searchSubDirectory)
                         {
-                            filesInRootDirectoriesTemp.AddRange(searchedDirectory.EnumerateFiles("*" + ext, SearchOption.AllDirectories));
+                            allDocuments.AddRange(
+                                searchedDirectory.EnumerateFiles("*" + ext, SearchOption.AllDirectories)
+                                .GroupBy(f => f.DirectoryName)
+                                .Select(
+                                    grp => new CachedDocuments()
+                                    {
+                                        PathSettingsRoot = EnsureEndingPathCarachter(EnsureCleanPath(root + grp.Key.Replace(searchedDirectory.FullName, ""))),
+                                        Documents = grp.ToList()
+                        }
+                                    )
+                                );
                         }
                         else
                         {
-                            filesInRootDirectoriesTemp.AddRange(searchedDirectory.EnumerateFiles("*" + ext));
+                            documents.PathSettingsRoot = root;
+                            documents.Documents.AddRange(searchedDirectory.EnumerateFiles("*" + ext));
                         }
                     }
                     else
                     {
-                        filesInRootDirectoriesTemp.AddRange(searchedDirectory.EnumerateFiles("*" + ext, SearchOption.AllDirectories));
+                        allDocuments.AddRange(
+                            searchedDirectory.EnumerateFiles("*" + ext, SearchOption.AllDirectories)
+                            .GroupBy(f => f.DirectoryName)
+                            .Select(
+                                grp => new CachedDocuments()
+                                {
+                                    PathSettingsRoot = EnsureEndingPathCarachter(EnsureCleanPath(root + grp.Key.Replace(searchedDirectory.FullName, ""))),
+                                    Documents = grp.ToList()
                     }
+                                )
+                            );
+
                 }
+
             }
 
-            IEnumerable<FileInfo> filesInRootDirectories = filesInRootDirectoriesTemp;
+            }
+
+            IEnumerable<CachedDocuments> filesInRootDirectories = allDocuments;
 
             DateTime cacheExpiration = setCacheExpiration();
 
@@ -889,7 +923,6 @@ namespace Plan.Plandokument
             Cache cache = HttpRuntime.Cache;
             cache.Insert("C_PlanDocuments", filesInRootDirectories, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
         }
-
 
 
         /// <summary>

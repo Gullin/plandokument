@@ -351,20 +351,19 @@ namespace Plan.Plandokument
         private void findFile(string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
         {
             string[] directoryRoots = ConfigurationManager.AppSettings["filesRotDirectory"].ToString().Split(',');
-
-            foreach (string root in directoryRoots)
+            foreach (string directoryRoot in directoryRoots)
             {
                 DirectoryInfo searchedDirectory;
-                if (Path.IsPathRooted(root))
+                if (Path.IsPathRooted(directoryRoot))
                 {
-                    searchedDirectory = new DirectoryInfo(Server.MapPath(@root));
+                    searchedDirectory = new DirectoryInfo(Server.MapPath(@directoryRoot));
                 }
                 else
                 {
-                    searchedDirectory = new DirectoryInfo(Utility.appPath + @root);
+                    searchedDirectory = new DirectoryInfo(Utility.appPath + @directoryRoot);
                 }
-                //DirectoryInfo searchedDirectory = new DirectoryInfo(root); 
-                getFileToDataTable(searchedDirectory, root, searchedFile, planId, dokumentAkt, dtFileResult);
+
+                getFileToDataTable(searchedDirectory, directoryRoot, searchedFile, planId, dokumentAkt, dtFileResult);
             }
         }
 
@@ -379,9 +378,23 @@ namespace Plan.Plandokument
         private void findFileInCache(string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
         {
             Regex regEx = SearchFilter(searchedFile);
-            IEnumerable<FileInfo> files = PlanCache.GetPlanDocumentsCache();
-            List<FileInfo> searchFileResult = files.Where(f => regEx.IsMatch(f.Name)).ToList();
-            CreateFileResult("test", planId, dokumentAkt, searchFileResult, dtFileResult);
+            IEnumerable<CachedDocuments> files = PlanCache.GetPlanDocumentsCache();
+            List<CachedDocuments> searchDocumentsResult = new List<CachedDocuments>();
+            CachedDocuments searchDocuments;
+            foreach (CachedDocuments file in files)
+            {
+                List<FileInfo> searchFileResult = file.Documents.Where(f => regEx.IsMatch(f.Name)).ToList();
+                if (searchFileResult.Count > 0)
+                {
+                    searchDocuments = new CachedDocuments();
+                    searchDocuments.Documents = searchFileResult;
+                    searchDocuments.PathSettingsRoot = file.PathSettingsRoot;
+                    searchDocumentsResult.Add(searchDocuments);
+                }
+            }
+            //TODO: Ta hänsyn till om katalogsökväg i Settings.config är relativ (virtuell) eller absolut (fysisk).
+            //Från FileInfo ges fysisk/absolut adress
+            CreateFileResult(planId, dokumentAkt, searchDocumentsResult, dtFileResult);
 
         }
 
@@ -390,14 +403,15 @@ namespace Plan.Plandokument
         /// Rekursiv sökning efter plandokumentsfil direkt från disk
         /// </summary>
         /// <param name="searchedDirectory">Rotkatalog av ramverket löst</param>
-        /// <param name="virtualFilePath">Katalog/sökväg som sökta filer kan existera i</param>
         /// <param name="searchedFile">Sökt filnamn (utan filändelse, inkl. ev. suffix)</param>
         /// <param name="planId">Plannyckel som referens till sökt plan</param>
         /// <param name="dokumentAkt">Akt filnamnsbaserat (exkl. ev. suffix)</param>
         /// <param name="dtFileResult">Resultattabell att fylla på med hittade filer</param>
         private void getFileToDataTable(DirectoryInfo searchedDirectory, string virtualFilePath, string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
         {
-            List<FileInfo> files = null;
+            CachedDocuments documents = new CachedDocuments();
+            documents.PathSettingsRoot = directoryRoot;
+            documents.Documents = new List<FileInfo>();
             DirectoryInfo[] subDirs = null;
 
 
@@ -409,8 +423,7 @@ namespace Plan.Plandokument
                 string[] searchedFileExtentions = ConfigurationManager.AppSettings["fileExtentions"].ToString().Split(',');
                 if (searchedFileExtentions == null || string.IsNullOrWhiteSpace(searchedFileExtentions[0]))
                 {
-                    files = searchedDirectory.EnumerateFiles(searchedFile + ".*").ToList();
-                    files.AddRange(searchedDirectory.EnumerateFiles(searchedFile + ",*.*").ToList());
+                    documents.Documents.AddRange(searchedDirectory.EnumerateFiles(searchedFile + ",*.*").ToList());
                 }
                 else
                 {
@@ -418,18 +431,10 @@ namespace Plan.Plandokument
                     {
                         List<FileInfo> filesFoundExact = searchedDirectory.EnumerateFiles(searchedFile + ext).ToList();
 
-                        if (files != null)
-                        {
-                            files.AddRange(filesFoundExact);
-                        }
-                        else
-                        {
-                            files = (from f in filesFoundExact
-                                     select f).ToList();
-                        }
+                        documents.Documents.AddRange(filesFoundExact);
 
                         List<FileInfo> filesFoundPart = searchedDirectory.EnumerateFiles(searchedFile + ",*" + ext).ToList();
-                        files.AddRange(filesFoundPart);
+                        documents.Documents.AddRange(filesFoundPart);
                     }
                 }
             }
@@ -455,11 +460,11 @@ namespace Plan.Plandokument
 
 
             // Om hittade filer
-            if (files != null && files.Count > 0)
+            if (documents.Documents.Count > 0)
             {
-                virtualFilePath = EnsureEndingSlash(virtualFilePath);
+                directoryRoot = EnsureEndingSlash(directoryRoot);
 
-                CreateFileResult(virtualFilePath, planId, dokumentAkt, files, dtFileResult);
+                CreateFileResult(planId, dokumentAkt, documents, dtFileResult);
 
             }
 
@@ -526,18 +531,18 @@ namespace Plan.Plandokument
 
 
         /// <summary>
-        /// Fyller global datatabell med sökresultat 
+        /// Fyller global datatabell med sökresultat. Kontrollerar typ av dokument etc.
         /// </summary>
         /// <param name="virtualFilePath">Katalog/sökväg som sökta filer kan existera i</param>
         /// <param name="planId">Plannyckel som referens till sökt plan</param>
         /// <param name="dokumentAkt">Akt filnamnsbaserat (exkl. ev. suffix)</param>
-        /// <param name="files">Lista med funna plandokument</param>
+        /// <param name="files">Funna plandokument för specifik sökväg</param>
         /// <param name="dtFileResult">Global datatabell med sökresultat</param>
-        private void CreateFileResult(string virtualFilePath, string planId, string dokumentAkt, List<FileInfo> files, DataTable dtFileResult)
+        private void CreateFileResult(string planId, string dokumentAkt, CachedDocuments files, DataTable dtFileResult)
         {
             DataRow drFile;
             // För varje hittad fil lagra information i publik datatabell
-            foreach (FileInfo fi in files)
+            foreach (FileInfo fi in files.Documents)
             {
                 // Hantera suffix i filnamn
                 string[] fileNameParts = fi.Name.Replace(dokumentAkt, "").Split('_');
@@ -649,7 +654,7 @@ namespace Plan.Plandokument
                 drFile = dtFileResult.NewRow();
                 // Fysisk fil-sökväg, fungerar ej för hyperlänk. Dokument behöver finnas som relativ sökväg till webbapplikationen.
                 //drFile["PATH"] = searchedDirectory.FullName;
-                drFile["PATH"] = virtualFilePath;
+                drFile["PATH"] = files.PathSettingsRoot;
                 drFile["NAME"] = fi.Name;
                 drFile["EXTENTION"] = fi.Extension;
                 // Filstorlek i Byte
@@ -660,6 +665,22 @@ namespace Plan.Plandokument
                 drFile["DOCUMENTPART"] = findtypePart;
                 dtFileResult.Rows.Add(drFile);
             }
+        }
+
+        /// <summary>
+        /// Fyller global datatabell med sökresultat 
+        /// </summary>
+        /// <param name="planId">Plannyckel som referens till sökt plan</param>
+        /// <param name="dokumentAkt">Akt filnamnsbaserat (exkl. ev. suffix)</param>
+        /// <param name="files">Lista med funna plandokument</param>
+        /// <param name="dtFileResult">Global datatabell med sökresultat</param>
+        private void CreateFileResult(string planId, string dokumentAkt, List<CachedDocuments> files, DataTable dtFileResult)
+        {
+            foreach (var rootPath in files)
+            {
+                CreateFileResult(planId, dokumentAkt, rootPath, dtFileResult);
+            }
+
         }
 
 
