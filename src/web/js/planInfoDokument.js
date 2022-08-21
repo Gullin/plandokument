@@ -916,7 +916,6 @@ function putPlansDocs($headerPlan, plansDocs) {
             // [8].THUMNAILPATH
             // [9].THUMNAILINDICATION
             if (plansDocs) {
-                console.log(plansDocs);
 
                 //#region För varje dokument, räknar dokumentdelar för resp. dokumenttyp samt signalerar om dokumenttypen ska renderas som grupp
                 $.each(eval(plansDocs), function (key, valueDoc) {

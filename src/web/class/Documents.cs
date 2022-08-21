@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Caching;
+using System.Web.Hosting;
 using System.Web.Services;
 
 namespace Plan.Plandokument
@@ -29,7 +30,7 @@ namespace Plan.Plandokument
     /// Klassen är behållare för dokument från filserver som är hittade efter sökta planer
     /// </summary>
     public class Documents : System.Web.Services.WebService
-	{
+    {
         /// <summary>
         /// Egenskap 
         /// </summary>
@@ -67,7 +68,7 @@ namespace Plan.Plandokument
         {
             DataTable dtSearchedPlans = FilterPlanBasisCache(planIds);
 
-            
+
             // Definierar tabell med filinformation för returnering av metodens resultat
             DataTable dtFileResult = new DataTable();
             DataColumn cl = new DataColumn("PATH", System.Type.GetType("System.String"));
@@ -140,7 +141,8 @@ namespace Plan.Plandokument
                     // alla komibinationer av alla dokumentsuffix/dokumenttyp
                     foreach (var item in listDocumenttyper)
                     {
-                        if (!string.IsNullOrEmpty(item.Type)) {
+                        if (!string.IsNullOrEmpty(item.Type))
+                        {
                             string suffix = String.IsNullOrEmpty(item.Suffix) ? item.Suffix : "_" + item.Suffix;
                             string searchedFile = documentPrefix + documentAkt + suffix;
 
@@ -275,7 +277,7 @@ namespace Plan.Plandokument
                     {
                         thumnailDirectory = new DirectoryInfo(
                             HostingEnvironment.MapPath(@"~/" + thumnailsRotDirectory)
-                        );
+                            );
                     }
 
                     // För dokumenten plankartor
@@ -339,7 +341,7 @@ namespace Plan.Plandokument
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Klassens namn för loggning
                 string className = this.GetType().Name;
@@ -446,7 +448,7 @@ namespace Plan.Plandokument
         /// <param name="planId">Plannyckel som referens till sökt plan</param>
         /// <param name="dokumentAkt">Akt filnamnsbaserat (exkl. ev. suffix)</param>
         /// <param name="dtFileResult">Resultattabell att fylla på med hittade filer</param>
-        private void getFileToDataTable(DirectoryInfo searchedDirectory, string virtualFilePath, string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
+        private void getFileToDataTable(DirectoryInfo searchedDirectory, string directoryRoot, string searchedFile, string planId, string dokumentAkt, DataTable dtFileResult)
         {
             CachedDocuments documents = new CachedDocuments();
             documents.PathSettingsRoot = directoryRoot;
@@ -530,7 +532,7 @@ namespace Plan.Plandokument
                         , searchedFile, planId, dokumentAkt, dtFileResult);
                 }
             }
-            
+
 
 
         }
@@ -573,7 +575,6 @@ namespace Plan.Plandokument
         /// <summary>
         /// Fyller global datatabell med sökresultat. Kontrollerar typ av dokument etc.
         /// </summary>
-        /// <param name="virtualFilePath">Katalog/sökväg som sökta filer kan existera i</param>
         /// <param name="planId">Plannyckel som referens till sökt plan</param>
         /// <param name="dokumentAkt">Akt filnamnsbaserat (exkl. ev. suffix)</param>
         /// <param name="files">Funna plandokument för specifik sökväg</param>
