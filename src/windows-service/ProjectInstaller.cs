@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
 using System.Threading.Tasks;
+using Plan.Shared.Thumnails;
 
 namespace Plan.WindowsService
 {
@@ -27,9 +28,9 @@ namespace Plan.WindowsService
             _serviceInstaller = new ServiceInstaller
             {
                 StartType = ServiceStartMode.Automatic,
-                ServiceName = Utility.GetServiceParamConfig("serviceName"),
-                DisplayName = Utility.GetServiceParamConfig("serviceDisplayName"),
-                Description = Utility.GetServiceParamConfig("serviceDescription")
+                ServiceName = Utility.GetServiceAppSettings("serviceName"),
+                DisplayName = Utility.GetServiceAppSettings("serviceDisplayName"),
+                Description = Utility.GetServiceAppSettings("serviceDescription")
             };
 
             Installers.Add(_serviceProcessInstaller);
