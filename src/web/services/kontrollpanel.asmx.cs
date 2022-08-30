@@ -9,19 +9,10 @@ using System.Configuration;
 using System.Collections.Specialized;
 using System.IO;
 using System.Text;
+using Plan.Shared.Thumnails;
 
 namespace Plan.Plandokument
 {
-
-    class ServiceConfig
-    {
-        public static string ServiceName { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceName"];
-        public static string ServiceDisplayName { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceDisplayName"];
-        public static string ServiceDescription { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceDescription"];
-        public static string WatchedFolder { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["WatchedFolder"];
-        public static string ThumnailsFolder { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ThumnailsFolder"];
-    }
-
 
     /// <summary>
     /// Tjänster anpassade för applikationens behov i kontrollpanelen
@@ -409,7 +400,7 @@ namespace Plan.Plandokument
 
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
-            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.ServiceExists(ServiceConfig.ServiceName));
+            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.ServiceExists(ConfigShared.ServiceName));
 
         }
 
@@ -420,7 +411,7 @@ namespace Plan.Plandokument
 
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
-            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.StartService(ServiceConfig.ServiceName));
+            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.StartService(ConfigShared.ServiceName));
 
         }
 
@@ -431,7 +422,7 @@ namespace Plan.Plandokument
 
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
-            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.StopService(ServiceConfig.ServiceName));
+            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.StopService(ConfigShared.ServiceName));
 
         }
 
@@ -442,7 +433,7 @@ namespace Plan.Plandokument
 
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
-            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.ServiceIsRunning(ServiceConfig.ServiceName));
+            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.ServiceIsRunning(ConfigShared.ServiceName));
 
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
 using System.Web;
+using Plan.Shared.Thumnails;
 
 namespace Plan.Plandokument
 {
@@ -22,11 +23,11 @@ namespace Plan.Plandokument
         {
             ServiceMeta serviceMeta = new ServiceMeta
             {
-                ServiceName = ServiceConfig.ServiceName,
-                ServiceDisplayName = ServiceConfig.ServiceDisplayName,
-                ServiceDescription = ServiceConfig.ServiceDescription,
-                WatchedFolder = ServiceConfig.WatchedFolder,
-                ThumnailsFolder = ServiceConfig.ThumnailsFolder
+                ServiceName = ConfigShared.ServiceName,
+                ServiceDisplayName = ConfigShared.ServiceDisplayName,
+                ServiceDescription = ConfigShared.ServiceDescription,
+                WatchedFolder = ConfigShared.WatchedFolder,
+                ThumnailsFolder = ConfigShared.ThumnailsFolder
             };
 
             return serviceMeta;

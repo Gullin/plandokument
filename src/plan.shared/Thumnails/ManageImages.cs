@@ -17,11 +17,19 @@ namespace Plan.Shared.Thumnails
     /// </summary>
     public class ConfigShared
     {
-        public static string WatchedFolder { get; } = @ConfigurationManager.AppSettings["WatchedFolder"].ToString();
+        public static string ServiceName { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceName"];
+        public static string ServiceDisplayName { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceDisplayName"];
+        public static string ServiceDescription { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ServiceDescription"];
+        //public static string WatchedFolder { get; } = @ConfigurationManager.AppSettings["WatchedFolder"].ToString();
+        // Alternativa sätt att erhålla XML-sektioner som inställningar
+        //https://www.google.com/search?q=asp.net+4.8+add+section+external+setting+file&rlz=1C1GCEU_svSE918SE918&ei=CasGY6-RDI-crgSch5-gBQ&oq=asp.net+4.8+add+section+&gs_lcp=Cgdnd3Mtd2l6EAMYADIFCCEQoAEyBQghEKABMgUIIRCgATIFCCEQoAE6BwgAEEcQsAM6CAghEB4QFhAdOgQIIRAVOgcIIRCgARAKSgQIQRgASgQIRhgAULhAWIpMYL5saAFwAXgAgAH1AYgBhgeSAQU1LjIuMZgBAKABAcgBCMABAQ&sclient=gws-wiz
+        //https://www.c-sharpcorner.com/article/four-ways-to-read-configuration-setting-in-c-sharp/
+        public static string WatchedFolder { get; } = (@ConfigurationManager.GetSection("ThumnailsService") as NameValueCollection)["WatchedFolder"].ToString();
+
+        //public static string ThumnailsFolder { get; } = @ConfigurationManager.AppSettings["ThumnailsFolder"].ToString();
+        public static string ThumnailsFolder { get; } = (@ConfigurationManager.GetSection("ThumnailsService") as NameValueCollection)["ThumnailsFolder"].ToString();
 
         public static string WatchFilter { get; } = "*.tif";
-
-        public static string ThumnailsFolder { get; } = @ConfigurationManager.AppSettings["ThumnailsFolder"].ToString();
 
         public static string ThumnailsExtension { get; } = "jpg";
 
