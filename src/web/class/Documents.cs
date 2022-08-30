@@ -281,7 +281,7 @@ namespace Plan.Plandokument
                     }
 
                     // För dokumenten plankartor
-                    if (row["DOCUMENTTYPE"].ToString() == "Karta")
+                    if (row["DOCUMENTTYPE"].ToString() == "Karta" && row["EXTENTION"].ToString().ToLower() == ".tif")
                     {
                         // Söker thumnails och spara temporärt filinformationen i en lista
                         string fileFilter = Path.GetFileNameWithoutExtension(
