@@ -139,6 +139,7 @@
   <ItemGroup>
     <Content Include="js\kontrollpanel-cache.js" />
     <Content Include="js\kontrollpanel-service.js" />
+    <Content Include="js\kontrollpanel-thumnails.js" />
     <Content Include="js\kontrollpanel.js" />
     <Content Include="lib\octicons-9.1.1\check.svg" />
     <Content Include="lib\octicons-9.1.1\circle-slash.svg" />
@@ -346,6 +347,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="class\utility\UtilityDatabaseSqlTemplates.cs" />
+    <Compile Include="class\utility\UtilityDataTable.cs" />
+    <Compile Include="class\utility\UtilityJSON.cs" />
     <Compile Include="not-authenticated.aspx.cs">
       <DependentUpon>not-authenticated.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -355,6 +358,7 @@
     </Compile>
     <Compile Include="services\kontrollpanel.asmx.cs">
       <DependentUpon>kontrollpanel.asmx</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="checkFileaccess.aspx.cs">
       <DependentUpon>checkFileaccess.aspx</DependentUpon>

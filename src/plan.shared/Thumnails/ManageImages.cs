@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Plan.Shared.Thumnails
@@ -111,6 +113,50 @@ namespace Plan.Shared.Thumnails
             {
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Raderar rasterplankartans båda tillhörande tumnagelbilder.
+        /// </summary>
+        /// <param name="e">Resultat från en event när fil ändras.</param>
+        public static void DeleteThumnailFiles(FileSystemEventArgs e)
+        {
+            DeleteThumnailFiles(e.Name);
+        }
+
+        /// <summary>
+        /// Raderar rasterplankartans båda tillhörande tumnagelbilder.
+        /// </summary>
+        /// <param name="filePath">Fullständig sökväg till bild som är underlag till tumnagelbilder.</param>
+        public static void DeleteThumnailFiles(string filePath)
+        {
+            string _folderThumnails = ConfigShared.ThumnailsFolder;
+            string _filesToDelete = Path.GetFileNameWithoutExtension(filePath) + "_thumnail*." + ConfigShared.ThumnailsExtension;
+
+
+            bool someExists = Directory.EnumerateFiles(_folderThumnails, _filesToDelete).Any();
+
+            if (someExists)
+            {
+                try
+                {
+                    Regex _filesToDeletePattern = new Regex(_filesToDelete);
+
+                    Directory.EnumerateFiles(_folderThumnails)
+                        .Where(file => _filesToDeletePattern.Match(file).Success).AsParallel()
+                        .ForAll(File.Delete);
+
+                    //if (File.Exists(_fileToDelete))
+                    //{
+                    //    File.Delete(_fileToDelete);
+                    //}
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
         }
 
 

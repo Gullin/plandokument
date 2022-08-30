@@ -453,9 +453,75 @@ namespace Plan.Plandokument
 
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
-            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.RebootService(ServiceConfig.ServiceName));
+            return jsonSerializer.Serialize(UtilityServicePlandokumentThumnails.RebootService(ConfigShared.ServiceName));
 
         }
+        #endregion
+
+
+
+        #region Thumnail
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string getPlansDocsAll()
+        {
+            Documents planDocs = new Documents();
+
+            return JSONHelpers.getObjectAsJson(DataTableHelpers.getTableSorted(planDocs.SearchedPlansDocuments, "DOCUMENTTYPE", "ASC", "EXTENTION", "ASC"));
+        }
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string CreateThumnails(List<object> planImages)
+        {
+            bool successful = false;
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+            try
+            {
+                foreach (string planImage in planImages)
+                {
+                    ManageImages.CreateThumnailFiles(
+                        Utility.appPath + planImage
+                        );
+                }
+
+                successful = true;
+            
+                return jsonSerializer.Serialize(successful);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string DeleteThumnails(List<object> planImages)
+        {
+            bool successful = false;
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+            try
+            {
+                foreach (string planImage in planImages)
+                {
+                    ManageImages.DeleteThumnailFiles(
+                        Utility.appPath + planImage
+                        );
+                }
+
+                successful = true;
+
+                return jsonSerializer.Serialize(successful);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
         #endregion
 
 

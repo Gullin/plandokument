@@ -12,13 +12,19 @@
     <link href="css/page-UI-core.css" rel="stylesheet" />
     <link href="css/page-UI-kontrollpanel.css" rel="stylesheet" />
     <style type="text/css">
-        .right{
+        h3 {
+
+        }
+        .right {
             text-align: right;
         }
         table {
-            border-spacing: 0.5em 0px;
+            border-spacing: 0px;
             border-collapse: separate;
             /*border: 1px solid red;*/
+        }
+        thead {
+            font-weight: bold;
         }
         td {
             /*border: 1px solid red;*/
@@ -29,14 +35,23 @@
             align-content: center;
             -webkit-align-content: center;
             margin: 0px auto;
+            text-align: center; 
+            vertical-align: middle;
         }
         .clear {
             content: url('../lib/octicons-9.1.1/check.svg');
+            color: green;
             fill: green;
+            filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+            transform: scale(1.5);
         }
         .no {
             content: url('../lib/octicons-9.1.1/circle-slash.svg');
             color: red;
+            fill: red;
+            /*filter: grayscale(100%) sepia(100%) saturate(600%) hue-rotate(-50deg) brightness(40%) contrast(0.8);*/
+            filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+            transform: scale(1.5);
         }
         .error {
             color: red;
@@ -119,6 +134,7 @@
     <script src="<%= ResolveUrl("~/") %>js/kontrollpanel.js" type="text/javascript"></script>
     <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-cache.js" type="text/javascript"></script>
     <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-service.js" type="text/javascript"></script>
+    <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-thumnails.js" type="text/javascript"></script>
     <script type="text/javascript">
 
 
@@ -151,21 +167,22 @@
             </ul>
 
             <div class="tab-content" id="menu-content">
+                <%--Översikt--%>
                 <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
                     Kommer senare
                 </div>
 
 
-
+                <%--Logg--%>
                 <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="tab-logs">
                     Kommer senare
                 </div>
 
 
-
+                <%--Cache--%>
                 <div class="tab-pane fade" id="cache" role="tabpanel" aria-labelledby="tab-cache">
                     <p>
-                        Systemet cachar fyra informationsdelar för snabbare svarstider.
+                        Systemet har fem informationsdelar i cache för snabbare svarstider.
                         </p>
                     <hr />
                     <h3>
@@ -272,19 +289,21 @@
                 </div>
 
 
-
+                <%--Kontroll / Validera--%>
                 <div class="tab-pane fade" id="validate" role="tabpanel" aria-labelledby="tab-validate">
                     Kommer senare
                 </div>
 
 
+                <%--ThumNails--%>
                 <div class="tab-pane fade" id="thumnails" role="tabpanel" aria-labelledby="tab-thumnails">
 
-                    <div id="ThumnailsContent" style="display: none;">
+                    <div id="ThumnailsServiceContent" style="display: none;">
                         <p>
                             Respektive plans plankarta lagras som pdf-fil och georefererad tiff-fil. Tiff-filen konverteras till två generella bilder, en större och en mindre,
                         som översikter.
-                        Konverteringen till mindre bilder sker med automatik av en Windows-tjänst.
+                            Konverteringen till mindre bilder sker med automatik av en Windows-tjänst.
+                            Uppgifter om och enklare administrering av denna Windows-tjänst kan hittas nedan.
                         </p>
 
                         <hr />
@@ -296,13 +315,13 @@
                         </div>
 
                         <hr />
+
                         <h3>
                             Status
                         </h3>
                         <p>
                             Kör: <span id="status">N/A</span>
                         </p>
-                        <hr />
 
                         <button id="btnServiceRestart" class="btn btn-primary btn-sm" type="button" onclick="ServiceRestart(this)">
                             <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
@@ -325,10 +344,14 @@
                         </p>
                     </div>
 
+                    <div id="ThumnailsContent" style="display: none;">
+
+                    </div>
+
                 </div>
 
 
-
+                <%--System--%>
                 <div class="tab-pane fade" id="system" role="tabpanel" aria-labelledby="tab-system">
                     Kommer senare
                 </div>
@@ -338,7 +361,7 @@
 
 
 
-            <button type="button" style="position: absolute; bottom: 5px;" class="btn btn-outline-primary" onclick="modal();">Open spinner, close in 3 secs</button>
+<%--            <button type="button" style="position: absolute; bottom: 5px;" class="btn btn-outline-primary" onclick="modal();">Open spinner, close in 3 secs</button>
 
             <div class="modal" data-backdrop="static" data-keyboard="false" tabindex="-1">
                 <div class="modal-dialog modal-spinner-width modal-dialog-centered" style="text-align: center;">
@@ -348,7 +371,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>--%>
 
 
 
