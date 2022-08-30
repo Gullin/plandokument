@@ -18,9 +18,9 @@ $(document).ready(
                 var cacheMeta = JSON.parse(msg.d);
 
                 var text = [];
-                text[0] = "Antal applikations-cachar: " + cacheMeta.NumberOfApplicationCaches;
-                text[1] = "Totalt antal cachar: " + cacheMeta.NumberOfTotalCaches;
-                text[2] = "Tillgängligt minne för cachar: " + bytesToSize(cacheMeta.AvailableBytes);
+                text[0] = "Antal applikations cache: " + cacheMeta.NumberOfApplicationCaches;
+                text[1] = "Totalt antal cache: " + cacheMeta.NumberOfTotalCaches;
+                text[2] = "Tillgängligt minne för cache: " + bytesToSize(cacheMeta.AvailableBytes);
                 text[3] = "Outnyttjat minne för webbapplikation: " + cacheMeta.AvailablePhysicalMemory + " %";
 
                 text.forEach(function (element, index) {

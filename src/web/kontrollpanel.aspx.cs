@@ -15,6 +15,7 @@ namespace Plan.Plandokument
         {
             string _user = Plandokument.User.GetLogin(System.Web.HttpContext.Current.User.Identity.Name);
 
+            //TODO: AUTHENICATED ADMIN, kontrollera mot PostGIS-grupp (behöver användare vara med i Settings.config, PostgreSQl-användare och med i GIS-ADMIN-gruppen
             if (!(HttpContext.Current.User.Identity.IsAuthenticated && Plandokument.User.Admins.Contains(_user)))
             {
                 Response.Redirect("~/not-authenticated.aspx", true);
@@ -54,11 +55,11 @@ namespace Plan.Plandokument
                 {
                     if (_result < 1 || _result > 1)
                     {
-                        NyCacheEfterAntalDagar.Text = $"Efter antal dagar: {_result} st. dagar";
+                        NyCacheEfterAntalDagar.Text = $"Efter: {_result} st. dagar";
                     }
                     else
                     {
-                        NyCacheEfterAntalDagar.Text = $"Efter dag: <span class=\"amplify\">{_result} st. dag</span>";
+                        NyCacheEfterAntalDagar.Text = $"Efter: <span class=\"amplify\">{_result} st. dag</span>";
                     }
                 }
                 else

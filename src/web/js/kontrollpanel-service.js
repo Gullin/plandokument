@@ -33,7 +33,7 @@ $(document).ready(
             success: function (msg) {
                 var data = msg.d;
                 if (data) {
-                    $("#ThumnailsContent").show();
+                    $("#ThumnailsServiceContent").show();
                     isRunning();
                     createServiceDiv();
                 }

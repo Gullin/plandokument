@@ -24,7 +24,7 @@ namespace Plan.Plandokument
 
 
     /// <summary>
-    /// Summary description for cache
+    /// Tjänster anpassade för applikationens behov i kontrollpanelen
     /// </summary>
     [WebService(Namespace = "Landskrona.Apps.Plan.Dokument.Ws")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
