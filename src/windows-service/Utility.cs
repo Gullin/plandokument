@@ -11,7 +11,7 @@ namespace Plan.WindowsService
     public static class Utility
     {
 
-        public static string GetServiceParamConfig(string key)
+        public static string GetServiceAppSettings(string key)
         {
             //Debugger.Launch();
 

@@ -12,8 +12,8 @@ namespace Plan.WindowsService
     class LoggEvent
     {
         public static EventLog Logger { get; set; } = new EventLog();
-        public static string LogEventSource { get; set; } = Utility.GetServiceParamConfig("logEventSource");
-        public static string LogName { get; set; } = Utility.GetServiceParamConfig("logName");
+        public static string LogEventSource { get; set; } = Utility.GetServiceAppSettings("logEventSource");
+        public static string LogName { get; set; } = Utility.GetServiceAppSettings("logName");
         public static int LoggEventID { get; set; } = 0;
     }
 

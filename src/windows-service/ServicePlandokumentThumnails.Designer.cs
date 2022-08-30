@@ -33,7 +33,7 @@
             // 
             // ServicePlandokumentThumnails
             // 
-            this.ServiceName = Utility.GetServiceParamConfig("serviceName");
+            this.ServiceName = Utility.GetServiceAppSettings("serviceName");
             ((System.ComponentModel.ISupportInitialize)(this.eventLog)).EndInit();
 
         }
