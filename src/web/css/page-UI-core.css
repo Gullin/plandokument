@@ -55,3 +55,8 @@ a, a:visited, a:hover {
     top: -2px;
     left: 2px;
 }
+
+.hand {
+    cursor: pointer;
+}
+

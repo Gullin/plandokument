@@ -313,10 +313,6 @@ a.dropdown-item {
 
 
 
-.hand {
-    cursor: pointer;
-}
-
 .cursor-disabled {
     cursor: not-allowed;
 }
