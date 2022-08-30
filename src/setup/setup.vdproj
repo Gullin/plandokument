@@ -15,7 +15,7 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0620ACC8E9D74D89A44A76ADDCE08FD9"
+        "MsmKey" = "8:_1F106655935A4CA3887ED8599F8B87B4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -27,7 +27,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CB71662E9C4F4E696E338860E34BFD0F"
+        "MsmKey" = "8:_B8FB5227AE884F3FAE72FE7EAA8B12AC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C664978BDEA9775A887C7D4198C644DC"
+        "OwnerKey" = "8:_65C131AFA82B4298BA2F37C5DC620A36"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E723BA0F0255328CF75649E2011D0D13"
         "OwnerKey" = "8:_65C131AFA82B4298BA2F37C5DC620A36"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -40,7 +52,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CB71662E9C4F4E696E338860E34BFD0F"
+        "OwnerKey" = "8:_E723BA0F0255328CF75649E2011D0D13"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C664978BDEA9775A887C7D4198C644DC"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -70,10 +88,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.8"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    "Name" = "8:Microsoft .NET Framework 4.8 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.8"
                     }
                 }
             }
@@ -158,7 +176,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.6.1"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.8"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=671728"
                 }
@@ -166,9 +184,29 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0620ACC8E9D74D89A44A76ADDCE08FD9"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1F106655935A4CA3887ED8599F8B87B4"
             {
-            "SourcePath" = "8:..\\windows-service\\src\\icons\\LA 6-färg stad transparant-48x48.ico"
+            "SourcePath" = "8:..\\plan.shared\\bin\\Debug\\ThumnailsService.config"
+            "TargetName" = "8:ThumnailsService.config"
+            "Tag" = "8:"
+            "Folder" = "8:_C7C099C564DC4659BAD1FEB9523FAE79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B8FB5227AE884F3FAE72FE7EAA8B12AC"
+            {
+            "SourcePath" = "8:..\\windows-service\\icons\\LA 6-färg stad transparant-48x48.ico"
             "TargetName" = "8:LA 6-färg stad transparant-48x48.ico"
             "Tag" = "8:"
             "Folder" = "8:_C7C099C564DC4659BAD1FEB9523FAE79"
@@ -186,14 +224,45 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CB71662E9C4F4E696E338860E34BFD0F"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C664978BDEA9775A887C7D4198C644DC"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+            "AssemblyAsmDisplayName" = "8:Plan.Shared, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_CB71662E9C4F4E696E338860E34BFD0F"
+                    "_C664978BDEA9775A887C7D4198C644DC"
+                    {
+                    "Name" = "8:Plan.Shared.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Plan.Shared.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C7C099C564DC4659BAD1FEB9523FAE79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E723BA0F0255328CF75649E2011D0D13"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                "ScatterAssemblies"
+                {
+                    "_E723BA0F0255328CF75649E2011D0D13"
                     {
                     "Name" = "8:System.Net.Http.dll"
                     "Attributes" = "3:512"
@@ -274,7 +343,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Plandokument Thumnails Service"
         "ProductCode" = "8:{7286326D-F3DF-4409-BD94-F3DA52AF6C46}"
-        "PackageCode" = "8:{AE8A412E-8FFD-48D0-9266-AEF7744B7768}"
+        "PackageCode" = "8:{94BC7DDB-9A68-4C2F-8AE8-336FCD296BC5}"
         "UpgradeCode" = "8:{8C9AA9FD-51B8-4174-8721-658D958E9D60}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -291,7 +360,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:Skapar tumnagelbilder (Thumnails) av plankartornas tiff-bilder"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:_0620ACC8E9D74D89A44A76ADDCE08FD9"
+        "ARPPRODUCTICON" = "8:_B8FB5227AE884F3FAE72FE7EAA8B12AC"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -795,7 +864,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_65C131AFA82B4298BA2F37C5DC620A36"
             {
-            "SourcePath" = "8:..\\windows-service\\src\\obj\\Debug\\Plan.WindowsService.exe"
+            "SourcePath" = "8:..\\windows-service\\obj\\Debug\\Plan.WindowsService.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C7C099C564DC4659BAD1FEB9523FAE79"
