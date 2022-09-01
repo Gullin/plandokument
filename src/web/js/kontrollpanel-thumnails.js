@@ -2,7 +2,7 @@
 
     $.ajax({
         type: "POST",
-        url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/getPlansDocsAll',
+        url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/GetPlansDocsAll',
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (msg) {
