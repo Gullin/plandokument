@@ -5,7 +5,7 @@
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (msg) {
-            var data = msg.d;
+            var data = (msg.d === 'true');
             if (data) {
                 $("#status").text("Ja");
             }
