@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_25EDEB0B0C41D84C1920D95DCA1E4B3D"
+        "OwnerKey" = "8:_65C131AFA82B4298BA2F37C5DC620A36"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_65C131AFA82B4298BA2F37C5DC620A36"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -29,12 +35,6 @@
         {
         "MsmKey" = "8:_B8FB5227AE884F3FAE72FE7EAA8B12AC"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C664978BDEA9775A887C7D4198C644DC"
-        "OwnerKey" = "8:_65C131AFA82B4298BA2F37C5DC620A36"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -52,13 +52,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E723BA0F0255328CF75649E2011D0D13"
+        "OwnerKey" = "8:_25EDEB0B0C41D84C1920D95DCA1E4B3D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C664978BDEA9775A887C7D4198C644DC"
+        "OwnerKey" = "8:_E723BA0F0255328CF75649E2011D0D13"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -120,10 +120,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.8"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    "Name" = "8:Microsoft .NET Framework 4.8 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.8"
                     }
                 }
             }
@@ -204,34 +204,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B8FB5227AE884F3FAE72FE7EAA8B12AC"
-            {
-            "SourcePath" = "8:..\\windows-service\\icons\\LA 6-färg stad transparant-48x48.ico"
-            "TargetName" = "8:LA 6-färg stad transparant-48x48.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_C7C099C564DC4659BAD1FEB9523FAE79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C664978BDEA9775A887C7D4198C644DC"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_25EDEB0B0C41D84C1920D95DCA1E4B3D"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Plan.Shared, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_C664978BDEA9775A887C7D4198C644DC"
+                    "_25EDEB0B0C41D84C1920D95DCA1E4B3D"
                     {
                     "Name" = "8:Plan.Shared.dll"
                     "Attributes" = "3:512"
@@ -253,6 +233,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B8FB5227AE884F3FAE72FE7EAA8B12AC"
+            {
+            "SourcePath" = "8:..\\windows-service\\icons\\LA 6-färg stad transparant-48x48.ico"
+            "TargetName" = "8:LA 6-färg stad transparant-48x48.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_C7C099C564DC4659BAD1FEB9523FAE79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E723BA0F0255328CF75649E2011D0D13"
@@ -341,25 +341,25 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Plandokument Thumnails Service"
-        "ProductCode" = "8:{7286326D-F3DF-4409-BD94-F3DA52AF6C46}"
-        "PackageCode" = "8:{94BC7DDB-9A68-4C2F-8AE8-336FCD296BC5}"
-        "UpgradeCode" = "8:{8C9AA9FD-51B8-4174-8721-658D958E9D60}"
+        "ProductName" = "8:Plandokument Miniatyrbilder Administrering"
+        "ProductCode" = "8:{358F09B4-A5A6-4544-80F7-6A44597D21FD}"
+        "PackageCode" = "8:{6FB8636B-17B3-4D41-B030-BF3C49F4E0ED}"
+        "UpgradeCode" = "8:{25D5CC53-2275-42C6-90CB-C701D39F9032}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:0.0.2"
+        "ProductVersion" = "8:1.0.0"
         "Manufacturer" = "8:Landskrona stad"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Plandokument Thumnails Service"
+        "Title" = "8:Plandokument Miniatyrbilder Administrering"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Christian Gullin"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:Skapar tumnagelbilder (Thumnails) av plankartornas tiff-bilder"
-        "ARPURLINFOABOUT" = "8:"
+        "ARPCOMMENTS" = "8:Skapar miniatyrbilder (thumbnails/tumnagelbilder) av plankartornas tiff-bilder"
+        "ARPURLINFOABOUT" = "8:https://www.landskrona.se"
         "ARPPRODUCTICON" = "8:_B8FB5227AE884F3FAE72FE7EAA8B12AC"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
@@ -864,7 +864,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_65C131AFA82B4298BA2F37C5DC620A36"
             {
-            "SourcePath" = "8:..\\windows-service\\obj\\Debug\\Plan.WindowsService.exe"
+            "SourcePath" = "8:..\\windows-service\\obj\\Release\\Plan.WindowsService.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C7C099C564DC4659BAD1FEB9523FAE79"
