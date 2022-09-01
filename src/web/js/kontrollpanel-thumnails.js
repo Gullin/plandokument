@@ -96,10 +96,14 @@
                     var status = this.checked;
                     if (status) {
                         $('#table-thumnails tbody input').prop('checked', status);
+                    if (status) {
                         $thisCheckbox.prop('title', 'Avmarkera alla dokument');
+                        $('#table-thumnails tbody input').closest("tr").addClass("tr-selected");
+                        $('#table-thumnails tbody input').prop('checked', status)
                     } else {
                         $('#table-thumnails tbody input').prop('checked', status);
                         $thisCheckbox.prop('title', 'Markera alla dokument');
+                        $('#table-thumnails tbody input').closest("tr").removeClass("tr-selected");
                     }
                 });
                 // Kolumn 2
@@ -195,7 +199,14 @@
                         $tr.children("td[cg-clickable='true']").click(function (event) {
                             if (event.target.type !== 'checkbox') {
                                 //$(':checkbox', this).trigger('click');
-                                $(this).parent("tr").find(':checkbox').trigger('click');
+                                $clickedRow = $(this).parent("tr");
+                                $clickedRow.find(':checkbox').trigger('click');
+                                if ($clickedRow.find(':checkbox').is(":checked")) {
+                                    $clickedRow.addClass("tr-selected");
+                                }
+                                else {
+                                    $clickedRow.removeClass("tr-selected");
+                                }
                             }
                         });
 
