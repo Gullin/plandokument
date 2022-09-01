@@ -35,7 +35,7 @@
                         ReCreateThumnails(this);
                     })
                     .find("span:nth-child(2)")
-                    .text("Skapa om tumnagler för markerade plankarter");
+                    .text("Skapa om miniatyrbilder för markerade plankarter");
 
                 var $btnReloadThumnail = $button.clone();
                 $btnReloadThumnail
@@ -49,33 +49,34 @@
 
 
                 $("#ThumnailsContent").append("<hr />");
-                $("#ThumnailsContent").append("<h3>Befintliga plankartornas tiff-bilder, status thumnails</h3>");
+                $("#ThumnailsContent").append("<h3>Befintliga plankartornas tiff-bilder, status miniatyrbilder</h3>");
 
 
                 var $spanThumnailHave = $("<span>");
                 $spanThumnailHave.addClass("clear");
-                $spanThumnailHave.attr("title","Tumnagelbild existerar");
+                $spanThumnailHave.attr("title","Miniatyrbild existerar");
                 var $spanThumnailNo = $("<span>");
                 $spanThumnailNo.addClass("no");
-                $spanThumnailNo.attr("title","Tumnagelbild kunde inte hittas");
+                $spanThumnailNo.attr("title","Miniatyrbild kunde inte hittas");
 
-
-                $("#ThumnailsContent").append("existerande tumnagelbild")
-                    .append($spanThumnailHave
-                        .clone()
-                        .css("padding-left", "1em")
-                    );
-                $("#ThumnailsContent").append("<br />");
-                $("#ThumnailsContent").append(" avsaknad av tumnagelbild")
-                    .append($spanThumnailNo
-                        .clone()
-                        .css("padding-left", "1em")
-                    );
-                $("#ThumnailsContent").append("<br />");
 
                 $($divColRight).append($btnReCreateThumnail);
                 $($divColRight).append("<br />");
                 $($divColRight).append($btnReloadThumnail);
+                $($divColRight).append("<br />");
+
+                $($divColRight).append("existerande miniatyrbild")
+                    .append($spanThumnailHave
+                        .clone()
+                        .css("padding-left", "1em")
+                    );
+                $($divColRight).append("<br />");
+                $($divColRight).append(" avsaknad av miniatyrbild")
+                    .append($spanThumnailNo
+                        .clone()
+                        .css("padding-left", "1em")
+                    );
+
 
 
 
@@ -94,14 +95,12 @@
                 $th0.children("input").change(function () {
                     $thisCheckbox = $(this);
                     var status = this.checked;
-                    if (status) {
-                        $('#table-thumnails tbody input').prop('checked', status);
+                    $('#table-thumnails tbody input').prop('checked', status);
                     if (status) {
                         $thisCheckbox.prop('title', 'Avmarkera alla dokument');
                         $('#table-thumnails tbody input').closest("tr").addClass("tr-selected");
                         $('#table-thumnails tbody input').prop('checked', status)
                     } else {
-                        $('#table-thumnails tbody input').prop('checked', status);
                         $thisCheckbox.prop('title', 'Markera alla dokument');
                         $('#table-thumnails tbody input').closest("tr").removeClass("tr-selected");
                     }
@@ -175,13 +174,6 @@
                             }).text("radera");
 
                             $td4.append($($aDelete));
-
-                        //            //.attr("href","#")
-                        //            .click(function () {
-                        //                DeleteThumnail(this);
-                        //            })
-                        //            .text("radera")
-                        //    );
                         }
                         else {
                             $td4.attr("cg-clickable", "true");
@@ -245,7 +237,7 @@ function ReCreateThumnails(element) {
     $spinner.prop('disabled', true);
     $spinner.removeClass("spinner-hide");
     $spinner.next().remove();
-    $spinner.after("<span> Skapar om tumnagelbilder...</span>");
+    $spinner.after("<span> Skapar om miniatyrbilder...</span>");
 
     // Hämtar alla sökvägar från tabellcell till Array
     var planImages = GetCheckedPlansInTable();
@@ -254,7 +246,7 @@ function ReCreateThumnails(element) {
     if (typeof planImages[0] == 'undefined') {
         $spinner.addClass("spinner-hide");
         $spinner.next().remove();
-        $spinner.after("<span>Skapa om tumnagler för markerade plankarter</span>");
+        $spinner.after("<span>Skapa om miniatyrbilder för markerade plankarter</span>");
         $spinner.prop('disabled', false);
 
         alert("Inga plankartor valda");
@@ -274,17 +266,17 @@ function ReCreateThumnails(element) {
             success: function (msg) {
                 var data = msg.d;
                 if (data == "true") {
-                    alert("Tumnagelbilder omskapade");
+                    alert("Miniatyrbilder omskapade");
                 }
                 else {
-                    alert("Något gick fel vid försök att skapa om tumnagelbilder");
+                    alert("Något gick fel vid försök att skapa om miniatyrbilder");
                 }
 
             },
             complete: function () {
                 $spinner.addClass("spinner-hide");
                 $spinner.next().remove();
-                $spinner.after("<span>Skapa om tumnagler för markerade plankarter</span>");
+                $spinner.after("<span>Skapa om miniatyrbilder för markerade plankarter</span>");
                 $spinner.prop('disabled', false);
                 getAllPlansDocs();
             },
@@ -307,9 +299,7 @@ function ReloadThumnails() {
 
 function DeleteThumnail(element) {
 
-    //var planImages = [$(element).parent("td").siblings("td:first").attr("id")];
     var planImages = [$(element).parent("td").siblings().eq(1).text()];
-    console.log(planImages);
 
     if (planImages) {
 
@@ -323,10 +313,10 @@ function DeleteThumnail(element) {
                 console.log(msg);
                 var data = msg.d;
                 if (data == "true") {
-                    alert("Tumnagelbilder raderade");
+                    alert("Miniatyrbilder raderade");
                 }
                 else {
-                    alert("Något gick fel vid försök att radera tumnagelbilder");
+                    alert("Något gick fel vid försök att radera miniatyrbilder");
                 }
 
             },

@@ -29,6 +29,9 @@
         td {
             /*border: 1px solid red;*/
         }
+        .tr-selected {
+            background-color: rgb(224, 242, 255)
+        }
         .center {
             text-align: center;
             background-position: center;
@@ -159,7 +162,7 @@
                     <a class="nav-link" id="tab-validate" data-toggle="tab" href="#validate" role="tab" aria-controls="validate" aria-selected="false">Kontroll</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab-thumnails" data-toggle="tab" href="#thumnails" role="tab" aria-controls="thumnails" aria-selected="false">Thumnails</a>
+                    <a class="nav-link" id="tab-thumnails" data-toggle="tab" href="#thumnails" role="tab" aria-controls="thumnails" aria-selected="false">Miniatyrbilder</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="tab-system" data-toggle="tab" href="#system" role="tab" aria-controls="system" aria-selected="false">System</a>
@@ -309,7 +312,7 @@
                         <hr />
 
                         <h3>
-                            Windows Tjänsteuppgifter
+                            Konfigurerade Windows Tjänsteuppgifter
                         </h3>
                         <div id="ServiceMeta">
                         </div>
