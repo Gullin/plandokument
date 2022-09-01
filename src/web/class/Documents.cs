@@ -265,7 +265,7 @@ namespace Plan.Plandokument
                 // För varje hittat dokument, hitta ev. thumnails till plankarta
                 foreach (DataRow row in dtFileResult.Rows)
                 {
-                    string thumnailsRotDirectory = ConfigShared.ThumnailsFolder;
+                    string thumnailsRotDirectory = @ConfigurationManager.AppSettings["thumnailsVirtualDirectory"].ToString();
                     DirectoryInfo thumnailDirectory;
                     // Avgör om sökvägen är absolut eller relativ (det samma som virtuell i denna applikation)
                     if (Path.IsPathRooted(thumnailsRotDirectory))
