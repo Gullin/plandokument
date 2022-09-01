@@ -17,7 +17,9 @@
   <add key="VersionSuffix" value=" beta" />
   
   <!-- Generella -->
-  <!-- Tecken för separering av parametrar i URL-sökningen (sätts globalt och gäller för alla separeringar) -->
+<!-- Kommaseparerad lista med användar (Windows-konto) som ses som administratörer och ger tillgång till bl.a. kontrollpanel -->
+  <add key="admins" value="" />
+    <!-- Tecken för separering av parametrar i URL-sökningen (sätts globalt och gäller för alla separeringar) -->
   <add key="URLQueryStringSeparator" value="," />
   <!-- Tecken som används mellan fastighetsbeteckningens block och enhet i registernumret vid sökning (tecken som bl.a. kolon : eller asterix * är ej tillåtet av säkerhetsskäl som tecken i URL) -->
   <add key="URLParcelBlockUnitSign" value="_" />
@@ -56,10 +58,13 @@
   <!-- Rotkatalog för filer relativt till webbapplikationen (fungerar ej med fysiska sökvägar enl. t.ex. UNC), enkel backslash då verbatim string literal används -->
   <add key="filesRotDirectory" value="plandokument" />
   <!-- Underkataloger ska genomsökas, standard är ja om inget anges annars kan variabeln anta value=[true|false] -->
-  <add key="subDirectoryCrawl" value="" />
+  <add key="subDirectoryCrawl" value="true" />
   <!-- Filändelser enligt [.pdf] eller om flera kommaseparerat enligt [.pdf,.tif]. Sätts fältet tomt tas alla filer -->
   <add key="fileExtentions" value=".pdf,.tif" />
-  
+<!-- Thumnails av plankartor för webbapplikationens virtuella sökväg -->
+  <add key="thumnailsVirtualDirectory" value="plandokument/auto-miniatyrbild-plankarta" />
+
+
   <!-- Karta, MapGuide Open Source -->
   <!-- Bildparametrar -->
   <!-- MGMapImageSizeFromServer, "false" om bildstorlek sätts vid varje request av webbmetod, "true" om nedanstående MGMapImageWidth|MGMapImageHeight används -->
@@ -87,7 +92,14 @@
   <add key="MGPlanytorForegroundRgbaColor" value="0,127,255,0.4" />
   
   <!-- Loggning, skrivs under applikationens rotkatalog och under "log" -->
-  <!-- Felhantering -->
+<!-- Allmän event loggning -->
+  <!-- Filnamn för fellogg (utan filändelse), standard är "Error" om inget anges -->
+  <add key="auditLogFileName" value="Audit" />
+  <!-- Maximal storlek på felfiler (i MB), standard är 10 om inget eller om mindre än 0,005 anges -->
+  <add key="auditLogFileMaxByteSize" value="0,001" />
+  <!-- Maximalt antal filer (möjlighet att dela upp loggning i flera filer), standard är 1 om inget eller noll anges -->
+  <add key="auditLogFileMaxTotal" value="1" />
+    <!-- Felhantering -->
   <!-- Filnamn för fellogg (utan filändelse), standard är "Error" om inget anges -->
   <add key="errorFileName" value="Error" />
   <!-- Maximal storlek på felfiler (i MB), standard är 10 om inget eller om mindre än 0,005 anges -->
