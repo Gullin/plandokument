@@ -454,7 +454,7 @@ namespace Plan.Plandokument
         #region Thumnail
         [WebMethod(EnableSession = true)]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
-        public string getPlansDocsAll()
+        public string GetPlansDocsAll()
         {
             Documents planDocs = new Documents();
 
