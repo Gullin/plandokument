@@ -9,6 +9,28 @@ using System.Threading;
 
 namespace Plan.WindowsService
 {
+
+    /// <summary>
+    /// Håller inställningar för windows-tjänsten. Både hårdkodat och hämtade från AppSettings.
+    /// </summary>
+    class ConfigWatcher
+    {
+        public static string WatchedFolder { get; } = @ConfigurationManager.AppSettings["WatchedFolder"].ToString();
+
+        public static string WatchFilter { get; } = "*.tif";
+
+        public static string ThumnailsFolder { get; } = @ConfigurationManager.AppSettings["ThumnailsFolder"].ToString();
+
+        public static string ThumnailsExtension { get; } = "jpg";
+
+        public static string[] ThumnailsSuffixes { get; } = { "-l", "-s" };
+
+        public static int ImageQuality { get; } = 75;
+
+        public static int[] MaxDimensions { get; } = { 2000, 150 };
+    }
+
+
     /// <summary>
     /// Hanterar katalogbevakningen
     /// </summary>
@@ -21,13 +43,14 @@ namespace Plan.WindowsService
         /// <param name="watcher">Filbevakningsobjekt</param>
         public static void Init(FileSystemWatcher watcher)
         {
-            watcher.Path = ConfigShared.WatchedFolder;
+            //watcher.Path = ConfigShared.WatchedFolder;
+            watcher.Path = Utility.GetServiceAppSettings("WatchedFolder");
 
             // Villka förändringar som ska bevakas
             watcher.NotifyFilter = NotifyFilters.LastWrite
                                  | NotifyFilters.FileName;
 
-            watcher.Filter = ConfigShared.WatchFilter;
+            watcher.Filter = ConfigWatcher.WatchFilter;
 
             //watcher.InternalBufferSize = 65536; // 64 KB råder docs.microsoft ska vara max (4 KB är minimum)
             watcher.InternalBufferSize = 1048576; // 1 MB
@@ -50,14 +73,15 @@ namespace Plan.WindowsService
         /// </summary>
         private static void OnDeleted(object sender, FileSystemEventArgs e)
         {
-            if (!Directory.Exists(ConfigShared.ThumnailsFolder))
+            if (!Directory.Exists(Utility.GetServiceAppSettings("ThumnailsFolder")))
             {
                 return;
             }
 
             try
             {
-                foreach (var file in Directory.EnumerateFiles(ConfigShared.ThumnailsFolder, Path.GetFileNameWithoutExtension(e.Name) + "_thumnail*." + ConfigShared.ThumnailsExtension))
+                //foreach (var file in Directory.EnumerateFiles(ConfigShared.ThumnailsFolder, Path.GetFileNameWithoutExtension(e.Name) + "_thumnail*." + ConfigShared.ThumnailsExtension))
+                foreach (var file in Directory.EnumerateFiles(Utility.GetServiceAppSettings("ThumnailsFolder"), Path.GetFileNameWithoutExtension(e.Name) + "_thumnail*." + ConfigWatcher.ThumnailsExtension))
                 {
                     LoggEvent.Logger.WriteEntry("Raderar fil: " + file, EventLogEntryType.Information, LoggEvent.LoggEventID++);
                     File.Delete(file);
@@ -68,9 +92,9 @@ namespace Plan.WindowsService
                 LoggEvent.Logger.WriteEntry("Vid radering av: " + e.FullPath + " uppstod felet - " + ex.Message, EventLogEntryType.Error, LoggEvent.LoggEventID++);
             }
 
-            if (Directory.GetFiles(ConfigShared.ThumnailsFolder, "*." + ConfigShared.ThumnailsExtension).Length == 0)
+            if (Directory.GetFiles(Utility.GetServiceAppSettings("ThumnailsFolder"), "*." + ConfigWatcher.ThumnailsExtension).Length == 0)
             {
-                Directory.Delete(ConfigShared.ThumnailsFolder, false);
+                Directory.Delete(Utility.GetServiceAppSettings("ThumnailsFolder"), false);
             }
         }
 
@@ -87,8 +111,8 @@ namespace Plan.WindowsService
             try
             {
                 ManageImages.CreateThumnailFiles(e);
-                string _newFile = ConfigShared.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(e.Name) + "_thumnail";
-                LoggEvent.Logger.WriteEntry("Skapat: " + _newFile + ConfigShared.ThumnailsSuffixes[0] + "." + ConfigShared.ThumnailsExtension + " och " + _newFile + ConfigShared.ThumnailsSuffixes[1] + "." + ConfigShared.ThumnailsExtension, 
+                string _newFile = Utility.GetServiceAppSettings("ThumnailsFolder") + "\\" + Path.GetFileNameWithoutExtension(e.Name) + "_thumnail";
+                LoggEvent.Logger.WriteEntry("Skapat: " + _newFile + ConfigWatcher.ThumnailsSuffixes[0] + "." + ConfigWatcher.ThumnailsExtension + " och " + _newFile + ConfigWatcher.ThumnailsSuffixes[1] + "." + ConfigWatcher.ThumnailsExtension, 
                     EventLogEntryType.Information, LoggEvent.LoggEventID++);
             }
             catch (Exception ex)
@@ -104,8 +128,8 @@ namespace Plan.WindowsService
         {
             FileInfo _oldFile = new FileInfo(e.OldFullPath);
             FileInfo _newFile = new FileInfo(e.FullPath);
-            string _oldFileThumnailL = ConfigShared.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_oldFile.Name) + "_thumnail" + ConfigShared.ThumnailsSuffixes[0] + "." + ConfigShared.ThumnailsExtension;
-            string _oldFileThumnailS = ConfigShared.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_oldFile.Name) + "_thumnail" + ConfigShared.ThumnailsSuffixes[1] + "." + ConfigShared.ThumnailsExtension;
+            string _oldFileThumnailL = Utility.GetServiceAppSettings("ThumnailsFolder") + "\\" + Path.GetFileNameWithoutExtension(_oldFile.Name) + "_thumnail" + ConfigWatcher.ThumnailsSuffixes[0] + "." + ConfigWatcher.ThumnailsExtension;
+            string _oldFileThumnailS = Utility.GetServiceAppSettings("ThumnailsFolder") + "\\" + Path.GetFileNameWithoutExtension(_oldFile.Name) + "_thumnail" + ConfigWatcher.ThumnailsSuffixes[1] + "." + ConfigWatcher.ThumnailsExtension;
 
             try
             {
@@ -113,14 +137,14 @@ namespace Plan.WindowsService
                 {
                     File.Move(
                         _oldFileThumnailL,
-                        ConfigShared.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_newFile.Name) + "_thumnail" + ConfigShared.ThumnailsSuffixes[0] + "." + ConfigShared.ThumnailsExtension
+                        Utility.GetServiceAppSettings("ThumnailsFolder") + "\\" + Path.GetFileNameWithoutExtension(_newFile.Name) + "_thumnail" + ConfigWatcher.ThumnailsSuffixes[0] + "." + ConfigWatcher.ThumnailsExtension
                         );
                 }
                 if (File.Exists(_oldFileThumnailS))
                 {
                     File.Move(
                     _oldFileThumnailS,
-                    ConfigShared.ThumnailsFolder + "\\" + Path.GetFileNameWithoutExtension(_newFile.Name) + "_thumnail" + ConfigShared.ThumnailsSuffixes[1] + "." + ConfigShared.ThumnailsExtension
+                    Utility.GetServiceAppSettings("ThumnailsFolder") + "\\" + Path.GetFileNameWithoutExtension(_newFile.Name) + "_thumnail" + ConfigWatcher.ThumnailsSuffixes[1] + "." + ConfigWatcher.ThumnailsExtension
                     );
                 }
             }

@@ -122,11 +122,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\plan.shared\plan.shared.csproj">
       <Project>{0bf2e8f8-1e74-430e-bbda-0a37288c6518}</Project>
-      <Name>Plan.Shared</Name>
+      <Name>plan.shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
