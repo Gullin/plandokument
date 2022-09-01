@@ -52,23 +52,29 @@ namespace Plan.Plandokument
         {
             ServiceController sc = new ServiceController();
             sc.ServiceName = ServiceName;
-
-            if (sc.Status == ServiceControllerStatus.Stopped)
+            try
             {
-                // Startar tjänsten om dess nuvarande status är stoppad
-                try
+                if (sc.Status == ServiceControllerStatus.Stopped)
                 {
-                    // Startar tjänsten och väntar tills status är "Stopped"
-                    sc.Start();
-                    sc.WaitForStatus(ServiceControllerStatus.Running);
-                }
-                catch (InvalidOperationException ex)
-                {
-                    UtilityException.LogException(ex, "Plandokument Thumnails : StartService", false);
-                    return false;
-                }
+                    // Startar tjänsten om dess nuvarande status är stoppad
+                    try
+                    {
+                        // Startar tjänsten och väntar tills status är "Stopped"
+                        sc.Start();
+                        sc.WaitForStatus(ServiceControllerStatus.Running);
+                    }
+                    catch (InvalidOperationException exc)
+                    {
+                        UtilityException.LogException(exc, $"Plandokument Thumnails : StartService {ServiceName}", false);
+                        return false;
+                    }
 
-                return true;
+                    return true;
+                }
+            }
+            catch (Exception exc)
+            {
+                UtilityException.LogException(exc, $"Plandokument Thumnails : StartService {ServiceName}", true);
             }
 
             return false;
@@ -84,22 +90,29 @@ namespace Plan.Plandokument
             ServiceController sc = new ServiceController();
             sc.ServiceName = ServiceName;
 
-            if (sc.Status == ServiceControllerStatus.Running)
+            try
             {
-                // Stoppar tjänsten om dess nuvarande status är "Running"
-                try
+                if (sc.Status == ServiceControllerStatus.Running)
                 {
-                    // Stoppar tjänsten och väntar tills status är "Stopped"
-                    sc.Stop();
-                    sc.WaitForStatus(ServiceControllerStatus.Stopped);
-                }
-                catch (InvalidOperationException ex)
-                {
-                    UtilityException.LogException(ex, "Plandokument Thumnails : StopService", false);
-                    return false;
-                }
+                    // Stoppar tjänsten om dess nuvarande status är "Running"
+                    try
+                    {
+                        // Stoppar tjänsten och väntar tills status är "Stopped"
+                        sc.Stop();
+                        sc.WaitForStatus(ServiceControllerStatus.Stopped);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        UtilityException.LogException(ex, $"Plandokument Thumnails : StopService {ServiceName}", false);
+                        return false;
+                    }
 
-                return true;
+                    return true;
+                }
+            }
+            catch (Exception exc)
+            {
+                UtilityException.LogException(exc, $"Plandokument Thumnails : StopService {ServiceName}", true);
             }
 
             return false;
@@ -115,14 +128,23 @@ namespace Plan.Plandokument
             ServiceController sc = new ServiceController();
             sc.ServiceName = ServiceName;
 
-            if (sc.Status == ServiceControllerStatus.Running)
+            try
             {
-                return true;
+                if (sc.Status == ServiceControllerStatus.Running)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception exc)
             {
-                return false;
+                UtilityException.LogException(exc, $"Plandokument Thumnails : ServiceIsRunning {ServiceName}", true);
             }
+
+            return false;
         }
 
 
