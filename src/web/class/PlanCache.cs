@@ -863,7 +863,21 @@ namespace Plan.Plandokument
             foreach (string root in directoryRoots)
             {
                 //DirectoryInfo searchedDirectory = new DirectoryInfo(Server.MapPath("~") + "\\" + root);
-                DirectoryInfo searchedDirectory = new DirectoryInfo(HostingEnvironment.MapPath("~") + "\\" + root);
+                //DirectoryInfo searchedDirectory = new DirectoryInfo(HostingEnvironment.MapPath("~") + "\\" + root);
+                DirectoryInfo searchedDirectory;
+                // Avgör om sökvägen är absolut eller relativ (det samma som virtuell i denna applikation)
+                if (Path.IsPathRooted(root))
+                {
+                    searchedDirectory = new DirectoryInfo(
+                        root
+                        );
+                }
+                else
+                {
+                    searchedDirectory = new DirectoryInfo(
+                        HostingEnvironment.MapPath(@"~/" + root)
+                        );
+                }
 
                 foreach (string ext in searchedFileExtentions)
                 {
