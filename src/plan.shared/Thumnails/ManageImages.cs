@@ -140,24 +140,22 @@ namespace Plan.Shared.Thumnails
         {
             string _folderThumnails = ConfigShared.ThumnailsFolder;
             string _filesToDelete = Path.GetFileNameWithoutExtension(filePath) + "_thumnail*." + ConfigShared.ThumnailsExtension;
+            string _filesToDeleteRegExPattern = ".*" + Path.GetFileNameWithoutExtension(filePath) + @"_thumnail-.\." + ConfigShared.ThumnailsExtension;
 
 
             bool someExists = Directory.EnumerateFiles(_folderThumnails, _filesToDelete).Any();
+
 
             if (someExists)
             {
                 try
                 {
-                    Regex _filesToDeletePattern = new Regex(_filesToDelete);
+                    Regex _filesToDeletePattern = new Regex(_filesToDeleteRegExPattern);
 
                     Directory.EnumerateFiles(_folderThumnails)
-                        .Where(file => _filesToDeletePattern.Match(file).Success).AsParallel()
-                        .ForAll(File.Delete);
-
-                    //if (File.Exists(_fileToDelete))
-                    //{
-                    //    File.Delete(_fileToDelete);
-                    //}
+                        .Where(file => _filesToDeletePattern.Match(file).Success)
+                        .AsParallel()
+                        .ForAll(System.IO.File.Delete);
                 }
                 catch (Exception)
                 {

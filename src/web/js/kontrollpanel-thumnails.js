@@ -321,6 +321,7 @@ function DeleteThumnail(element) {
 
             },
             complete: function () {
+                getAllPlansDocs();
             },
             error: function () {
                 alert("Fel!\nDeleteThumnails");
