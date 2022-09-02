@@ -472,7 +472,7 @@ namespace Plan.Plandokument
                 foreach (string planImage in planImages)
                 {
                     ManageImages.CreateThumnailFiles(
-                        Utility.appPath + planImage
+                        Utility.EnsureEndingSlash(ConfigShared.WatchedFolder) + Path.GetFileName(planImage)
                         );
                 }
 
@@ -498,7 +498,7 @@ namespace Plan.Plandokument
                 foreach (string planImage in planImages)
                 {
                     ManageImages.DeleteThumnailFiles(
-                        Utility.appPath + planImage
+                        Utility.EnsureEndingSlash(ConfigShared.WatchedFolder) + Path.GetFileName(planImage)
                         );
                 }
 
