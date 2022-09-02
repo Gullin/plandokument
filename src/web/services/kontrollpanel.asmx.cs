@@ -480,9 +480,11 @@ namespace Plan.Plandokument
             
                 return jsonSerializer.Serialize(successful);
             }
-            catch
+            catch (Exception exc)
             {
-                throw;
+                UtilityException.LogException(exc, $"Plandokument Thumnails : CreateThumnails", false);
+
+                return jsonSerializer.Serialize(false.ToString());
             }
         }
 
@@ -506,9 +508,11 @@ namespace Plan.Plandokument
 
                 return jsonSerializer.Serialize(successful);
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-                throw;
+                UtilityException.LogException(exc, $"Plandokument Thumnails : DeleteThumnails", false);
+
+                return jsonSerializer.Serialize(false.ToString());
             }
         }
 
