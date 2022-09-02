@@ -504,7 +504,7 @@ namespace Plan.Plandokument
             // Om hittade filer
             if (documents.Documents.Count > 0)
             {
-                directoryRoot = EnsureEndingSlash(directoryRoot);
+                directoryRoot = Utility.EnsureEndingSlash(directoryRoot);
 
                 CreateFileResult(planId, dokumentAkt, documents, dtFileResult);
 
@@ -529,7 +529,7 @@ namespace Plan.Plandokument
                 foreach (DirectoryInfo dirInfo in subDirs)
                 {
                     // Rekursivt sök i alla underkataloger
-                    getFileToDataTable(dirInfo, EnsureEndingSlash(directoryRoot) + EnsureEndingSlash(dirInfo.Name)
+                    getFileToDataTable(dirInfo, Utility.EnsureEndingSlash(directoryRoot) + Utility.EnsureEndingSlash(dirInfo.Name)
                         , searchedFile, planId, dokumentAkt, dtFileResult);
                 }
             }
@@ -725,22 +725,5 @@ namespace Plan.Plandokument
 
         }
 
-
-        /// <summary>
-        /// Tillser att textsträng slutar med front slash
-        /// </summary>
-        /// <param name="virtualFilePath">Sökväg</param>
-        /// <returns>Textsträng med avslutande frontslash</returns>
-        private static string EnsureEndingSlash(string virtualFilePath)
-        {
-            // ser till så att kataloger slutar med slash
-            string pathEnd = virtualFilePath.Substring(virtualFilePath.Length - 1, 1);
-            if (!(pathEnd == "/" || pathEnd == "\\"))
-            {
-                virtualFilePath += "/";
-            }
-
-            return virtualFilePath;
-        }
     }
 }

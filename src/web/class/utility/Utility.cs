@@ -21,6 +21,24 @@ namespace Plan.Plandokument
 
 
         /// <summary>
+        /// Tillser att textsträng slutar med front slash
+        /// </summary>
+        /// <param name="virtualFilePath">Sökväg</param>
+        /// <returns>Textsträng med avslutande frontslash</returns>
+        internal static string EnsureEndingSlash(string virtualFilePath)
+        {
+            // ser till så att kataloger slutar med slash
+            string pathEnd = virtualFilePath.Substring(virtualFilePath.Length - 1, 1);
+            if (!(pathEnd == "/" || pathEnd == "\\"))
+            {
+                virtualFilePath += "/";
+            }
+
+            return virtualFilePath;
+        }
+
+
+        /// <summary>
         /// Kontrollerar om loggkatalog existerar annars skapar
         /// </summary>
         protected static void logDirectoryExist()
