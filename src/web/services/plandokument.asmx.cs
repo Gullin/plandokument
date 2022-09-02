@@ -824,7 +824,7 @@ namespace Plan.Plandokument
                 areaLayer.FeatureName = planClassName;
                 areaLayer.FeatureSourceName = planRes;
                 areaLayer.GeometryColumnName = planGeometryColumn;
-                areaLayer.Filter = planFilterColumn + " = " + planID;
+                areaLayer.Filter = planFilterColumn + " = '" + planID + "'";
 
                 LayerScaleRangeCollection lsrCollection = new LayerScaleRangeCollection();
 
