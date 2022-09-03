@@ -137,6 +137,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\page-UI-popover.css" />
     <Content Include="js\kontrollpanel-cache.js" />
     <Content Include="js\kontrollpanel-service.js" />
     <Content Include="js\kontrollpanel-thumnails.js" />

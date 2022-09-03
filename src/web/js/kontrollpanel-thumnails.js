@@ -1,4 +1,6 @@
-﻿function getAllPlansDocs() {
+﻿var urlBasePath = Lkr.Plan.Dokument.resolvedClientUrl;
+
+function getAllPlansDocs() {
 
     $.ajax({
         type: "POST",
@@ -58,6 +60,9 @@
                 var $spanThumnailNo = $("<span>");
                 $spanThumnailNo.addClass("no");
                 $spanThumnailNo.attr("title","Miniatyrbild kunde inte hittas");
+                var $spanThumnailPeek = $("<span>");
+                $spanThumnailPeek.addClass("peek");
+                $spanThumnailPeek.attr("title", "Miniatyrbild");
 
 
                 $($divColRight).append($btnReCreateThumnail);
@@ -119,7 +124,10 @@
                 $tr.append($th2);
                 $tr.append($th3);
                 // Kolumn 5
-                var $th4 = $("<th>").css("display", "block").html("&nbsp;");
+                var $th3_5 = $("<th>");
+                $tr.append($th3_5);
+                // Kolumn 6
+                var $th4 = $("<th>");
                 $tr.append($th4);
                 $tableHeader.append($tr);
                 $table.append($tableHeader);
@@ -162,6 +170,9 @@
                             $td3.append($spanThumnailNo.clone());
                         }
 
+                        var $td3_5 = $("<td>");
+                        $td3_5.addClass("center");
+
                         var $td4 = $("<td>");
                         $td4.addClass("center");
                         if (val.THUMNAILINDICATION.includes("l") || val.THUMNAILINDICATION.includes("s")) {
@@ -173,17 +184,53 @@
                                 "color": "blue"
                             }).text("radera");
 
+                            var $peek = $spanThumnailPeek.clone().popover({
+                                trigger: 'manual',
+                                placement: 'auto',
+                                title: val.NAME + ' innehåller',
+                                html: true,
+                                content:
+                                    '<div><img src="' + urlBasePath + val.THUMNAILPATH + val.NAME.replace(/\.[^/.]+$/, "") + '_thumnail-s.jpg" /><span class="popover-content-big-image" title="Större bild"></span>' + '</div>'
+                            }).on('mouseenter', function () {
+                                var _this = this;
+                                $(this).popover('show');
+                                $('.popover').on('mouseleave', function () {
+                                    $(_this).popover('hide');
+                                });
+                                $('.popover').find('span').on('click', function () {
+
+                                    $('<div class="modal" tabindex="-1"><div class="modal-dialog modal-wide modal-dialog-centered"><div class="modal-content"><img style="width:100%;" src="' + urlBasePath + val.THUMNAILPATH + val.NAME.replace(/\.[^/.]+$/, "") + '_thumnail-l.jpg" /></div></div></div>')
+                                        .modal({
+                                            keyboard: true
+                                        });
+
+                                    $(this).closest('.popover').popover('hide');
+                                });
+                            }).on('mouseleave', function () {
+                                var _this = this;
+                                setTimeout(function () {
+                                    if (!$('.popover:hover').length) {
+                                        $(_this).popover('hide');
+                                    }
+                                }, 200);
+                            });
+
+                            $td3_5.append($peek);
+
                             $td4.append($($aDelete));
                         }
                         else {
+                            $td3_5.attr("cg-clickable", "true");
+                            $td3_5;//.css("display", "block").html("&nbsp;")
                             $td4.attr("cg-clickable", "true");
-                            $td4.css("display", "block").html("&nbsp;")
+                            $td4;
                         }
 
                         $tr.append($td0);
                         $tr.append($td1);
                         $tr.append($td2);
                         $tr.append($td3);
+                        $tr.append($td3_5);
                         $tr.append($td4);
 
                         // Gör hela raden klickbar och omställer av kryssruta

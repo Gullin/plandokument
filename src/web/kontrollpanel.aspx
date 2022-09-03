@@ -11,6 +11,7 @@
     <link href="css/reset.css" rel="stylesheet" />
     <link href="css/page-UI-core.css" rel="stylesheet" />
     <link href="css/page-UI-kontrollpanel.css" rel="stylesheet" />
+    <link href="css/page-UI-popover.css" rel="stylesheet" />
     <style type="text/css">
         h3 {
 
@@ -38,7 +39,6 @@
             align-content: center;
             -webkit-align-content: center;
             margin: 0px auto;
-            text-align: center; 
             vertical-align: middle;
         }
         .clear {
@@ -55,6 +55,10 @@
             /*filter: grayscale(100%) sepia(100%) saturate(600%) hue-rotate(-50deg) brightness(40%) contrast(0.8);*/
             filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
             transform: scale(1.5);
+        }
+        .peek {
+            content: url('../lib/octicons-9.1.1/eye.svg');
+            transform: scale(0.75);
         }
         .error {
             color: red;

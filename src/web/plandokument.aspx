@@ -12,6 +12,7 @@
         <link href="css/reset.css" rel="stylesheet" />
         <link href="css/page-UI-core.css" rel="stylesheet" />
         <link href="css/page-UI-plan.css" rel="stylesheet" />
+        <link href="css/page-UI-popover.css" rel="stylesheet" />
         <link href="css/file-images-li.css" rel="stylesheet" />
         <style type="text/css">
 
