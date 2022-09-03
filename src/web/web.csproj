@@ -359,6 +359,7 @@
     <Content Include="static-resources\sql\mssqlserver\get-plan-register-bas.sql" />
     <Content Include="static-resources\sql\sqlite\check-exists-stat-requests.sql" />
     <Content Include="static-resources\sql\sqlite\create-stat-requests.sql" />
+    <Content Include="static-resources\sql\sqlite\get-sqlite-db-version.sql" />
     <Content Include="static-resources\sql\sqlite\insert-stat-requests.sql" />
     <Content Include="versioninfo.aspx" />
     <Content Include="Web.config">

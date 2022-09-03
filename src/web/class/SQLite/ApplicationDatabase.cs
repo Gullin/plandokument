@@ -48,7 +48,10 @@ namespace Plan.Plandokument.SQLite
 				cmd.Connection = dbCon;
                 dbCon.Open();
 
-				cmd.CommandText = SqlTemplates.ExistsAppDbStatRequest.Replace("@table_name","stat_requests");
+				cmd.CommandText = SqlTemplates.ExistsAppDbStatRequest;
+				cmd.Parameters.AddWithValue("@table_name", "stat_requests");
+				cmd.Prepare();
+
 				SQLiteDataReader sQLiteDataReader = cmd.ExecuteReader();
 				string tableExistsValue = "false";
 				while (sQLiteDataReader.Read())

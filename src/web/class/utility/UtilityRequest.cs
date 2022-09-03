@@ -252,11 +252,13 @@ namespace Plan.Plandokument
 
                 foreach (DataRow dr in searchRequest.Rows)
                 {
-                    cmd.CommandText = SqlTemplates.InsertAppDbStatRequest
-                        .Replace("@when", dr["WHEN"].ToString())
-                        .Replace("@nbr_search", dr["NBRSEARCHED"].ToString())
-                        .Replace("@nbr_hits", dr["NBRHITS"].ToString())
-                        .Replace("@searchtime", dr["TIME"].ToString().Replace(',','.'));
+                    cmd.CommandText = SqlTemplates.InsertAppDbStatRequest;
+                    cmd.Parameters.AddWithValue("@when", dr["WHEN"].ToString());
+                    cmd.Parameters.AddWithValue("@nbr_search", Convert.ToInt32(dr["NBRSEARCHED"]));
+                    cmd.Parameters.AddWithValue("@nbr_hits", Convert.ToInt32(dr["NBRHITS"].ToString()));
+                    cmd.Parameters.AddWithValue("@searchtime", Convert.ToDecimal(dr["TIME"].ToString()));
+                    cmd.Prepare();
+
                     cmd.ExecuteNonQuery();
                 }
 
