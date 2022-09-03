@@ -7,7 +7,10 @@ namespace Plan.Plandokument
 		public static string GetPlanRegisterBas { get; set; }
 		public static string GetPlanGeometriBas { get; set; }
 		public static string GetPlanBerorFastighet { get; set; }
-		public static string GetPlanBerorPlan { get; set; }
+        public static string GetPlanBerorPlan { get; set; }
+        public static string CreateAppDbStatRequest { get; set; }
+        public static string ExistsAppDbStatRequest { get; set; }
+        public static string InsertAppDbStatRequest { get; set; }
 
         static SqlTemplates()
 		{
@@ -23,6 +26,15 @@ namespace Plan.Plandokument
                 .OpenText().ReadToEnd();
 
             GetPlanBerorPlan = new FileInfo(baseScriptFolder + @"/mssqlserver/get-plan-beror-plan.sql")
+                .OpenText().ReadToEnd();
+
+            CreateAppDbStatRequest = new FileInfo(baseScriptFolder + @"/sqlite/create-stat-requests.sql")
+                .OpenText().ReadToEnd();
+
+            ExistsAppDbStatRequest = new FileInfo(baseScriptFolder + @"/sqlite/check-exists-stat-requests.sql")
+                .OpenText().ReadToEnd();
+
+            InsertAppDbStatRequest = new FileInfo(baseScriptFolder + @"/sqlite/insert-stat-requests.sql")
                 .OpenText().ReadToEnd();
         }
 

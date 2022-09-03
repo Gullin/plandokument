@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Plan.Plandokument.SQLite;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SQLite;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Web;
 
 namespace Plan.Plandokument
 {
@@ -24,7 +25,7 @@ namespace Plan.Plandokument
         /// <paramref name="TIME"/>
         /// </param>
         /// <value>Test</value>
-        public static void LogRequestStatsAsync(DataTable searchRequest)
+        private static string LogRequestStatsAsync()
         {
             UtilityLog.Log("Request loggad med statistik, detaljer i RequestStatistik.log", Utility.LogLevel.STATS);
 
@@ -77,11 +78,7 @@ namespace Plan.Plandokument
                     fileToReadSizeFrom.Dispose();
 
                     // Om basfilen inte är för stor skriv till den, annars kopiera bort den och skapa ny tom basfil
-                    if (fileSize < maxFileByteSize)
-                    {
-                        writeRequestStatToFile(searchRequest, logFile);
-                    }
-                    else
+                    if (fileSize >= maxFileByteSize)
                     {
                         if (maxFilesTotal > 0)
                         {
@@ -199,34 +196,82 @@ namespace Plan.Plandokument
                             swHeader.WriteLine(fileHeader);
                         }
 
-                        // Skriver till basfilen
-                        writeRequestStatToFile(searchRequest, logFile);
-
                     }
 
-
+                    return logFile;
                 }
+
+                // Annars returnera tom sträng som får testa mot
+                return String.Empty;
             }
             catch (Exception exc)
             {
                 UtilityException.LogException(exc, "Loggning Statistik : LogRequestStats", true);
+                return String.Empty;
             }
         }
 
-        private static void writeRequestStatToFile(DataTable searchRequest, string logFile)
+        internal static void WriteRequestStatToFile(DataTable searchRequest)
         {
             // skriv till basfilen
             // Open the log file for append and write the log
-            using (StreamWriter sw = new StreamWriter(logFile, true))
+            string logFile = LogRequestStatsAsync();
+            if (logFile != String.Empty)
             {
-                foreach (DataRow dr in searchRequest.Rows)
+                try
                 {
-                    sw.WriteLine(dr["WHEN"].ToString() + ";" +
-                                            dr["NBRSEARCHED"].ToString() + ";" +
-                                            dr["NBRHITS"].ToString() + ";" +
-                                            dr["TIME"].ToString());
+                    using (StreamWriter sw = new StreamWriter(logFile, true))
+                    {
+                        foreach (DataRow dr in searchRequest.Rows)
+                        {
+                            sw.WriteLine(dr["WHEN"].ToString() + ";" +
+                                                    dr["NBRSEARCHED"].ToString() + ";" +
+                                                    dr["NBRHITS"].ToString() + ";" +
+                                                    dr["TIME"].ToString());
+                        }
+                    }
+                }
+                catch (Exception exc)
+                {
+                    UtilityException.LogException(exc, "Request Statistics to log-fil", false);
                 }
             }
         }
-	}
+
+        internal static void WriteRequestStatToDb(DataTable searchRequest)
+        {
+            UtilityLog.Log($"Request loggad med statistik, detaljer i databas {ApplicationDatabase.GetDatabase()}", Utility.LogLevel.STATS);
+
+			SQLiteConnection dbCon = new SQLiteConnection(ApplicationDatabase.GetConnectionString());
+
+            try
+            {
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.Connection = dbCon;
+                dbCon.Open();
+
+                foreach (DataRow dr in searchRequest.Rows)
+                {
+                    cmd.CommandText = SqlTemplates.InsertAppDbStatRequest
+                        .Replace("@when", dr["WHEN"].ToString())
+                        .Replace("@nbr_search", dr["NBRSEARCHED"].ToString())
+                        .Replace("@nbr_hits", dr["NBRHITS"].ToString())
+                        .Replace("@searchtime", dr["TIME"].ToString().Replace(',','.'));
+                    cmd.ExecuteNonQuery();
+                }
+
+                dbCon.Close();
+                dbCon.Dispose();
+            }
+            catch (Exception exc)
+            {
+                UtilityException.LogException(exc, "Request Statistics to DB", false);
+            }
+            finally
+            {
+                dbCon.Dispose();
+            }
+        }
+
+    }
 }

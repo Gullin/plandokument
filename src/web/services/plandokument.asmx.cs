@@ -511,7 +511,8 @@ namespace Plan.Plandokument
 
             dtRequestLog.Rows.Add(drRequestLog);
 
-            UtilityRequest.LogRequestStatsAsync(dtRequestLog);
+            UtilityRequest.WriteRequestStatToFile(dtRequestLog);
+            UtilityRequest.WriteRequestStatToDb(dtRequestLog);
 
             return getObjectAsJson(getTableSorted(dtResultDistinct, "AKT", "ASC", "BEGREPP", "ASC"));
         }

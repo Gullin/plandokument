@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Web.Routing;
 using OSGeo.MapGuide;
+using Plan.Plandokument.SQLite;
 
 namespace Plan.Plandokument
 {
@@ -16,6 +17,13 @@ namespace Plan.Plandokument
                 ApplicationAssemblyUtility.GetApplicationCopyright() + " (debug='" +
                 ApplicationAssemblyUtility.AssemblyIsDebugBuild(ApplicationAssemblyUtility.ApplicationAssembly).ToString() + "')",
                 Utility.LogLevel.INFORM);
+
+            // Instansiera applikationsdatabase
+            if (!ApplicationDatabase.DatabaseExists())
+            {
+                ApplicationDatabase.CreateDatabase();
+                ApplicationDatabase.InitializeDatabase();
+            }
 
             // Starta ping-ning av webb applikation
             if (Boolean.TryParse(ConfigurationManager.AppSettings["shouldPing"], out bool result))
