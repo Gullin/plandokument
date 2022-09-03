@@ -474,6 +474,11 @@ namespace Plan.Plandokument
                     ManageImages.CreateThumnailFiles(
                         Utility.EnsureEndingSlash(ConfigShared.WatchedFolder) + Path.GetFileName(planImage)
                         );
+
+                    UtilityLog.Log(
+                        $"Miniatyrbild SKAPAD {Utility.EnsureEndingSlash(ConfigShared.WatchedFolder) + Path.GetFileName(planImage)}",
+                        Utility.LogLevel.INFORM
+                        );
                 }
 
                 successful = true;
@@ -501,6 +506,11 @@ namespace Plan.Plandokument
                 {
                     ManageImages.DeleteThumnailFiles(
                         Utility.EnsureEndingSlash(ConfigShared.WatchedFolder) + Path.GetFileName(planImage)
+                        );
+
+                    UtilityLog.Log(
+                        $"Miniatyrbild RADERAD {Utility.EnsureEndingSlash(ConfigShared.WatchedFolder) + Path.GetFileName(planImage)}",
+                        Utility.LogLevel.INFORM
                         );
                 }
 
