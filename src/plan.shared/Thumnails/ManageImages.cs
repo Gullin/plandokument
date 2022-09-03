@@ -38,6 +38,18 @@ namespace Plan.Shared.Thumnails
         public static int ImageQuality { get; } = 75;
 
         public static int[] MaxDimensions { get; } = { 2000, 150 };
+
+        private Configuration _config;
+
+        public static void Initialize()
+        {
+            //var _config = ((AppSettingsSection)ConfigurationManager.OpenExeConfiguration(
+            //    Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            //    )
+            //    .GetSection("ThumnailsService"))["WatchedFolder"];
+
+            //WatchedFolder = ((NameValueCollection)_config.GetSection("ThumnailsService"))["WatchedFolder"].ToString();
+        }
     }
 
 
@@ -88,13 +100,16 @@ namespace Plan.Shared.Thumnails
                     try
                     {
 
+                        string _newImage_l = _newFile + ConfigShared.ThumnailsSuffixes[0] + "." + ConfigShared.ThumnailsExtension;
+                        string _newImage_s = _newFile + ConfigShared.ThumnailsSuffixes[1] + "." + ConfigShared.ThumnailsExtension;
+
                         using (Image _image = Image.FromStream(fs))
                         {
                             if (_image.Width > ConfigShared.MaxDimensions[0] || _image.Height > ConfigShared.MaxDimensions[0])
                             {
                                 using (Image _newImage = ScaleImage(_image, ConfigShared.MaxDimensions[0], ConfigShared.MaxDimensions[0]))
                                 {
-                                    _newImage.Save(_newFile + ConfigShared.ThumnailsSuffixes[0] + "." + ConfigShared.ThumnailsExtension, pngEncoder, myEncoderParameters);
+                                    _newImage.Save(_newImage_l, pngEncoder, myEncoderParameters);
                                 }
                             }
 
@@ -103,7 +118,7 @@ namespace Plan.Shared.Thumnails
                             {
                                 using (Image _newImage = ScaleImage(_image, ConfigShared.MaxDimensions[1], ConfigShared.MaxDimensions[1]))
                                 {
-                                    _newImage.Save(_newFile + ConfigShared.ThumnailsSuffixes[1] + "." + ConfigShared.ThumnailsExtension, pngEncoder, myEncoderParameters);
+                                    _newImage.Save(_newImage_s, pngEncoder, myEncoderParameters);
                                 }
                             }
                         }
