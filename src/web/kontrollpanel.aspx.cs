@@ -6,6 +6,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Globalization;
+using Npgsql;
+using System.Data;
 
 namespace Plan.Plandokument
 {
@@ -19,6 +21,32 @@ namespace Plan.Plandokument
             if (!(HttpContext.Current.User.Identity.IsAuthenticated && Plandokument.User.Admins.Contains(_user)))
             {
                 Response.Redirect("~/not-authenticated.aspx", true);
+            }
+            else
+            {
+                DataTable dtUser = new DataTable();
+                NpgsqlConnection npgsqlCon = UtilityDatabase.GetNpgsqlConnectionForDBGeodata();
+                NpgsqlCommand npgsqlCom = new NpgsqlCommand(
+                    SqlTemplates.GetUserIdFullName.Replace("@user_id", _user),
+                    npgsqlCon);
+                NpgsqlDataReader npgsqlDr;
+
+                npgsqlCom.Connection.Open();
+                npgsqlDr = npgsqlCom.ExecuteReader();
+
+                dtUser.Load(npgsqlDr);
+
+                npgsqlDr.CloseAsync();
+                npgsqlDr.DisposeAsync();
+
+                string userFullName = String.Empty;
+                if (dtUser.Rows.Count > 0)
+                {
+                    userFullName = dtUser.Rows[0]["first_name"].ToString() + " " + dtUser.Rows[0]["last_name"].ToString();
+                }
+
+                lblUser.Text = $"Inloggad som [ {_user} ] {userFullName}";
+                lblUser.ToolTip = "Autentiserad som administratör genom SSO (Singel Sign On)";
             }
 
 

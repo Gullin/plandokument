@@ -11,6 +11,7 @@ namespace Plan.Plandokument
         public static string CreateAppDbStatRequest { get; set; }
         public static string ExistsAppDbStatRequest { get; set; }
         public static string InsertAppDbStatRequest { get; set; }
+        public static string GetUserIdFullName { get; set; }
 
         static SqlTemplates()
 		{
@@ -35,6 +36,9 @@ namespace Plan.Plandokument
                 .OpenText().ReadToEnd();
 
             InsertAppDbStatRequest = new FileInfo(baseScriptFolder + @"/sqlite/insert-stat-requests.sql")
+                .OpenText().ReadToEnd();
+
+            GetUserIdFullName = new FileInfo(baseScriptFolder + @"/postgresql/get-username-by-user-id.pgsql")
                 .OpenText().ReadToEnd();
         }
 

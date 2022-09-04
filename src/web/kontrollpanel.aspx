@@ -391,6 +391,10 @@
                 </asp:PlaceHolder>
             </div>
 
+            <div id="user" class="hand">
+                <asp:Label ID="lblUser" ToolTip="Användare kunde inte identifieras fullt ut" runat="server">[ N/ A]</asp:Label>
+            </div>
+
             <div id="feedback">
                 <a href="<%= ResolveUrl("~/") %>dokument/alla" title="Lista alla planer från Planregistret">
                     <img id="listAllPlanes" src="<%= ResolveUrl("~/") %>pic/list_all_planes.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>

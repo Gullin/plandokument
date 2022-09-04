@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Plan.Plandokument {
-    
-    
-    public partial class kontrollpanel {
-        
+namespace Plan.Plandokument
+{
+
+
+    public partial class kontrollpanel
+    {
+
         /// <summary>
         /// form1 control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Plan.Plandokument {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
+
         /// <summary>
         /// NyCacheEfterAntalDagar control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Plan.Plandokument {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label NyCacheEfterAntalDagar;
-        
+
         /// <summary>
         /// NyCacheKlockan control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Plan.Plandokument {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label NyCacheKlockan;
-        
+
         /// <summary>
         /// lblVersion control.
         /// </summary>
@@ -47,7 +49,16 @@ namespace Plan.Plandokument {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblVersion;
-        
+
+        /// <summary>
+        /// lblUser control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUser;
+
         /// <summary>
         /// lblCopyrightYear control.
         /// </summary>

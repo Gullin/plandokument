@@ -499,6 +499,7 @@
     <None Include="Properties\PublishProfiles\Deploy Debug x64.pubxml" />
     <None Include="Properties\PublishProfiles\Deploy Release x64.pubxml" />
     <Content Include="static-resources\sql\postgresql\get-plan-geometri-bas.pgsql" />
+    <Content Include="static-resources\sql\postgresql\get-username-by-user-id.pgsql" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
