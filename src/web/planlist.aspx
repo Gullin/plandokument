@@ -120,7 +120,6 @@
                         sorting: true,
                         listClass: 'MiddleCenterTD',
                         display: function (planData) {
-                            console.log(planData);
                             var $img = $("<img>");
                             if (planData.record.HasDocument || planData.record.HasDocument == null) {
                                 $img.attr("src", urlBasePath + "pic/planDocuments.png");
@@ -223,6 +222,20 @@
         });
 
 
+        // Filtrera jTable-tabellen i klienten, filtreras på innehållet från alla kolumner
+        $(function () {
+
+            $("#searchJTablePlanList").keyup(function () {
+                var value = $(this).val().toLowerCase();
+                $(".jtable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            $("#searchJTablePlanList").focus();
+        });
+
+
         // Ladda ner dokument zippade via webbtjänst
         function getFilesZipped($selectedRows, zipFileNamePart) {
             toggleLoadingImage(true);
@@ -261,6 +274,14 @@
 <body>
     <form id="form1" runat="server">
         <div id="container">
+
+            <br />
+
+            <input id="searchJTablePlanList" style="width: 50%; padding: 1em; font-size: 1.5em; font-weight: bolder;" type="text" placeholder="Filtrera listade planer ..." />
+
+            <br />
+            <br />
+
             <div id="PlanTableContainer"></div>
 
 
