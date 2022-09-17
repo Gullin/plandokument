@@ -153,37 +153,37 @@
 
 
             <ul class="nav nav-tabs" id="menu" role="tablist">
-                <li class="nav-item">
+<%--                <li class="nav-item">
                     <a class="nav-link active" id="tab-overview" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Översikt</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="tab-logs" data-toggle="tab" href="#logs" role="tab" aria-controls="logs" aria-selected="false">Loggar</a>
-                </li>
+                </li>--%>
                 <li class="nav-item">
                     <a class="nav-link" id="tab-cache" data-toggle="tab" href="#cache" role="tab" aria-controls="cache" aria-selected="false">Cache</a>
                 </li>
-                <li class="nav-item">
+<%--                <li class="nav-item">
                     <a class="nav-link" id="tab-validate" data-toggle="tab" href="#validate" role="tab" aria-controls="validate" aria-selected="false">Kontroll</a>
-                </li>
+                </li>--%>
                 <li class="nav-item">
                     <a class="nav-link" id="tab-thumnails" data-toggle="tab" href="#thumnails" role="tab" aria-controls="thumnails" aria-selected="false">Miniatyrbilder</a>
                 </li>
-                <li class="nav-item">
+<%--                <li class="nav-item">
                     <a class="nav-link" id="tab-system" data-toggle="tab" href="#system" role="tab" aria-controls="system" aria-selected="false">System</a>
-                </li>
+                </li>--%>
             </ul>
 
             <div class="tab-content" id="menu-content">
                 <%--Översikt--%>
-                <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
+<%--                <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
                     Kommer senare
-                </div>
+                </div>--%>
 
 
                 <%--Logg--%>
-                <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="tab-logs">
+<%--                <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="tab-logs">
                     Kommer senare
-                </div>
+                </div>--%>
 
 
                 <%--Cache--%>
@@ -297,9 +297,9 @@
 
 
                 <%--Kontroll / Validera--%>
-                <div class="tab-pane fade" id="validate" role="tabpanel" aria-labelledby="tab-validate">
+<%--                <div class="tab-pane fade" id="validate" role="tabpanel" aria-labelledby="tab-validate">
                     Kommer senare
-                </div>
+                </div>--%>
 
 
                 <%--ThumNails--%>
@@ -359,9 +359,9 @@
 
 
                 <%--System--%>
-                <div class="tab-pane fade" id="system" role="tabpanel" aria-labelledby="tab-system">
+<%--                <div class="tab-pane fade" id="system" role="tabpanel" aria-labelledby="tab-system">
                     Kommer senare
-                </div>
+                </div>--%>
             </div>
 
 
