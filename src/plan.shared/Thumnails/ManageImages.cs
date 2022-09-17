@@ -61,7 +61,7 @@ namespace Plan.Shared.Thumnails
         /// <param name="e">Resultat från en event när fil ändras.</param>
         public static void CreateThumnailFiles(FileSystemEventArgs e)
         {
-            CreateThumnailFiles(e.Name);
+            CreateThumnailFiles(e.FullPath);
         }
 
         /// <summary>
