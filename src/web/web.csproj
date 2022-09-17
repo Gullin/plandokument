@@ -160,6 +160,7 @@
     <Content Include="js\kontrollpanel.js" />
     <Content Include="lib\octicons-9.1.1\check.svg" />
     <Content Include="lib\octicons-9.1.1\circle-slash.svg" />
+    <Content Include="lib\octicons-9.1.1\eye.svg" />
     <Content Include="not-authenticated.aspx" />
     <Content Include="pic\favicon.ico" />
     <Content Include="services\kontrollpanel.asmx" />
