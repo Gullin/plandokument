@@ -57,6 +57,7 @@
             </ul>
         </div>
 
+        
 
         <div id="content">
 
@@ -64,6 +65,31 @@
                 <h4 id="avsnitt1">Versionsinformation</h4>
                 <div id="version">
                     <ul>
+                        <li><span>v0.24</span> Request statistik lagras i SQLite-fil "PlandokumentAppDb.sqlite" parallellt med textfil. Förberedelse för ett framtida borttag av textfil.
+                        </li>
+                        <li><span>v0.23</span> Beroendet till databashanterare Oracle borttaget. Stödjer kombination av MS SQL Server och PostGIS.
+                        </li>
+                        <li>
+                            <ul>
+                                <li><span>v0.22.3</span> SSO (Single Sign On), administratörers användar-id konfigureras i Settings.config. Namn hämtas från databasschema och tabell lk_gis.sys_meta_users.</li>
+                                <li><span>v0.22.2</span> Miniatyrbilder, presenterar Windows-tjänstens tjänsteuppgifter, möjlighet att starta om, stoppa och starta Windows-tjänsten samt listning av alla tiff-filer med om miniatyrbilder finns eller inte.</li>
+                                <li><span>v0.22.1</span> Cache, redogör för konfigurerad förnyelse (sätts i Settings.config), metadata som minnesanvändning samt möjlighet till manuell förnyelse.</li>
+                            </ul>
+                        </li>
+                        <li><span>v0.22</span> Administrationssajt
+                        </li>
+                        <li><span>v0.21</span> Windows-tjänst för att automatiskt skapa miniatyrbilder när tiff-bilder skapas, ändras eller raderas.
+                        </li>
+                        <li><span>v0.20</span> Möjlighet att presentera miniatyrbilder till plankartans tiff-filer. Två kopier av tiff-bild, en större (filnamnssuffix _l) och en mindre (filnamnssuffix _s). Konfiguration görs i gemensam mellan webbapplikation och Windows-tjänst konfigurationsfil "ThumnailsService.config".
+                        </li>
+                        <li><span>v0.19</span> Cache införd på bredden för rappare applikation (tidigare endast grundläggande planregisterinformation. Cache utökas med:
+                            <ul>
+                                <li>Plandokument</li>
+                                <li><a href="<%= ResolveUrl("~/") %>dokument/om#avsnitt4-1">Dokumenttyper</a></li>
+                                <li>Planers berörkretsar (fastigheters relation till plan)</li>
+                                <li>Planpåverkan (planers relation sinsemellan)</li>
+                            </ul>
+                        </li>
                         <li>
                             <ul>
                                 <li><span>v0.18.3</span> BUGGRÄTTNING: Länkningsfel för skriptresurser.
@@ -487,6 +513,7 @@
                                 </li>
                             </ul>
                         </li>
+                        <li><a href="https://github.com/Gullin/plandokument/issues">Ytterligare ...</a></li>
                     </ul>
                 </div>
             </div>
