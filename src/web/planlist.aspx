@@ -86,7 +86,23 @@
                         listClass: 'testRow'
                     },
                     Akt: {
-                        title: 'Aktbeteckning'
+                        title: 'Aktbeteckning',
+                        display: function (planData) {
+                            var $a = $("<a>", {
+                                text: planData.record.Akt,
+                                title: planData.record.Akt,
+                                href: urlBasePath + "dokument/" + planData.record.Akt,
+                                target: "_blank"
+                            });
+
+                            var $span = $("<span>");
+                            $span.addClass("linkNewWindow");
+                            $span.attr("title", "Öppnar länk i nytt webbläsarfönster");
+
+                            $a.append($span);
+
+                            return $a;
+                        }
                     },
                     AktEgen: {
                         title: 'Bygglov'
@@ -104,6 +120,7 @@
                         sorting: true,
                         listClass: 'MiddleCenterTD',
                         display: function (planData) {
+                            console.log(planData);
                             var $img = $("<img>");
                             if (planData.record.HasDocument || planData.record.HasDocument == null) {
                                 $img.attr("src", urlBasePath + "pic/planDocuments.png");
