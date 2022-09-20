@@ -65,6 +65,22 @@
                 <h4 id="avsnitt1">Versionsinformation</h4>
                 <div id="version">
                     <ul>
+                        <li>
+                            <ul>
+                                <li><span>v0.28.2</span> Knapptext uppdateras dynamiskt och återspeglar antalet markerade tiff-bilder.
+                                </li>
+                                <li><span>v0.28.1</span> Knappar glider med sidrullningen vid flera tiff-bilder till antalet.
+                                </li>
+                            </ul>
+                        </li>
+                        <li><span>v0.28</span> Förbättring av knappar för skapande av miniatyrbilder
+                        </li>
+                        <li><span>v0.27</span> Filtrering av planlista
+                        </li>
+                        <li><span>v0.26</span> Länkning av plan på planbeteckning mot sajt plandokument.
+                        </li>
+                        <li><span>v0.25</span> Favicon.
+                        </li>
                         <li><span>v0.24</span> Request statistik lagras i SQLite-fil "PlandokumentAppDb.sqlite" parallellt med textfil. Förberedelse för ett framtida borttag av textfil.
                         </li>
                         <li><span>v0.23</span> Beroendet till databashanterare Oracle borttaget. Stödjer kombination av MS SQL Server och PostGIS.
