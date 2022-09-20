@@ -1083,7 +1083,7 @@ function putPlansDocs($headerPlan, plansDocs) {
                                         });
                                         $('.popover').find('span').on('click', function () {
 
-                                            $('<div class="modal" tabindex="-1"><div class="modal-dialog modal-wide modal-dialog-centered"><div class="modal-content"><img style="width:100%;" src="' + urlBasePath + valueDoc[8] + valueDoc[1].replace(/\.[^/.]+$/, "") + '_thumnail-l.jpg" /></div></div></div>').modal({
+                                            $('<div class="modal" tabindex="-1"><div class="modal-dialog modal-xl modal-wide modal-dialog-centered" style="min-width: 90%"><div class="modal-content"><img style="width:100%;" src="' + urlBasePath + valueDoc[8] + valueDoc[1].replace(/\.[^/.]+$/, "") + '_thumnail-l.jpg" /></div></div></div>').modal({
                                                 keyboard: true
                                             });
 
