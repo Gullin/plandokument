@@ -115,6 +115,11 @@ function getAllPlansDocs() {
                         $thisCheckbox.prop('title', 'Markera alla dokument');
                         $('#table-thumnails tbody input').closest("tr").removeClass("tr-selected");
                     }
+
+                    SetTextReCreateThumbnailsButton(
+                        $("#table-thumnails").find("tbody").find(':checkbox:checked').length
+                    );
+
                 });
                 // Kolumn 2
                 var $th1 = $("<th>");
@@ -137,6 +142,7 @@ function getAllPlansDocs() {
                 $tr.append($th4);
                 $tableHeader.append($tr);
                 $table.append($tableHeader);
+
 
                 // Table Body
                 var $tableBody = $("<tbody>");
@@ -253,6 +259,11 @@ function getAllPlansDocs() {
                                     $clickedRow.removeClass("tr-selected");
                                 }
                             }
+
+                            SetTextReCreateThumbnailsButton(
+                                $(this).closest("tbody").find(':checkbox:checked').length
+                            );
+
                         });
 
                         $tableBody.append($tr);
@@ -280,6 +291,26 @@ function getAllPlansDocs() {
             alert("FEL!");
         }
     })
+
+}
+
+function SetTextReCreateThumbnailsButton(nbrChecked) {
+    var thumbnailButtonText = $("#btnReCreateThumnail").find("span:nth-child(2)").text();
+    if (nbrChecked == 1) {
+        $("#btnReCreateThumnail")
+            .find("span:nth-child(2)")
+            .text("Skapa om " + nbrChecked + " st. miniatyrbild");
+    }
+    else if (nbrChecked >= 1) {
+        $("#btnReCreateThumnail")
+            .find("span:nth-child(2)")
+            .text("Skapa om " + nbrChecked + " st. miniatyrbilder");
+    }
+    else {
+        $("#btnReCreateThumnail")
+            .find("span:nth-child(2)")
+            .text("Skapa om miniatyrbilder för markerade plankarter");
+    }
 
 }
 
