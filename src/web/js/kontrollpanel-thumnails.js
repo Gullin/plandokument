@@ -13,9 +13,10 @@ function getAllPlansDocs() {
 
                 $("#ThumnailsContent").empty();
 
-                var $divRow = $("<div>").addClass("row justify-content-start");
+                var $divRow = $("<div>").addClass("row");
                 var $divColLeft = $("<div>").addClass("col-auto");
                 var $divColRight = $divColLeft.clone();
+
 
                 // Funktionsknappar
                 // Mall definierad
@@ -65,23 +66,28 @@ function getAllPlansDocs() {
                 $spanThumnailPeek.attr("title", "Miniatyrbild");
 
 
-                $($divColRight).append($btnReCreateThumnail);
-                $($divColRight).append("<br />");
-                $($divColRight).append($btnReloadThumnail);
-                $($divColRight).append("<br />");
 
-                $($divColRight).append("existerande miniatyrbild")
+                var $divColRightButtond = $("<div>");
+                $divColRightButtond.addClass("sticky-top");
+
+                $divColRightButtond.append($btnReCreateThumnail);
+                $divColRightButtond.append("<br />");
+                $divColRightButtond.append($btnReloadThumnail);
+                $divColRightButtond.append("<br />");
+
+                $divColRightButtond.append("existerande miniatyrbild")
                     .append($spanThumnailHave
                         .clone()
                         .css("padding-left", "1em")
                     );
-                $($divColRight).append("<br />");
-                $($divColRight).append(" avsaknad av miniatyrbild")
+                $divColRightButtond.append("<br />");
+                $divColRightButtond.append(" avsaknad av miniatyrbild")
                     .append($spanThumnailNo
                         .clone()
                         .css("padding-left", "1em")
                     );
 
+                $divColRight.append($divColRightButtond);
 
 
 
