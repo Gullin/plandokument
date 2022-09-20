@@ -6,6 +6,8 @@
 <head runat="server">
     <title>Alla planer</title>
     <link rel="icon" type="image/x-icon" href="~/pic/favicon.ico" />
+
+    <link href="lib/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/reset.css" rel="stylesheet" />
     <link href="css/page-UI-core.css" rel="stylesheet" />
     <link href="css/page-UI-centering.css" rel="stylesheet" />
@@ -277,9 +279,8 @@
 
             <br />
 
-            <input id="searchJTablePlanList" style="width: 50%; padding: 1em; font-size: 1.5em; font-weight: bolder;" type="text" placeholder="Filtrera listade planer ..." />
+            <input id="searchJTablePlanList" type="text" class="form-control" placeholder="Filtrera listade planer ..." />
 
-            <br />
             <br />
 
             <div id="PlanTableContainer"></div>
