@@ -351,7 +351,7 @@
                         </p>
                     </div>
 
-                    <div id="ThumnailsContent" style="display: none;">
+                    <div id="ThumnailsContent" style="display: none; position: relative;">
 
                     </div>
 
