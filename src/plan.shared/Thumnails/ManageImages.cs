@@ -112,6 +112,10 @@ namespace Plan.Shared.Thumnails
                                     _newImage.Save(_newImage_l, pngEncoder, myEncoderParameters);
                                 }
                             }
+                            else
+                            {
+                                _image.Save(_newImage_l, pngEncoder, myEncoderParameters);
+                            }
 
 
                             if (_image.Width > ConfigShared.MaxDimensions[1] || _image.Height > ConfigShared.MaxDimensions[1])
@@ -120,6 +124,10 @@ namespace Plan.Shared.Thumnails
                                 {
                                     _newImage.Save(_newImage_s, pngEncoder, myEncoderParameters);
                                 }
+                            }
+                            else
+                            { 
+                                _image.Save(_newImage_s, pngEncoder, myEncoderParameters);
                             }
                         }
 
