@@ -24,10 +24,10 @@ namespace Plan.Shared.Thumnails
         // Alternativa sätt att erhålla XML-sektioner som inställningar
         //https://www.google.com/search?q=asp.net+4.8+add+section+external+setting+file&rlz=1C1GCEU_svSE918SE918&ei=CasGY6-RDI-crgSch5-gBQ&oq=asp.net+4.8+add+section+&gs_lcp=Cgdnd3Mtd2l6EAMYADIFCCEQoAEyBQghEKABMgUIIRCgATIFCCEQoAE6BwgAEEcQsAM6CAghEB4QFhAdOgQIIRAVOgcIIRCgARAKSgQIQRgASgQIRhgAULhAWIpMYL5saAFwAXgAgAH1AYgBhgeSAQU1LjIuMZgBAKABAcgBCMABAQ&sclient=gws-wiz
         //https://www.c-sharpcorner.com/article/four-ways-to-read-configuration-setting-in-c-sharp/
-        public static string WatchedFolder { get; } = (@ConfigurationManager.GetSection("ThumnailsService") as NameValueCollection)["WatchedFolder"].ToString();
+        public static string WatchedFolder { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["WatchedFolder"];
 
         //public static string ThumnailsFolder { get; } = @ConfigurationManager.AppSettings["ThumnailsFolder"].ToString();
-        public static string ThumnailsFolder { get; } = (@ConfigurationManager.GetSection("ThumnailsService") as NameValueCollection)["ThumnailsFolder"].ToString();
+        public static string ThumnailsFolder { get; } = ((NameValueCollection)ConfigurationManager.GetSection("ThumnailsService"))["ThumnailsFolder"];
 
         public static string WatchFilter { get; } = "*.tif";
 
