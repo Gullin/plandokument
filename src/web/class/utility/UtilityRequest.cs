@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Plan.Plandokument
 {
@@ -14,7 +15,6 @@ namespace Plan.Plandokument
         private UtilityRequest()
         { }
 
-        //TODO: Request-log, logga async/await
         /// <summary>
         /// Loggar sökningens statistik till fil på server.
         /// </summary>
@@ -25,7 +25,7 @@ namespace Plan.Plandokument
         /// <paramref name="TIME"/>
         /// </param>
         /// <value>Test</value>
-        private static string LogRequestStatsAsync()
+        private static string LogRequestStats()
         {
             UtilityLog.Log("Request loggad med statistik, detaljer i RequestStatistik.log", Utility.LogLevel.STATS);
 
@@ -211,11 +211,198 @@ namespace Plan.Plandokument
             }
         }
 
+        private static async Task<string> LogRequestStatsAsync()
+        {
+            await UtilityLog.LogAsync("Request loggad med statistik, detaljer i RequestStatistik.log", Utility.LogLevel.STATS);
+
+            try
+            {
+                // Tilldelar värde för max antal loggfiler, noll ingen loggning, negativt värde oändligt antal filer eller annars antalet
+                // om inget anges eller inget tal antas negativt värde
+                int maxFilesTotal = int.TryParse(ConfigurationManager.AppSettings["requestStatFileMaxTotal"].ToString(), out maxFilesTotal) ? maxFilesTotal : -1;
+
+                if (maxFilesTotal != 0)
+                {
+                    // Standardvärden
+                    string baseFileNameDefult = "RequestStatistik";
+                    double maxFileByteSizeDefault = 10;
+                    string fileHeader = "Occurred;NbrSearched;NbrHits;SearchTime (notDocsMap)";
+
+                    logDirectoryExist();
+
+                    // Get the absolute path to the log file
+                    string baseFileName = ConfigurationManager.AppSettings["requestStatFileName"].ToString();
+                    if (string.IsNullOrEmpty(baseFileName))
+                    {
+                        baseFileName = baseFileNameDefult;
+                    }
+                    string logFile = logDirectory + baseFileName + ".log";
+                    if (!File.Exists(logFile))
+                    {
+                        FileStream fs = File.Create(logFile);
+                        fs.Close();
+                        using (StreamWriter swHeader = new StreamWriter(logFile, true))
+                        {
+                            await swHeader.WriteLineAsync(fileHeader);
+                        }
+                    }
+
+                    // Tilldelar värde till maximal storlek för loggfiler
+                    double maxFileByteSize = maxFileByteSizeDefault;
+                    if (double.TryParse(ConfigurationManager.AppSettings["requestStatFileMaxByteSize"].ToString(), out maxFileByteSize))
+                    {
+                        if (maxFileByteSize < 0.005)
+                            maxFileByteSize = maxFileByteSizeDefault;
+                    }
+                    maxFileByteSize = maxFileByteSize * 1024.0 * 1024.0;
+
+
+                    // Läs filstorlek för basloggfil
+                    FileStream fileToReadSizeFrom = File.Open(logFile, FileMode.Open, FileAccess.Read);
+                    long fileSize = fileToReadSizeFrom.Length;
+                    fileToReadSizeFrom.Close();
+                    fileToReadSizeFrom.Dispose();
+
+                    // Om basfilen inte är för stor skriv till den, annars kopiera bort den och skapa ny tom basfil
+                    if (fileSize >= maxFileByteSize)
+                    {
+                        if (maxFilesTotal > 0)
+                        {
+                            //dela upp basfilen men ej till fler delfiler än inställning medger
+                            // Skapa felloggfiler enligt "Error.log" som övergripande med "ErrorYYYYMMDDTHHMISS.fff" som dellogfiler med max stycken enligt standard eller parameter
+                            string[] logFiles = Directory.GetFiles(logDirectory, baseFileName + "*.log", SearchOption.TopDirectoryOnly);
+                            int nbrLogFiles = logFiles.Length;
+                            int nbrMaxFileItteration = nbrLogFiles;
+                            int nbrFileItteration = 0;
+                            while (nbrLogFiles >= maxFilesTotal)
+                            {
+                                // Bryter while-loopen om antalet ittereringar blir fler än potentiella filer att radera
+                                // om de ej raderats p.g.a. att de innehåller basfilnamnet men ej datumstämpel på korrekt sätt
+                                if (nbrFileItteration >= nbrMaxFileItteration)
+                                    break;
+                                nbrFileItteration++;
+
+
+                                // Rensa äldsta dellog-fil tills max antal minus en existerar
+                                // Hitta äldsta
+                                string oldestFileWithPath = string.Empty;
+                                DateTime? oldestTimeStamp = null;
+                                // YYYYMMDDTHHMISS.fff
+                                Regex timestampRegex = new Regex("([2-3][0-9]{3})(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])T([0-1][0-9]|2[0-4])([0-5][0-9])([0-5][0-9]).([0-999])");
+                                foreach (string file in logFiles)
+                                {
+                                    // Kontrollerar från höger om skiljetecken för katalog (fysisk eller virtuell finns) existerar
+                                    int position = file.LastIndexOf(@"\");
+                                    if (position == -1)
+                                    {
+                                        position = file.LastIndexOf(@"/");
+
+                                    }
+
+                                    // Endast filnamn med ändelse
+                                    string tempFileName;
+                                    string tempDirectoryPath = string.Empty;
+                                    if (position == -1)
+                                    {
+                                        // antar är fil utan kataloger
+                                        tempFileName = file;
+                                    }
+                                    else
+                                    {
+                                        tempFileName = file.Substring(position + 1);
+                                        tempDirectoryPath = file.Substring(0, position);
+                                    }
+
+                                    // Om filen inte är basloggfilen
+                                    if (tempFileName != baseFileName + ".log")
+                                    {
+                                        // Om filens 15 tecken efter lika många tecken som basloggfilens antal tecken stämmer med tidsstämpelns teckenuppsättning
+                                        string potentialFileTimeSuffix = tempFileName.Substring(baseFileName.Length, 15);
+                                        if (timestampRegex.IsMatch(potentialFileTimeSuffix))
+                                        {
+                                            DateTime tempTimeStamp = new DateTime(Convert.ToInt16(potentialFileTimeSuffix.Substring(0, 4)),     // år
+                                                                                  Convert.ToInt16(potentialFileTimeSuffix.Substring(4, 2)),     // månad
+                                                                                  Convert.ToInt16(potentialFileTimeSuffix.Substring(6, 2)),     // dag
+                                                                                  Convert.ToInt16(potentialFileTimeSuffix.Substring(9, 2)),     // timme
+                                                                                  Convert.ToInt16(potentialFileTimeSuffix.Substring(11, 2)),    // minut
+                                                                                  Convert.ToInt16(potentialFileTimeSuffix.Substring(13, 2)),    // sekund
+                                                                                  Convert.ToInt16(potentialFileTimeSuffix.Substring(16, 3)));   // millisekund
+
+                                            if (oldestTimeStamp != null)
+                                            {
+                                                if (tempTimeStamp < oldestTimeStamp)
+                                                {
+                                                    oldestTimeStamp = tempTimeStamp;
+                                                    oldestFileWithPath = tempDirectoryPath + "\\" + tempFileName;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                oldestTimeStamp = tempTimeStamp;
+                                                oldestFileWithPath = tempDirectoryPath + "\\" + tempFileName;
+                                            }
+                                        }
+                                    }
+
+                                }
+
+                                // Om äldsta filen existerar, radera den
+                                if (File.Exists(oldestFileWithPath))
+                                {
+                                    FileInfo file = new FileInfo(oldestFileWithPath);
+                                    file.Delete();
+                                    nbrLogFiles--;
+                                }
+
+
+                                if (!string.IsNullOrEmpty(oldestFileWithPath))
+                                {
+                                    // Minska vektorn med sökbara filer med den potentiellt raderbara
+                                    int arrayIdxDeletedFile = Array.IndexOf(logFiles, oldestFileWithPath);
+                                    List<string> tmpStringArray = new List<string>(logFiles);
+                                    tmpStringArray.RemoveAt(arrayIdxDeletedFile);
+                                    logFiles = tmpStringArray.ToArray();
+                                }
+                            }
+                        }
+
+
+                        // Formatera datum-tids-sträng för unik
+                        string fileTimeSuffix = DateTime.Now.ToString("yyyyMMddTHHmmss.fff");
+                        // Kopiera undan basfil med tidsstämpel om antalet filer i inställningar tillåter
+                        File.Copy(logFile, logDirectory + baseFileName + fileTimeSuffix + ".log");
+
+                        // Tömmer basfilen till noll byte
+                        FileStream fs = File.Open(logFile, FileMode.Truncate, FileAccess.Write);
+                        fs.Close();
+
+                        // Skriver rubriker på nytt
+                        using (StreamWriter swHeader = new StreamWriter(logFile, true))
+                        {
+                            await swHeader.WriteLineAsync(fileHeader);
+                        }
+
+                    }
+
+                    return logFile;
+                }
+
+                // Annars returnera tom sträng som får testa mot
+                return String.Empty;
+            }
+            catch (Exception exc)
+            {
+                await UtilityException.LogExceptionAsync(exc, "Loggning Statistik : LogRequestStats", true);
+                return String.Empty;
+            }
+        }
+
+
         internal static void WriteRequestStatToFile(DataTable searchRequest)
         {
             // skriv till basfilen
             // Open the log file for append and write the log
-            string logFile = LogRequestStatsAsync();
+            string logFile = LogRequestStats();
             if (logFile != String.Empty)
             {
                 try
@@ -237,6 +424,35 @@ namespace Plan.Plandokument
                 }
             }
         }
+
+
+        internal static async Task WriteRequestStatToFileAsync(DataTable searchRequest)
+        {
+            // skriv till basfilen
+            // Open the log file for append and write the log
+            string logFile = await LogRequestStatsAsync();
+            if (logFile != String.Empty)
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(logFile, true))
+                    {
+                        foreach (DataRow dr in searchRequest.Rows)
+                        {
+                            await sw.WriteLineAsync(dr["WHEN"].ToString() + ";" +
+                                                    dr["NBRSEARCHED"].ToString() + ";" +
+                                                    dr["NBRHITS"].ToString() + ";" +
+                                                    dr["TIME"].ToString());
+                        }
+                    }
+                }
+                catch (Exception exc)
+                {
+                    await UtilityException.LogExceptionAsync(exc, "Request Statistics to log-fil", false);
+                }
+            }
+        }
+
 
         internal static void WriteRequestStatToDb(DataTable searchRequest)
         {
@@ -268,6 +484,44 @@ namespace Plan.Plandokument
             catch (Exception exc)
             {
                 UtilityException.LogException(exc, "Request Statistics to DB", false);
+            }
+            finally
+            {
+                dbCon.Dispose();
+            }
+        }
+
+
+        internal static async Task WriteRequestStatToDbAsync(DataTable searchRequest)
+        {
+            await UtilityLog.LogAsync($"Request loggad med statistik, detaljer i databas {ApplicationDatabase.GetDatabase()}", Utility.LogLevel.STATS);
+
+            SQLiteConnection dbCon = new SQLiteConnection(ApplicationDatabase.GetConnectionString());
+
+            try
+            {
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.Connection = dbCon;
+                dbCon.Open();
+
+                foreach (DataRow dr in searchRequest.Rows)
+                {
+                    cmd.CommandText = SqlTemplates.InsertAppDbStatRequest;
+                    cmd.Parameters.AddWithValue("@when", dr["WHEN"].ToString());
+                    cmd.Parameters.AddWithValue("@nbr_search", Convert.ToInt32(dr["NBRSEARCHED"]));
+                    cmd.Parameters.AddWithValue("@nbr_hits", Convert.ToInt32(dr["NBRHITS"].ToString()));
+                    cmd.Parameters.AddWithValue("@searchtime", Convert.ToDecimal(dr["TIME"].ToString()));
+                    cmd.Prepare();
+
+                    await cmd.ExecuteNonQueryAsync();
+                }
+
+                dbCon.Close();
+                dbCon.Dispose();
+            }
+            catch (Exception exc)
+            {
+                await UtilityException.LogExceptionAsync(exc, "Request Statistics to DB", false);
             }
             finally
             {
