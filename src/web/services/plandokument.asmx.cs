@@ -18,6 +18,7 @@ using System.Xml.Linq;
 using OSGeo.MapGuide;
 using Plan.Plandokument.MapLayerDefinition;
 using Plan.Plandokument.jTable;
+using System.Threading.Tasks;
 
 namespace Plan.Plandokument
 {
@@ -177,7 +178,7 @@ namespace Plan.Plandokument
         //TODO: Kontrollera för om sökning görs mot samma begrepp med värde som finns vid flera tillfällen
         [WebMethod(EnableSession = true)]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
-        public string getPlanInfo()
+        public async Task<string> getPlanInfo()
         {
             // Kontrollera om sökning är gjord efter speciellt begrepp (kolumn)
             string begrepp = string.Empty;
@@ -511,7 +512,8 @@ namespace Plan.Plandokument
 
             dtRequestLog.Rows.Add(drRequestLog);
 
-            UtilityRequest.WriteRequestStatToFile(dtRequestLog);
+            //UtilityRequest.WriteRequestStatToFile(dtRequestLog);
+            await UtilityRequest.WriteRequestStatToFileAsync(dtRequestLog);
             UtilityRequest.WriteRequestStatToDb(dtRequestLog);
 
             return getObjectAsJson(getTableSorted(dtResultDistinct, "AKT", "ASC", "BEGREPP", "ASC"));
