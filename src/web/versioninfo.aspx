@@ -67,6 +67,8 @@
                     <ul>
                         <li>
                             <ul>
+                                <li><span>v0.28.3</span> BUGGRÄTTNING: Miniatyrbilder skapades ej om bilderna inte behövde skalas ner i dimensioner. Ska komprimeras och byta filformat.
+                                </li>
                                 <li><span>v0.28.2</span> Knapptext uppdateras dynamiskt och återspeglar antalet markerade tiff-bilder.
                                 </li>
                                 <li><span>v0.28.1</span> Knappar glider med sidrullningen vid flera tiff-bilder till antalet.
