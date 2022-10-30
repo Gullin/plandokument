@@ -65,6 +65,8 @@
                 <h4 id="avsnitt1">Versionsinformation</h4>
                 <div id="version">
                     <ul>
+                        <li><span>v0.29</span> Administrationssajt utökad med översikt som redogör för viss användningsstatistik.
+                        </li>
                         <li>
                             <ul>
                                 <li><span>v0.28.3</span> BUGGRÄTTNING: Miniatyrbilder skapades ej om bilderna inte behövde skalas ner i dimensioner. Ska komprimeras och byta filformat.
@@ -75,9 +77,9 @@
                                 </li>
                             </ul>
                         </li>
-                        <li><span>v0.28</span> Förbättring av knappar för skapande av miniatyrbilder
+                        <li><span>v0.28</span> Förbättring av knappar för skapande av miniatyrbilder.
                         </li>
-                        <li><span>v0.27</span> Filtrering av planlista
+                        <li><span>v0.27</span> Filtrering av planlista.
                         </li>
                         <li><span>v0.26</span> Länkning av plan på planbeteckning mot sajt plandokument.
                         </li>
