@@ -103,8 +103,20 @@ function ChartStatRunningTotalRequestsByPeriod(period) {
                 data: data,
                 options: {
                     scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Tid'
+                            }
+                        },
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Requests'
+                            }
                         }
                     }
                 }
@@ -188,8 +200,20 @@ function ChartStatTotalRequestsByPeriod(period) {
                 data: data,
                 options: {
                     scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Tid'
+                            }
+                        },
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Requests'
+                            }
                         }
                     }
                 }
@@ -273,8 +297,20 @@ function ChartStatSearchtimeRequestsByPeriod(period) {
                 data: data,
                 options: {
                     scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Tid'
+                            }
+                        },
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Millisekunder'
+                            }
                         }
                     }
                 }
