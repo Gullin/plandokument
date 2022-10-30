@@ -135,10 +135,12 @@
     <script src="<%= ResolveUrl("~/") %>js/jquery-3.4.1.min.js" type="text/javascript"></script>
     <script src="<%= ResolveUrl("~/") %>lib/popper.js-1.14.7/popper.min.js" type="text/javascript"></script>
     <script src="<%= ResolveUrl("~/") %>lib/bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<%= ResolveUrl("~/") %>lib/chart.js-3.9.1/chart.js"></script>
     <!-- Misc -->
     <script src="<%= ResolveUrl("~/") %>js/utility.js" type="text/javascript"></script>
 
     <script src="<%= ResolveUrl("~/") %>js/kontrollpanel.js" type="text/javascript"></script>
+    <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-stats.js" type="text/javascript"></script>
     <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-cache.js" type="text/javascript"></script>
     <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-service.js" type="text/javascript"></script>
     <script src="<%= ResolveUrl("~/") %>js/kontrollpanel-thumnails.js" type="text/javascript"></script>
@@ -153,10 +155,10 @@
 
 
             <ul class="nav nav-tabs" id="menu" role="tablist">
-<%--                <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link active" id="tab-overview" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Översikt</a>
                 </li>
-                <li class="nav-item">
+<%--                <li class="nav-item">
                     <a class="nav-link" id="tab-logs" data-toggle="tab" href="#logs" role="tab" aria-controls="logs" aria-selected="false">Loggar</a>
                 </li>--%>
                 <li class="nav-item">
@@ -175,9 +177,41 @@
 
             <div class="tab-content" id="menu-content">
                 <%--Översikt--%>
-<%--                <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
-                    Kommer senare
-                </div>--%>
+                <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm">
+                                <h3>Antal</h3>
+                                <asp:Label ID="StatTotalRequests" runat="server"></asp:Label>
+                                <br />
+                                <asp:Label ID="StatSearchRequestsTotal" runat="server"></asp:Label>
+                                <br />
+                                <asp:Label ID="StatSearchRequestsHits" runat="server"></asp:Label>
+                                <h3>Varaktighet</h3>
+                                <asp:Label ID="StatPeriodRequestsEnduring" runat="server"></asp:Label>
+                                <br />
+                                <asp:Label ID="StatPeriodRequestsFirst" runat="server"></asp:Label>
+                                <br />
+                                <asp:Label ID="StatPeriodRequestsLast" runat="server"></asp:Label>
+                                <h3>Svarstider</h3>
+                                <asp:Label ID="StatSearchtimeMinRequests" runat="server"></asp:Label>
+                                <br />
+                                <asp:Label ID="StatSearchtimeMaxRequests" runat="server"></asp:Label>
+                                <br />
+                                <asp:Label ID="StatSearchtimeAverageRequests" runat="server"></asp:Label>
+                                <br />
+                                <div style="font-size: 0.8em; line-height: normal;">I diagramet med genomsnittliga svarstider har 5-percentilen tagits bort (eliminering av outlines/spikar). Med andra ord endast 95 % av svarstiderna redovisas.</div>
+                            </div>
+                            <div id="StatCharts" class="col-sm">
+                                <canvas id="RunningTotalRequestsByYear"></canvas>
+                                <canvas id="TotalRequestsByYear"></canvas>
+                                <canvas id="SearchtimeRequestsByYear"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
 
 
                 <%--Logg--%>
@@ -188,100 +222,104 @@
 
                 <%--Cache--%>
                 <div class="tab-pane fade" id="cache" role="tabpanel" aria-labelledby="tab-cache">
+
+
+
+                    <div class="container">
                     <p>
                         Systemet har fem informationsdelar i cache för snabbare svarstider.
-                        </p>
-                    <hr />
-                    <h3>
-                        Automatisk förnyande av cache
-                    </h3>
-                    <p>
-                        Sker
                     </p>
-                    <ul>
-                        <li><asp:Label ID="NyCacheEfterAntalDagar" runat="server"></asp:Label></li>
-                        <li><asp:Label ID="NyCacheKlockan" runat="server"></asp:Label></li>
-                    </ul>
+                        <div class="row">
+                            <div class="col-sm">
+                                <h3>Automatisk förnyande av cache
+                                </h3>
+                                <p>
+                                    Sker
+                                </p>
+                                <ul>
+                                    <li>
+                                        <asp:Label ID="NyCacheEfterAntalDagar" runat="server"></asp:Label></li>
+                                    <li>
+                                        <asp:Label ID="NyCacheKlockan" runat="server"></asp:Label></li>
+                                </ul>
 
-                    <hr />
+                                <hr />
 
-                    <h3>
-                        Metadata
-                    </h3>
-                    <!-- Byggs upp av javascript //-->
-                    <div id="CacheMeta">
+                                <h3>Metadata
+                                </h3>
+                                <!-- Byggs upp av javascript //-->
+                                <div id="CacheMeta">
+                                </div>
 
-                    </div>
+                            </div>
 
-                    <hr />
-
-                    <h3>
-                        Förnya Cache
-                    </h3>
-                    <p>
-                        Sker förändringar av den underliggande informationen och som ska slå igenom innan systemet gör en egen schemalagd cache-ning kan manuell om-cache-ning göras nedan.
-                    </p>
-                    <table id="ReCacheTable">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Existerar</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="right">Grundläggande planregisterinformation</td>
-                                <td class="center"></td>
-                                <td>
-                                    <button id="btnRefreshCachePlan" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBasis(this)">
-                                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
-                                        <span>Förnya cache</span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="right">Plandokument</td>
-                                <td class="center"></td>
-                                <td>
-                                    <button id="btnRefreshCachePlanDocuments" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanDocuments(this)">
-                                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
-                                        <span>Förnya cache</span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="right">Dokumenttyper</td>
-                                <td class="center"></td>
-                                <td>
-                                    <button id="btnRefreshCacheDocumenttypes" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlandocumenttypes(this)">
-                                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
-                                        <span>Förnya cache</span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="right">Planers berörkrets (fastigheter relation till plan)</td>
-                                <td class="center"></td>
-                                <td>
-                                    <button id="btnRefreshCachePlanBerorFastighet" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorFastighet(this)">
-                                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
-                                        <span>Förnya cache</span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="right">Planpåverkan (planers relation)</td>
-                                <td class="center"></td>
-                                <td>
-                                    <button id="btnRefreshCachePlanBerorPlan" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorPlan(this)">
-                                        <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
-                                        <span>Förnya cache</span>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-<%--                        <tfoot>
+                            <div class="col-sm">
+                                <h3>Förnya Cache
+                                </h3>
+                                <p>
+                                    Sker förändringar av den underliggande informationen och som ska slå igenom innan systemet gör en egen schemalagd cache-ning kan manuell om-cache-ning göras nedan.
+                                </p>
+                                <table id="ReCacheTable">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Existerar</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="right">Grundläggande planregisterinformation</td>
+                                            <td class="center"></td>
+                                            <td>
+                                                <button id="btnRefreshCachePlan" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBasis(this)">
+                                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                                    <span>Förnya cache</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right">Plandokument</td>
+                                            <td class="center"></td>
+                                            <td>
+                                                <button id="btnRefreshCachePlanDocuments" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanDocuments(this)">
+                                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                                    <span>Förnya cache</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right">Dokumenttyper</td>
+                                            <td class="center"></td>
+                                            <td>
+                                                <button id="btnRefreshCacheDocumenttypes" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlandocumenttypes(this)">
+                                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                                    <span>Förnya cache</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right">Planers berörkrets (fastigheter relation till plan)</td>
+                                            <td class="center"></td>
+                                            <td>
+                                                <button id="btnRefreshCachePlanBerorFastighet" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorFastighet(this)">
+                                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                                    <span>Förnya cache</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right">Planpåverkan (planers relation)</td>
+                                            <td class="center"></td>
+                                            <td>
+                                                <button id="btnRefreshCachePlanBerorPlan" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlanBerorPlan(this)">
+                                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                                    <span>Förnya cache</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <%--                        <tfoot>
                             <tr>
                                 <td></td>
                                 <td colspan="2">
@@ -292,7 +330,12 @@
                                 </td>
                             </tr>
                         </tfoot>--%>
-                    </table>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
 
 

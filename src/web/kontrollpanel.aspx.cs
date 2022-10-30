@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using System.Globalization;
 using Npgsql;
 using System.Data;
+using Plan.Plandokument.SQLite;
 
 namespace Plan.Plandokument
 {
@@ -76,6 +77,48 @@ namespace Plan.Plandokument
                 // Copyright på sida
                 DateTime dateTime = DateTime.Now;
                 lblCopyrightYear.Text = dateTime.Year.ToString() + " " + ApplicationAssemblyUtility.GetApplicationCopyright().ToString();
+
+
+                // Statistik från Request-data
+                DataTable dataTable = new DataTable();
+                dataTable = StatData.StatTotalRequests();
+                if(dataTable.Rows.Count > 0)
+                {
+                    NumberFormatInfo nfi = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+                    nfi.NumberGroupSeparator = " ";
+                    nfi.NumberDecimalSeparator = ",";
+                    StatTotalRequests.Text = $"Förfrågningar (requests): {String.Format("{0:n0}", dataTable.Rows[0][0])} st.";
+                }
+                dataTable = StatData.StatSearchRequests();
+                if (dataTable.Rows.Count > 0)
+                {
+                    StatSearchRequestsTotal.Text = $"Sökningar: {String.Format("{0:n0}", dataTable.Rows[0][0])} st.";
+                    StatSearchRequestsHits.Text = $"Träffar: {String.Format("{0:n0}", dataTable.Rows[0][1])} st.";
+                }
+                dataTable = StatData.StatPeriodRequests();
+                if (dataTable.Rows.Count > 0)
+                {
+                    StatPeriodRequestsFirst.Text = $"Första registrerade förfrågan: {dataTable.Rows[0][0].ToString()}";
+                    StatPeriodRequestsLast.Text = $"Senaste registrerade förfrågan: {dataTable.Rows[0][1].ToString()}";
+                    DateTime firstRequest;
+                    DateTime lastRequest;
+                    if (DateTime.TryParseExact(dataTable.Rows[0][0].ToString(),"yyyy-MM-dd HH:mm:ss",new CultureInfo("sv-SE"),DateTimeStyles.None, out firstRequest)
+                        &&
+                        DateTime.TryParseExact(dataTable.Rows[0][1].ToString(), "yyyy-MM-dd HH:mm:ss", new CultureInfo("sv-SE"), DateTimeStyles.None, out lastRequest))
+                    {
+                        TimeSpan periodOfRequests = lastRequest - firstRequest;
+                        int years = (int)Math.Floor((double)(periodOfRequests.Days / 365));
+                        periodOfRequests = periodOfRequests.Subtract(new TimeSpan(years * 365, 0, 0, 0));
+                        StatPeriodRequestsEnduring.Text = $"Sökningar har gjorts inom en period av<br />{years.ToString()} år, {periodOfRequests.Days.ToString()} dagar, {periodOfRequests.Hours.ToString()} timmar, {periodOfRequests.Minutes.ToString()} minuter och {periodOfRequests.Seconds.ToString()} sekunder";
+                    }
+                }
+                dataTable = StatData.StatSearchtimeRequests();
+                if (dataTable.Rows.Count > 0)
+                {
+                    StatSearchtimeMinRequests.Text = $"Kortast: {String.Format("{0:n0}", dataTable.Rows[0][0])} ms.";
+                    StatSearchtimeMaxRequests.Text = $"Längst: {String.Format("{0:n0}", dataTable.Rows[0][1])} ms.";
+                    StatSearchtimeAverageRequests.Text = $"Genomsnitt: {String.Format("{0:n0}", dataTable.Rows[0][2])} ms.";
+                }
 
 
                 // Cache-dagar

@@ -24,6 +24,87 @@ namespace Plan.Plandokument
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
+        /// StatTotalRequests control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label StatTotalRequests;
+
+        /// <summary>
+        /// StatSearchRequestsTotal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label StatSearchRequestsTotal;
+
+        /// <summary>
+        /// StatSearchRequestsHits control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label StatSearchRequestsHits;
+
+        /// <summary>
+        /// StatPeriodRequestsEnduring control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label StatPeriodRequestsEnduring;
+
+        /// <summary>
+        /// StatPeriodRequestsFirst control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label StatPeriodRequestsFirst;
+
+        /// <summary>
+        /// StatPeriodRequestsLast control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label StatPeriodRequestsLast;
+
+        /// <summary>
+        /// StatSearchtimeMinRequests control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label StatSearchtimeMinRequests;
+
+        /// <summary>
+        /// StatSearchtimeMaxRequests control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label StatSearchtimeMaxRequests;
+
+        /// <summary>
+        /// StatSearchtimeAverageRequests control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label StatSearchtimeAverageRequests;
+
+        /// <summary>
         /// NyCacheEfterAntalDagar control.
         /// </summary>
         /// <remarks>

@@ -156,8 +156,10 @@
     <Content Include="css\page-UI-popover.css" />
     <Content Include="js\kontrollpanel-cache.js" />
     <Content Include="js\kontrollpanel-service.js" />
+    <Content Include="js\kontrollpanel-stats.js" />
     <Content Include="js\kontrollpanel-thumnails.js" />
     <Content Include="js\kontrollpanel.js" />
+    <Content Include="lib\chart.js-3.9.1\chart.js" />
     <Content Include="lib\octicons-9.1.1\check.svg" />
     <Content Include="lib\octicons-9.1.1\circle-slash.svg" />
     <Content Include="lib\octicons-9.1.1\eye.svg" />
@@ -361,6 +363,16 @@
     <Content Include="static-resources\sql\sqlite\check-exists-stat-requests.sql" />
     <Content Include="static-resources\sql\sqlite\create-stat-requests.sql" />
     <Content Include="static-resources\sql\sqlite\get-sqlite-db-version.sql" />
+    <Content Include="static-resources\sql\sqlite\get-stat-requests-count-by-period.sql" />
+    <Content Include="static-resources\sql\sqlite\get-stat-requests-count.sql" />
+    <Content Include="static-resources\sql\sqlite\get-stat-requests-period.sql" />
+    <Content Include="static-resources\sql\sqlite\get-stat-running-total-hits-count.sql" />
+    <Content Include="static-resources\sql\sqlite\get-stat-running-total-requests-by-period.sql" />
+    <Content Include="static-resources\sql\sqlite\get-stat-running-total-requests.sql" />
+    <Content Include="static-resources\sql\sqlite\get-stat-running-total-search-count.sql" />
+    <Content Include="static-resources\sql\sqlite\get-stat-search-count.sql" />
+    <Content Include="static-resources\sql\sqlite\get-stat-searchtime-by-period.sql" />
+    <Content Include="static-resources\sql\sqlite\get-stat-searchtime.sql" />
     <Content Include="static-resources\sql\sqlite\insert-stat-requests.sql" />
     <Content Include="versioninfo.aspx" />
     <Content Include="Web.config">

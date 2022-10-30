@@ -10,6 +10,11 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 using Plan.Shared.Thumnails;
+using Plan.Plandokument.SQLite;
+using Plan.Plandokument;
+using System.Data.SQLite;
+using System.Drawing;
+using System.Data;
 
 namespace Plan.Plandokument
 {
@@ -63,7 +68,7 @@ namespace Plan.Plandokument
                     using (var reader = new StreamReader(fileToReadSizeFrom))
                     {
 
-                        
+
                         while ((line = reader.ReadLine()) != null)
                         {
                             lineCounter++;
@@ -116,6 +121,201 @@ namespace Plan.Plandokument
             return jsonSerializer.Serialize(new { FileSize = fileSize, FileLineCounts = lineCounter, NewLineCounts = lineDiffCounter, Content = sb.ToString() });
 
         }
+        #endregion
+
+
+
+        #region Stats
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatTotalByDayRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatTotalByDayRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatTotalByMonthRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatTotalByMonthRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatTotalByYearRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatTotalByYearRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatTotalRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatTotalRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatPeriodRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatPeriodRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatRunningTotalRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatRunningTotalRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatRunningTotalByDayRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatRunningTotalByDayRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatRunningTotalByMonthRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatRunningTotalByMonthRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatRunningTotalByYearRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatRunningTotalByYearRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatRunningHitsRequests()
+        {
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatRunningHitsRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatRunningSearchRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatRunningSearchRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatSearchRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatSearchRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatSearchtimeRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatSearchtimeRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatSearchtimeByDayRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatSearchtimeByDayRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatSearchtimeByMonthRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatSearchtimeByMonthRequests()
+                );
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string StatSearchtimeByYearRequests()
+        {
+
+            return JSONHelpers.getObjectAsJson(
+                StatData.StatSearchtimeByYearRequests()
+                );
+
+        }
+
         #endregion
 
 
@@ -482,7 +682,7 @@ namespace Plan.Plandokument
                 }
 
                 successful = true;
-            
+
                 return jsonSerializer.Serialize(successful);
             }
             catch (Exception exc)

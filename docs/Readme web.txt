@@ -77,3 +77,4 @@
     + jTable 2.4.0
     + Bootstrap 4.1.2
     + Bootstrap 4.3.1
+    + Charts.js 3.9.1
