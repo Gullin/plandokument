@@ -435,7 +435,7 @@
             </div>
 
             <div id="user" class="hand">
-                <asp:Label ID="lblUser" ToolTip="Användare kunde inte identifieras fullt ut" runat="server">[ N/ A]</asp:Label>
+                <asp:Label ID="lblUser" ToolTip="Användare kunde inte identifieras fullt ut" runat="server">[ N/ A ]</asp:Label>
             </div>
 
             <div id="feedback">
