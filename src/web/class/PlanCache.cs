@@ -32,6 +32,7 @@ namespace Plan.Plandokument
         public string Type { get; set; }
     }
 
+    [Serializable]
     public class CachedDocuments
     {
         public string PathSettingsRoot { get; set; }

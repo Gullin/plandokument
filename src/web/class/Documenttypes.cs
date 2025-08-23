@@ -91,6 +91,7 @@ namespace Plan.Plandokument
         }
     }
 
+    [Serializable]
     public class Documenttype
     {
 
