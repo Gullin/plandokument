@@ -10,7 +10,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using OSGeo.MapGuide;
 using Plan.Plandokument;
 
 namespace Plan.Plandokument
@@ -110,31 +109,6 @@ namespace Plan.Plandokument
             string[] cleanSearchedPlans = searchStringAsCleanStringArray(searchString);
             Session["SearchedPlans"] = cleanSearchedPlans;
             Session["PlanerAntal"] = countSearchedPlans(cleanSearchedPlans);
-            // Skapas endast ny om ny sökning görs efter att kartsessionen raderats, styrs av sessionState TimeOute i web.config
-            if (Session["MapSiteSessionID"] == null)
-            {
-                Session["MapSiteSessionID"] = createMapSiteSession();
-            }
-        }
-
-        private string createMapSiteSession()
-        {
-            // Initierar kartsite och kartsession 
-            string mapWebTierInit = ConfigurationManager.AppSettings["MGWebTierInit"].ToString();
-            string mapUserName = ConfigurationManager.AppSettings["MGUserName"].ToString();
-            string mapUserPass = ConfigurationManager.AppSettings["MGUserPass"].ToString();
-
-            MapGuideApi.MgInitializeWebTier(mapWebTierInit);
-            MgUserInformation userInfo = new MgUserInformation(mapUserName, mapUserPass);
-            MgSite mapSite = new MgSite();
-            mapSite.Open(userInfo);
-            
-
-            string mapSiteSessionID = mapSite.CreateSession();
-
-            //mapSite.Close();
-
-            return mapSiteSessionID;
         }
 
         private Boolean isPlansFromUrlSingel(string[] plans)

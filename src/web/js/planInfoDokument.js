@@ -310,14 +310,6 @@ function getSearchedPlans() {
 
                                 putPlansDocs($headerPlan, plansDocs);
 
-                                // Hämtar maximal bredd och höjd som är möjlig för kartbild
-                                var mapImageWidth = $('#map-' + planid).width();
-                                var mapImageHeight = $('#doc-' + planid).outerHeight();
-                                // Lagrar dimensioner för mätning av förändring när webbläsarfönster ändras i storlek
-                                $('#map-' + planid).attr('dimension', mapImageWidth + "," + mapImageHeight)
-                                // Drar bort för 10 % marginal (20 % / 2)
-                                mapImageWidth = mapImageWidth - Math.round(mapImageWidth * 0.2);
-                                mapImageHeight = mapImageHeight - Math.round(mapImageHeight * 0.2);
                                 // Hämtar renderad kartbild med plan
                                 putMapOfPlan(planid);
 
@@ -414,14 +406,6 @@ function getSearchedPlans() {
 
                     putPlansDocs($headerPlan, plansDocs);
 
-                    // Hämtar maximal bredd och höjd som är möjlig för kartbild
-                    var mapImageWidth = $('#map-' + planid).width();
-                    var mapImageHeight = $('#doc-' + planid).outerHeight();
-                    // Lagrar dimensioner för mätning av förändring när webbläsarfönster ändras i storlek
-                    $('#map-' + planid).attr('dimension', mapImageWidth + "," + mapImageHeight)
-                    // Drar bort för 10 % marginal (20 % / 2)
-                    mapImageWidth = mapImageWidth - Math.round(mapImageWidth * 0.2);
-                    mapImageHeight = mapImageHeight - Math.round(mapImageHeight * 0.2);
                     // Hämtar renderad kartbild med plan
                     putMapOfPlan(planid);
 
@@ -1605,14 +1589,6 @@ function initialExpandCollapsAll() {
 
                     var planID = $(this).attr("planid");
 
-                    // Hämtar maximal bredd och höjd som är möjlig för kartbild
-                    var mapImageWidth = $('#map-' + planID).width();
-                    var mapImageHeight = $('#doc-' + planID).outerHeight();
-                    // Lagrar dimensioner för mätning av förändring när webbläsarfönster ändras i storlek
-                    $('#map-' + planID).attr('dimension', mapImageWidth + "," + mapImageHeight)
-                    // Drar bort för 10 % marginal (20 % / 2)
-                    mapImageWidth = mapImageWidth - Math.round(mapImageWidth * 0.2);
-                    mapImageHeight = mapImageHeight - Math.round(mapImageHeight * 0.2);
                     // Hämtar renderad kartbild med plan
                     putMapOfPlan(planID);
                 });

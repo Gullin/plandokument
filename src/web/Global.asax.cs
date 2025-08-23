@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Diagnostics;
 using System.Web.Routing;
-using OSGeo.MapGuide;
 using Plan.Plandokument.SQLite;
 
 namespace Plan.Plandokument
@@ -80,24 +79,6 @@ namespace Plan.Plandokument
             Server.ClearError();
         }
 
-        protected void Session_End(object sender, EventArgs e)
-        {
-            // Om kartsessions finns lagrad i applikationens session
-            string sessionVariableName = "MapSiteSessionID";
-            if (Session[sessionVariableName] != null)
-            {
-                // Rensar bort kartsession, både kartsessions-ID från sessionsvariabeln och från kartserver
-                string mapWebTierInit = ConfigurationManager.AppSettings["MGWebTierInit"].ToString();
-                string mapSessionID = Session[sessionVariableName].ToString();
-                Session.Remove(sessionVariableName);
-                MapGuideApi.MgInitializeWebTier(mapWebTierInit);
-                MgUserInformation userInfo = new MgUserInformation(mapSessionID);
-                MgSiteConnection siteConnection = new MgSiteConnection();
-                siteConnection.Open(userInfo);
-                MgSite mapSite = siteConnection.GetSite();
-                mapSite.DestroySession(mapSite.GetCurrentSession());
-            }
-        }
 
         protected void Application_End(object sender, EventArgs e)
         {
