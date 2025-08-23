@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontroll av kartklient</title>
+
+  <link rel="icon" type="image/x-icon" href="./pic/favicon.ico" />
+  <link href="./lib/bootstrap-4.1.2-dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="./lib/bootstrap-icons-1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="./lib/ol-10.6.1/ol.css" rel="stylesheet" />
+  <link href="./css/page-UI-map.css" rel="stylesheet" />
+
+  <script src="./js/jquery-3.4.1.min.js" type="text/javascript"></script>
+  <script src="./lib/bootstrap-4.1.2-dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./lib/proj4-2.19.3/proj4.js" type="text/javascript"></script>
+  <script src="./lib/ol-10.6.1/ol.js" type="text/javascript"></script>
+
+  <script src="./js/ol-mapbackground.js" type="text/javascript"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .ol-zoom-extent-map {
+      left: 1em;
+      top: 1em;
+    }
+
+    .ol-zoom-extent-object {
+      left: 1em;
+      top: 3em;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="mapcontainer" style="position: relative; min-height: 100vh;"></div>
+
+
+  <script>
+    const map = new MapBackground('mapcontainer');
+  </script>
+
+</body>
+
+</html>
