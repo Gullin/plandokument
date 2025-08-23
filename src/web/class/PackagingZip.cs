@@ -29,7 +29,7 @@ namespace Plan.Plandokument
                 // zip-fil med path som skapas som arkiv
                 string zipFile = zipFileNamePart.Replace("/", "_") + "-" + DateTime.Now.ToString("yyyyMMddTHHmmss.fff") + ".zip";
                 string ZipFileToCreate = HttpContext.Current.Server.MapPath(
-                    zipDirectory.Replace("~/", "") + zipFile
+                    zipDirectory + zipFile
                     );
 
                 // Om filen, mot förmodan, skulle existera raderas den.
@@ -44,7 +44,7 @@ namespace Plan.Plandokument
                     foreach (String file in files)
                     {
                         zip.CreateEntryFromFile(
-                            HttpContext.Current.Server.MapPath(file), 
+                            HttpContext.Current.Server.MapPath("~/" + file),
                             file.Substring(file.LastIndexOf('/') + 1)
                             );
                     }
