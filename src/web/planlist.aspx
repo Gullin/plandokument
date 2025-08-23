@@ -8,6 +8,7 @@
     <link rel="icon" type="image/x-icon" href="~/pic/favicon.ico" />
 
     <link href="lib/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="lib/bootstrap-icons-1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
     <link href="css/reset.css" rel="stylesheet" />
     <link href="css/page-UI-core.css" rel="stylesheet" />
     <link href="css/page-UI-centering.css" rel="stylesheet" />
@@ -298,10 +299,15 @@
         </div>
 
         <div id="feedback">
-            <a href="<%= ResolveUrl("~/") %>dokument/om" title="Beskrivning av funktionalitet och utseende">
-                <img id="help" src="<%= ResolveUrl("~/") %>pic/help.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
-            <a href="mailto:gis@landskrona.se?Subject=Webbapplikation Plandokument" title="Lämna synpunkter eller rapportera fel">
-                <img id="mail" src="<%= ResolveUrl("~/") %>pic/mail.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
+                <a href="<%= ResolveUrl("~/") %>dokument/karta" title="Visar alla planer i en interaktiv karta">
+                    <i id="map" class="bi bi-compass"></i>
+                </a>
+                <a href="<%= ResolveUrl("~/") %>dokument/om" title="Beskrivning av funktionalitet och utseende">
+                    <i id="info" class="bi bi-info-circle"></i>
+                </a>
+                <a href="mailto:gis@landskrona.se?Subject=Webbapplikation Plandokument" title="Lämna synpunkter eller rapportera fel">
+                    <i id="mail" class="bi bi-envelope"></i>
+                </a>
         </div>
 
         <div id="copyrightWrapper">

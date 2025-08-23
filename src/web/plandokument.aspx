@@ -249,12 +249,18 @@
             </div>
 
             <div id="feedback">
+                <a href="<%= ResolveUrl("~/") %>dokument/karta" title="Visar alla planer i en interaktiv karta">
+                    <i id="map" class="bi bi-compass"></i>
+                </a>
                 <a href="<%= ResolveUrl("~/") %>dokument/alla" title="Lista alla planer från Planregistret">
-                    <img id="listAllPlanes" src="<%= ResolveUrl("~/") %>pic/list_all_planes.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
+                    <i id="allPlanes" class="bi bi-list"></i>
+                </a>
                 <a href="<%= ResolveUrl("~/") %>dokument/om" title="Beskrivning av funktionalitet och utseende">
-                    <img id="help" src="<%= ResolveUrl("~/") %>pic/help.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
+                    <i id="info" class="bi bi-info-circle"></i>
+                </a>
                 <a href="mailto:gis@landskrona.se?Subject=Webbapplikation Plandokument" title="Lämna synpunkter eller rapportera fel">
-                    <img id="mail" src="<%= ResolveUrl("~/") %>pic/mail.png" onmouseover="hover(this);" onmouseout="unhover(this);" /></a>
+                    <i id="mail" class="bi bi-envelope"></i>
+                </a>
             </div>
 
             <div id="copyrightWrapper">
