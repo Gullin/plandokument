@@ -290,6 +290,16 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <td class="right">Planers geometri som GeoJSON</td>
+                                            <td class="center"></td>
+                                            <td>
+                                                <button id="btnRefreshCachePlanGeoJSON" class="btn btn-primary btn-sm" type="button" onclick="RefreshCachePlansGeoJSON(this)">
+                                                    <span class="spinner-border spinner-border-sm spinner-hide" role="status" aria-hidden="true"></span>
+                                                    <span>Förnya cache</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <td class="right">Plandokument</td>
                                             <td class="center"></td>
                                             <td>

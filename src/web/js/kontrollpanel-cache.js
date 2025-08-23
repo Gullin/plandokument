@@ -3,6 +3,7 @@ $(document).ready(
     function () {
 
         CacheExistsPlanBasis();
+        CacheExistsPlansGeoJSON();
         CacheExistsPlanDocuments();
         CacheExistsPlandocumenttypes();
         CacheExistsPlanBerorFastighet();
@@ -111,6 +112,47 @@ function RefreshCachePlanBasis(element) {
         }
     })
 }; // SLUT RefreshCachePlanBasis
+
+
+
+// Cachar om planernas geometri som GeoJSON
+function RefreshCachePlansGeoJSON(element) {
+    var $spinner = $(element).children("span");
+    $spinner.prop('disabled', true);
+    $spinner.removeClass("spinner-hide");
+    $spinner.next().remove();
+    $spinner.after("<span> Loading...</span>");
+
+    $("#btnRefreshCachePlanGeoJSON").parent().prev().removeClass("clear no");
+
+
+    var t0 = new Date().getTime();
+    return $.ajax({
+        type: "POST",
+        url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheRefreshPlansGeoJSON',
+        contentType: "application/json; charset=UTF-8",
+        dataType: "json",
+        success: function (msg) {
+            var data = msg.d;
+            if (data) {
+                var t1 = new Date().getTime();
+                setTimeout(function () {
+                    $spinner.addClass("spinner-hide");
+                    $spinner.next().remove();
+                    $spinner.after("<span> Förnya cache</span>");
+                    $spinner.prop('disabled', false);
+                }, (t1 - t0 < Lkr.Plan.AjaxCalls.Delay) ? (Lkr.Plan.AjaxCalls.Delay - (t1 - t0)) : 0);
+            }
+
+        },
+        complete: function () {
+            CacheExistsPlansGeoJSON();
+        },
+        error: function () {
+            alert("Fel!\nRefreshCachePlansGeoJSON");
+        }
+    })
+}; // SLUT RefreshCachePlansGeoJSON
 
 
 
@@ -299,6 +341,33 @@ function CacheExistsPlanBasis() {
         }
     })
 } // SLUT CacheExistsPlanBasis
+
+
+
+// Kontrollera så att cache för planers geometri som GeoJCON existerar
+function CacheExistsPlansGeoJSON() {
+    $.ajax({
+        type: "POST",
+        url: Lkr.Plan.Dokument.resolvedClientUrl + 'services/kontrollpanel.asmx/CacheExistsPlansGeoJson',
+        contentType: "application/json; charset=UTF-8",
+        dataType: "json",
+        success: function (msg) {
+            var data = msg.d;
+            var $td = $("#btnRefreshCachePlanGeoJSON").parent().prev();
+            if (data == "true") {
+                $td.addClass('clear');
+                $td.attr('title', "Godkänt");
+            }
+            else {
+                $td.addClass('no');
+                $td.attr('title', "Underkänd");
+            }
+        },
+        error: function () {
+            //alert("Fel!\nRefreshCachePlanBerorFastighet");
+        }
+    })
+} // SLUT CacheExistsPlansGeoJSON
 
 
 
