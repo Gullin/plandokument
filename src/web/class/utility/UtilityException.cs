@@ -396,5 +396,22 @@ namespace Plan.Plandokument
             }
         }
 
+        // 
+        /// <summary>
+        /// Hjälpmetod för att "platta ut" Exception-objektet. Användbart vid exempelvis JSON-serialisering.
+        /// </summary>
+        /// <param name="ex">Felobjektet</param>
+        /// <returns>"platt" objekt</returns>
+        public static object FlattenException(Exception ex)
+        {
+            return new
+            {
+                ex.Message,
+                ex.Source,
+                ex.StackTrace,
+                ExceptionType = ex.GetType().FullName,
+                InnerException = ex.InnerException != null ? FlattenException(ex.InnerException) : null
+            };
+        }
     }
 }
