@@ -306,6 +306,19 @@ a.dropdown-item {
 
 
 
+
+.planContent {
+    /*min-height: 100vh;*/
+    display: flex;
+    align-items: stretch;
+}
+
+.planContent-column {
+    display: flex;
+    flex-direction: column;
+    /*height: 100%;*/
+}
+
 .planContent-header {
     font-size: 1.2em;
     text-align: center;
@@ -333,10 +346,11 @@ a.dropdown-item {
 }
 
 .planContent-left {
-    width: 33%;
+    width: 40%;
+/*    width: 33%;
     float: left;
     display: inline;
-    margin-top: 0.5em;
+    margin-top: 0.5em;*/
     /*border: 1px solid black;*/
 }
 
@@ -360,10 +374,13 @@ a.dropdown-item {
 }
 
 .planContent-right {
-    width: 66%;
+    width: 60%;
+    height: 100%;
+/*    width: 66%;
     float: right;
     display: inline;
     margin-top: 0.5em;
+    position: relative;*/
     /*border: 1px solid black;*/
 }
 

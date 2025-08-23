@@ -461,9 +461,10 @@ function putPlanContentHolder($contentPlan, planid) {
 
     var $contentPlanDocs = $("<div></div>");
     $contentPlanDocs.attr("id", "doc-" + planid)
+    $contentPlanDocs.addClass("planContent-column");
     $contentPlanDocs.addClass("planContent-left");
     $contentPlanDocs.append($avsnittPlanhandling);
-    $contentPlan.append($contentPlanDocs);
+    //$contentPlan.append($contentPlanDocs);
 
     var $avsnittPlanMap = $("<span></span>")
     $avsnittPlanMap.addClass("planContent-avsnitt");
@@ -471,13 +472,17 @@ function putPlanContentHolder($contentPlan, planid) {
 
     var $contentPlanMap = $("<div></div>");
     $contentPlanMap.attr("id", "map-" + planid)
+    $contentPlanMap.addClass("planContent-column");
     $contentPlanMap.addClass("planContent-right");
     $contentPlanMap.append($avsnittPlanMap);
-    $contentPlan.append($contentPlanMap);
+    //$contentPlan.append($contentPlanMap);
 
-    var $contentPlanDummy = $("<div></div>");
-    $contentPlanDummy.addClass("planContent-dummy");
-    $contentPlan.append($contentPlanDummy);
+    var $contentPlanDocMap = $("<div></div>");
+    $contentPlanDocMap.attr("id", "contentdocmap-" + planid)
+    $contentPlanDocMap.addClass("planContent");
+    $contentPlanDocMap.append($contentPlanDocs);
+    $contentPlanDocMap.append($contentPlanMap);
+    $contentPlan.append($contentPlanDocMap);
 
     return $contentPlan;
 
