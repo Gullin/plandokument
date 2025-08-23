@@ -60,3 +60,6 @@ a, a:visited, a:hover {
     cursor: pointer;
 }
 
+.invert-icon-black {
+    filter: invert(1);
+}

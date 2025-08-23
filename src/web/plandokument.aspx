@@ -8,14 +8,18 @@
         <title>Plandokument</title>
         <link rel="icon" type="image/x-icon" href="~/pic/favicon.ico" />
         <link href="css/jquery-ui-1.10.3-smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
+        <link href="lib/bootstrap-icons-1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
         <link href="lib/bootstrap-4.1.2-dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="lib/bootstrap-icons-1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
+        <link href="lib/ol-10.6.1/ol.css" rel="stylesheet" />
+        <link href="lib/ol-ext-4.0.33/ol-ext.css" rel="stylesheet" />
         <link href="css/reset.css" rel="stylesheet" />
         <link href="css/page-UI-core.css" rel="stylesheet" />
         <link href="css/page-UI-plan.css" rel="stylesheet" />
         <link href="css/page-UI-popover.css" rel="stylesheet" />
         <link href="css/file-images-li.css" rel="stylesheet" />
+        <link href="css/page-UI-map.css" rel="stylesheet" />
         <style type="text/css">
-
 
 
 
@@ -41,9 +45,44 @@
         <script src='<%#ResolveClientUrl("~/js/json3.min.js")%>' type="text/javascript"></script>
         <script src='<%#ResolveClientUrl("~/js/jquery-3.4.1.min.js")%>' type="text/javascript"></script>
     	<script src='<%#ResolveClientUrl("~/lib/bootstrap-4.1.2-dist/js/bootstrap.bundle.min.js")%>'></script>
+        <script src='<%#ResolveClientUrl("~/lib/proj4-2.19.3/proj4.js")%>' type="text/javascript"></script>
+        <script src='<%#ResolveClientUrl("~/lib/ol-10.6.1/ol.js")%>' type="text/javascript"></script>
+        <script src='<%#ResolveClientUrl("~/lib/ol-ext-4.0.33/ol-ext.js")%>' type="text/javascript"></script>
         <script src='<%#ResolveClientUrl("~/js/utility.js")%>' type="text/javascript"></script>
         <!-- Används vid utveckling -->
+        <script src='<%#ResolveClientUrl("~/js/ol-mapbackground.js")%>' type="text/javascript"></script>
         <script src='<%#ResolveClientUrl("~/js/planInfoDokument.js")%>' type="text/javascript"></script>
+
+        <%-- För test --%>
+        <script type="text/javascript">
+
+
+            // Test av ny webbmetod
+            //var planIds = ['071', '148', '1677'];
+            //12-GLU-299, 12-GLU-343
+            /*
+            var planIds = ['236', '167'];
+            $.ajax({
+                type: "POST",
+                url: urlBasePath + 'services/plandokument.asmx/getPlansGeometryAsGeoJson',
+                contentType: "application/json; charset=UTF-8",
+                dataType: "json",
+                data: JSON.stringify({ planIds: planIds }),
+                success: function (msg) {
+                    if (msg.d != '') {
+                        console.log(JSON.parse(msg.d));
+                    } else {
+                        console.log("TEST TJÄNST: INGEN DATA");
+                    }
+                },
+                error: function () {
+                    alert("Fel: Systemfel (test av anrop metod getPlansGeometryAsGeoJson i Landskrona.App.Plan.Dokument.Ws.WsPlanhandling), kontakta gis@landskrona.se vid upprepande fel.");
+                }
+            });
+            */
+
+        </script>
+
         <script type="text/javascript">
 
 

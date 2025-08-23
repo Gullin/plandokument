@@ -319,7 +319,7 @@ function getSearchedPlans() {
                                 mapImageWidth = mapImageWidth - Math.round(mapImageWidth * 0.2);
                                 mapImageHeight = mapImageHeight - Math.round(mapImageHeight * 0.2);
                                 // Hämtar renderad kartbild med plan
-                                putMapOfPlan(planid, mapImageWidth, mapImageHeight);
+                                putMapOfPlan(planid);
 
                             });
                         }
@@ -423,7 +423,7 @@ function getSearchedPlans() {
                     mapImageWidth = mapImageWidth - Math.round(mapImageWidth * 0.2);
                     mapImageHeight = mapImageHeight - Math.round(mapImageHeight * 0.2);
                     // Hämtar renderad kartbild med plan
-                    putMapOfPlan(planid, mapImageWidth, mapImageHeight);
+                    putMapOfPlan(planid);
 
                 });
             }
@@ -1609,7 +1609,7 @@ function initialExpandCollapsAll() {
                     mapImageWidth = mapImageWidth - Math.round(mapImageWidth * 0.2);
                     mapImageHeight = mapImageHeight - Math.round(mapImageHeight * 0.2);
                     // Hämtar renderad kartbild med plan
-                    putMapOfPlan(planID, mapImageWidth, mapImageHeight);
+                    putMapOfPlan(planID);
                 });
             });
         }
@@ -1622,7 +1622,7 @@ function initialExpandCollapsAll() {
 
 
 // Hämtar och placerar kartöversikt efter inskickat plan-ID och möjlig storlek på bildplatsen.
-function putMapOfPlan(planID, imageWidth, imageHeight) {
+function putMapOfPlan(planID) {
     var $animatedMapDiv = $("<div id='mapLoadDiv-" + planID + "'></div>");
     $animatedMapDiv.css('text-align', 'center');
     $animatedMapDiv.addClass('mapGeneratingGif');
@@ -1634,58 +1634,7 @@ function putMapOfPlan(planID, imageWidth, imageHeight) {
 
     var errorMessage = "Kartbild kunde inte hämtas.<br />Uppdatera sidan genom t.ex. knappen F5,<br /> återkommer felet vänd dig till kontakt (se höger e-postikon).";
 
-    Lkr.Plan.AjaxCalls.putMapOfPlan = $.ajax({
-        type: "POST",
-        url: urlBasePath + 'services/plandokument.asmx/getPlanMapImageAsBase64String',
-        contentType: "application/json; charset=UTF-8",
-        dataType: "json",
-        data: "{planID: '" + planID + "', imageWidth: '" + imageWidth + "', imageHeight: '" + imageHeight + "'}",
-        success: function (msg) {
-            if (msg.d != '') {
-                var imageObject = eval(msg.d);
-                if (imageObject) {
-                    var mapSessionImage = imageObject[0].MAPIMAGEBASE64;
-                    var mapSessionImageWidth = imageObject[0].WIDTH;
-                    var mapSessionImageHeight = imageObject[0].HEIGHT;
-                    var $mapImg = $('<img />');
-                    //$mapImg.attr('src', "data:image/png;base64," + mapSessionImage.substring(1).substring(0, mapSessionImage.length - 2));
-                    $mapImg.attr('src', "data:image/png;base64," + mapSessionImage);
-                    $mapImg.attr('width', mapSessionImageWidth);
-                    $mapImg.attr('height', mapSessionImageHeight);
-                    // Om kartbild är högre än plattsen med listade dokument eller bredare än avseed plats ska inte absolut positionering göras
-                    var docListHeight = $('#doc-' + planID).outerHeight();
-                    var mapPlaceholderWidth = $('#map-' + planID).width();
-                    if (docListHeight > mapSessionImageHeight && mapPlaceholderWidth > mapSessionImageWidth) {
-                        var topPosition = $('#doc-' + planID).position().top;
-                        var leftPosition = $('#map-' + planID).position().left;
-                        // Mitten på dokumentlistan minus halva kartbildshöjden
-                        var newTopPosition = (topPosition + docListHeight / 2) - (mapSessionImageHeight / 2);
-                        // Mitten på hållaren för kartbild minus halva bredden på kartbild
-                        var newLeftPosition = (leftPosition + mapPlaceholderWidth / 2) - (mapSessionImageWidth / 2);
-                        $mapImg.css({
-                            position: "absolute",
-                            top: newTopPosition + "px",
-                            left: newLeftPosition + "px"
-                        });
-                    }
+    const map = new MapBackground('map-' + planID);
+    map.addPlan([planID]);
 
-                    $('#map-' + planID).children('div, img').remove();
-                    $('#map-' + planID).append($mapImg);
-                }
-                else {
-                    $('#map-' + planID).find('img').attr("src", urlBasePath + "pic/no-image.png");
-                    $('#map-' + planID).find('span').html(errorMessage);
-                }
-            }
-        },
-        error: function (jqxhr, status, error) {
-            $('#map-' + planID).find('img').attr("src", urlBasePath + "pic/no-image.png");
-            $('#map-' + planID).find('span').html(errorMessage);
-            var err = eval(jqxhr);
-            console.error(err.status + " " + err.statusText + "\n" +
-                err.statusCode);
-        },
-        complete: function () {
-        }
-    })
 }; // SLUT putMapOfPlan
