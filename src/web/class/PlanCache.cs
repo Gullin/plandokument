@@ -30,6 +30,18 @@ namespace Plan.Plandokument
     {
         public string Key { get; set; }
         public string Type { get; set; }
+        public long EstimatedMemorySize { get; set; }
+
+        public static long EstimateObjectSize(object obj)
+        {
+            if (obj == null) return 0;
+            using (var ms = new MemoryStream())
+            {
+                var bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                bf.Serialize(ms, obj);
+                return ms.Length;
+            }
+        }
     }
 
     [Serializable]
@@ -64,7 +76,8 @@ namespace Plan.Plandokument
                     cacheMeta.Caches.Add(new Caches()
                     {
                         Key = en.Key.ToString(),
-                        Type = "Application"
+                        Type = "Application",
+                        EstimatedMemorySize = Caches.EstimateObjectSize(en.Value)
                     });
                     nbrOfApplicationCaches++;
                 }
@@ -298,7 +311,7 @@ namespace Plan.Plandokument
             }
         }
 
-        
+
         /// <summary>
         /// Kontrollerar om alla planers geometrier som GeoJSON
         /// </summary>

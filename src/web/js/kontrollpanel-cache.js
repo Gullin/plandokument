@@ -33,6 +33,48 @@ $(document).ready(
                     }
                 });
 
+                $('#CacheMeta').append("<br />")
+
+                let nbrApplicationCaches = cacheMeta.Caches.filter(item => item.Type === 'Application').length;
+
+                cacheMeta.Caches.forEach(function (element, index) {
+
+                    if (element.Type == 'Application') {
+                        switch (element.Key) {
+                            case "C_Plans":
+                                $('#CacheMeta').append("Grundläggande planregisterinformation " + bytesToSize(element.EstimatedMemorySize));
+                                break;
+
+                            case "C_Documenttypes":
+                                $('#CacheMeta').append("Dokumenttyper " + bytesToSize(element.EstimatedMemorySize));
+                                break;
+
+                            case "C_PlanBerorPlan":
+                                $('#CacheMeta').append("Planpåverkan (planers relationer) " + bytesToSize(element.EstimatedMemorySize));
+                                break;
+
+                            case "C_PlanBerorFastighet":
+                                $('#CacheMeta').append("Planers berörkrets (fastigheter relation till plan) " + bytesToSize(element.EstimatedMemorySize));
+                                break;
+
+                            case "C_PlanDocuments":
+                                $('#CacheMeta').append("Plandokument " + bytesToSize(element.EstimatedMemorySize));
+                                break;
+
+                            case "C_PlansGeoJson":
+                                $('#CacheMeta').append("Planers geometri som GeoJSON " + bytesToSize(element.EstimatedMemorySize));
+                                break;
+
+                            default:
+                                $('#CacheMeta').append("N/A " + bytesToSize(element.EstimatedMemorySize));
+                                break;
+                        }
+                        if (index != nbrApplicationCaches) {
+                            $('#CacheMeta').append("<br />")
+                        }
+                    }
+                });
+
 
             },
             error: function () {
