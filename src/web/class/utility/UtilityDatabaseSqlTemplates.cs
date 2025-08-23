@@ -6,7 +6,9 @@ namespace Plan.Plandokument
 	{
 		public static string GetPlanRegisterBas { get; set; }
 		public static string GetPlanGeometriBas { get; set; }
-		public static string GetPlanBerorFastighet { get; set; }
+		public static string GetPlanGeoJson { get; set; }
+        public static string GetPlanGeometriAsGeoJson { get; set; }
+        public static string GetPlanBerorFastighet { get; set; }
         public static string GetPlanBerorPlan { get; set; }
         public static string ExistsAppDbStatRequest { get; set; }
         public static string CreateAppDbStatRequest { get; set; }
@@ -31,6 +33,7 @@ namespace Plan.Plandokument
 
         static SqlTemplates()
 		{
+            //TODO: UtilityDatabaseSqlTemplate: Ställa om alla filläsningar till usings för att släppa fillås
 			string baseScriptFolder = Utility.appPath + @"/static-resources/sql/";
 
             GetPlanRegisterBas = new FileInfo(baseScriptFolder + @"/mssqlserver/get-plan-register-bas.sql")
@@ -39,7 +42,17 @@ namespace Plan.Plandokument
             GetPlanGeometriBas = new FileInfo(baseScriptFolder + @"/postgresql/get-plan-geometri-bas.pgsql")
                 .OpenText().ReadToEnd();
 
-			GetPlanBerorFastighet = new FileInfo(baseScriptFolder + @"/mssqlserver/get-plan-beror-fastighet.sql")
+            using (StreamReader sr = new StreamReader(baseScriptFolder + @"/postgresql/get-plans-geometries-as-geojson.pgsql"))
+            {
+                GetPlanGeoJson = sr.ReadToEnd();
+            }
+
+            using (StreamReader sr = new StreamReader(baseScriptFolder + @"/postgresql/get-plan-geometries-as-geojson.pgsql"))
+            {
+                GetPlanGeometriAsGeoJson = sr.ReadToEnd();
+            }
+
+            GetPlanBerorFastighet = new FileInfo(baseScriptFolder + @"/mssqlserver/get-plan-beror-fastighet.sql")
                 .OpenText().ReadToEnd();
 
             GetPlanBerorPlan = new FileInfo(baseScriptFolder + @"/mssqlserver/get-plan-beror-plan.sql")
