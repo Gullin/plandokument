@@ -183,6 +183,27 @@ namespace Plan.Plandokument
                                 "~/versioninfo.aspx",
                                 false);
 
+
+            // Alias
+            routes.MapPageRoute("PlandokumentKarta",
+                                "dokument/karta",
+                                "~/map.aspx",
+                                false);
+            routes.MapPageRoute("PlandokumentKartor",
+                                "dokument/kartor",
+                                "~/map.aspx",
+                                false);
+            routes.MapPageRoute("PlandokumentMap",
+                                "dokument/map",
+                                "~/map.aspx",
+                                false);
+            routes.MapPageRoute("PlandokumentMaps",
+                                "dokument/maps",
+                                "~/map.aspx",
+                                false);
+
+
+
             routes.MapPageRoute("Plandokument",
                                 "{villkor}/{*plan}",
                                 "~/plandokument.aspx",
