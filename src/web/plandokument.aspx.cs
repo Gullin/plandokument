@@ -94,7 +94,7 @@ namespace Plan.Plandokument
                 else
                 {
                     //fungerar ej p.g.a. round trip utan sökbegrepp som rensa sessionen
-                    //Session.Clear();
+                    Session.Clear();
                 }
 
             }
