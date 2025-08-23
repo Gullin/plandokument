@@ -86,7 +86,24 @@ extend(Lkr, {
                         }
                         */
                     ]
+                },
+                hopp: [
+                    {
+                        name: 'Länk till Handläggarkartan (AIMS)',
+                        active: true,
+                        link: 'https://geodata-handlaggare.landskrona.local/mapserver2016/fusion/templates/mapguide/gsviewer_a/index.html?applicationdefinition=Library://LANDSKRONA/Webblayouter/Landskrona_handlaggare.ApplicationDefinition&extent={e_min}%2C{n_min}%2C{e_max}%2C{n_max}&theme=Library%3A%2F%2FLANDSKRONA%2FKartor%2FLandskrona_handlaggare.MapDefinition&showgroups=Gallande_planer'
+                    },
+                    {
+                        name: 'Länk till Handläggarkartan (CSM test 1)',
+                        active: true,
+                        link: 'https://karta-intern.landskrona.se/spatialmap?ignorefavorite=true&profile=csm_standard_profile&selectorgroups=planer+planer_gallande_planer&layers=theme-bakgrundskarta_color_notext+theme-planytor_andrade_y+theme-planytor_y&opacities=1+1+1&mapext={e_min}+{n_min}+{e_max}+{n_max}'
+                    },
+                    {
+                        name: 'Länk till Handläggarkartan (CSM test 2)',
+                        active: true,
+                        link: 'https://karta-intern.landskrona.se/spatialmap?ignorefavorite=true&profile=csm_standard_profile&wkt=POLYGON(({e_min}+{n_min}%2C{e_min}+{n_max}%2C{e_max}+{n_max}%2C{e_max}+{n_min}%2C{e_min}+{n_min}))&page=content-showwkt&selectorgroups=planer+planer_gallande_planer&layers=theme-bakgrundskarta_color_notext+theme-planytor_andrade_y+theme-planytor_y&opacities=1+1+1&mapext={e_min}+{n_min}+{e_max}+{n_max}'
                 }
+                ]
             }
         },
         Dokument: {

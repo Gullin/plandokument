@@ -4,7 +4,7 @@ const initialMapExtent = [96000, 6184000, 123000, 6205000];
 // Tas från https://epsg.io/3008.proj4
 const epsgProjectionDefintion = '+proj=tmerc +lat_0=0 +lon_0=13.5 +k=1 +x_0=150000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs';
 const backGroundLayerSettings = Lkr.Plan.Setting.Map.backGroundLayerSettings;
-
+const jumps = Lkr.Plan.Setting.Map.hopp;
 
 
 
@@ -542,7 +542,6 @@ class MapBackground {
 
             this.addAllPlans();
             this.map.addLayer(vectorLayer);
-            console.log(legend);
 
             const source = vectorLayer.getSource();
             const features = source.getFeatures();
@@ -673,13 +672,19 @@ class MapBackground {
                     if (layer === vectorLayer) {
                         const id = feature.getId();
                         const props = feature.getProperties();
-                        console.log("Koordinater för karthopp");
-                        console.log("Extent", feature.getGeometry().getExtent());
+                        let featureExtension = feature.getGeometry().getExtent();
+                        let jumpLinks = "";
+                        jumps.forEach(item => {
+                            if (item.active) {
+                                jumpLinks += `<p><a href="${item.link.replaceAll("{e_min}",featureExtension[0]).replaceAll("{n_min}",featureExtension[1]).replaceAll("{e_max}",featureExtension[2]).replaceAll("{n_max}",featureExtension[3])}" target="_blank">${item.name}</a><span class="linkNewWindow" style="top: 0px; left: 0px;" title="Öppnar länk i nytt webbläsarfönster"></span></p>`
+                            }
+                        });
                         // Bygg popup-innehåll
                         const html = `
                         <div style="min-width:200px; font-size: 1.2em;">
                             <h6>Plan ${id}</h6>
                             <p><a href="${Lkr.Plan.Dokument.resolvedClientUrl}dokument/${id}" target="_blank">Dokument<span class="linkNewWindow" style="top: 0px; left: 0px;" title="Öppnar länk i nytt webbläsarfönster"></span></a></p>
+                            ${jumpLinks}
                         </div>`;
                         popup.show(evt.coordinate, html);
                     }
