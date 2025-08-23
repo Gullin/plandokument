@@ -176,11 +176,11 @@ namespace Plan.Plandokument
 
         [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
-        public string StatPeriodRequests()
+        public string StatPeriodTotalRequests()
         {
 
             return JSONHelpers.getObjectAsJson(
-                StatData.StatPeriodRequests()
+                StatData.StatPeriodTotalRequests()
                 );
 
         }

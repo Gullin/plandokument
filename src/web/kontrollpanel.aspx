@@ -203,11 +203,22 @@
                                 <br />
                                 <div style="font-size: 0.8em; line-height: normal;">I diagramet med genomsnittliga svarstider har 5-percentilen tagits bort (eliminering av outlines/spikar). Med andra ord endast 95 % av svarstiderna redovisas.</div>
                             </div>
+
+
+
                             <div id="StatCharts" class="col-sm">
+                                <button class="btn btn-primary btn-sm" type="button">Reset Date</button>
+                                <div data-role="rangeslider">
+                                    <input type="range" name="range-1a" id="range-1a" min="0" max="100" value="40" data-popup-enabled="true" data-show-value="true" />
+                                    <input type="range" name="range-1b" id="range-1b" min="0" max="100" value="80" data-popup-enabled="true" data-show-value="true" />
+                                </div>
+
                                 <canvas id="RunningTotalRequestsByYear"></canvas>
                                 <canvas id="TotalRequestsByYear"></canvas>
                                 <canvas id="SearchtimeRequestsByYear"></canvas>
                             </div>
+
+
                         </div>
                     </div>
 

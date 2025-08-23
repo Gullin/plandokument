@@ -95,7 +95,7 @@ namespace Plan.Plandokument
                     StatSearchRequestsTotal.Text = $"Sökningar: {String.Format("{0:n0}", dataTable.Rows[0][0])} st.";
                     StatSearchRequestsHits.Text = $"Träffar: {String.Format("{0:n0}", dataTable.Rows[0][1])} st.";
                 }
-                dataTable = StatData.StatPeriodRequests();
+                dataTable = StatData.StatPeriodTotalRequests();
                 if (dataTable.Rows.Count > 0)
                 {
                     StatPeriodRequestsFirst.Text = $"Första registrerade förfrågan: {dataTable.Rows[0][0].ToString()}";

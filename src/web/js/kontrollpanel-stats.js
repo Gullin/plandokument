@@ -1,22 +1,27 @@
-﻿$(document).ready(
-    function () {
-        ChartStatRunningTotalRequestsByPeriod();
-        ChartStatTotalRequestsByPeriod();
-        ChartStatSearchtimeRequestsByPeriod();
+﻿let startDate;
+let endDate;
+let originalDataStatRunningTotalRequestsByPeriod = [];
+let originalDataStatTotalRequestsByPeriod = [];
+let originalDataStatSearchtimeRequestsByPeriod = [];
 
+$(document).ready(
+
+    function () {
+
+        // #region knappar perioder år, månad och dag
         var $divPeriodButtons = $("<div>")
             .addClass("btn-group btn-group-sm")
             .attr({
                 "role": "group",
                 "aria-label": "Ändra diagramperiod"
             })
-            .css("float","right");
+            .css("float", "right");
         var $periodButtonTemplate = $("<button>")
             .addClass("btn btn-primary")
             .attr("type", "button");
         $divPeriodButtons.append(
             $periodButtonTemplate.clone()
-                .attr("id","btnChartYear")
+                .attr("id", "btnChartYear")
                 .text("År")
                 .addClass("active")
                 .click(function () {
@@ -39,9 +44,179 @@
                     ChangeChartsPeriod(this);
                 })
         );
+        // #endregion
+
+
+        // #region datumintervall
+        var $inputDate = $("<input>")
+            .attr("type", "date")
+            .addClass("form-control form-control-sm");
+        var $divInputDateContainer = $("<div>")
+            .addClass("col");
+        var $divDateIntervall = $("<div>")
+            .addClass("form-row");
+        $divDateIntervall.append(
+            $divInputDateContainer
+                .clone()
+                .append(
+                    $inputDate.clone()
+                        .attr({
+                            "id": "startdate",
+                            "placeholder": "Startdatum"
+                        })
+                )
+        );
+        $divDateIntervall.append(
+            $divInputDateContainer
+                .clone()
+                .append(
+                    $inputDate.clone()
+                        .attr({
+                            "id": "enddate",
+                            "placeholder": "Slutdatum"
+                        })
+                )
+        );
+        // #endregion
+
+        $("#StatCharts").prepend($divDateIntervall);
         $("#StatCharts").prepend($divPeriodButtons);
+
+        
+        initStartEndDate();
+        
+        ChartStatRunningTotalRequestsByPeriod();
+        ChartStatTotalRequestsByPeriod();
+        ChartStatSearchtimeRequestsByPeriod();
+
+    }    
+);    
+
+
+function initStartEndDate() {
+    
+    let services = 'services/kontrollpanel.asmx/StatPeriodTotalRequests';
+    $.ajax({
+        type: "POST",
+        url: Lkr.Plan.Dokument.resolvedClientUrl + services,
+        contentType: "application/json; charset=UTF-8",
+        dataType: "json",
+        success: function (msg) {
+            
+            let data = JSON.parse(msg.d);
+
+            startDate = data[0].date_first_request.slice(0, 10);
+            endDate = data[0].date_latest_request.slice(0, 10);
+
+        },    
+        error: function () {
+            console.error("Fel!\nStatPeriodTotalRequests");
+        },    
+        complete: function () {
+
+            // Sätt datumfilterna till standardvärden
+            document.getElementById('startdate').min = startDate;
+            document.getElementById('startdate').max = endDate;
+            document.getElementById('enddate').min = startDate;
+            document.getElementById('enddate').max = endDate;
+            document.getElementById('startdate').value = startDate;
+            document.getElementById('enddate').value = endDate;
+            
+        
+            // Lägg till event listeners för start- och slutdatum
+            document.getElementById('startdate').addEventListener('input', filterDataByDate);
+            document.getElementById('enddate').addEventListener('input', filterDataByDate);
+
+        }    
+    });    
+}; // SLUT initStartEndDate    
+
+
+function filterDataByDate() {
+    let currentFromToDates;
+
+    let activePeriodButton = $(".btn-group .btn.active").attr("id");
+
+    switch (activePeriodButton) {
+        case "btnChartYear":
+            currentFromToDates = getCurrentFromToDates("year");
+            break;
+        case "btnChartMonth":
+            currentFromToDates = getCurrentFromToDates("month");
+            break;
+        case "btnChartDay":
+            currentFromToDates = getCurrentFromToDates("day");
+            break;
     }
-);
+
+    console.log("startDate", startDate);
+    console.log("endDate", endDate);
+
+    // Filtrera endast om båda datum är angivna
+    if (startDate && endDate) {
+
+        console.log("ÄNDRA DIAGRAM");
+        console.log("DATA RunningTotalRequests", originalDataStatRunningTotalRequestsByPeriod);
+        console.log("DATA TotalRequests", originalDataStatTotalRequestsByPeriod);
+        console.log("DATA SearchtimeRequests", originalDataStatSearchtimeRequestsByPeriod);
+
+
+        let chartRunningTotalRequestsByYear = Chart.getChart("RunningTotalRequestsByYear");
+        let chartTotalRequestsByYear = Chart.getChart("TotalRequestsByYear");
+        let chartSearchtimeRequestsByYear = Chart.getChart("SearchtimeRequestsByYear");
+
+        // Filtrera dataset baserat på valt datumintervall  
+        const filteredDataStatRunningTotalRequestsByPeriod = originalDataStatRunningTotalRequestsByPeriod.filter(item => {
+            return item.period >= currentFromToDates.fromDate && item.period <= currentFromToDates.toDate;
+        });
+
+        // Uppdatera labels och data
+        const filteredLabelsStatRunningTotalRequestsByPeriod = filteredDataStatRunningTotalRequestsByPeriod.map(item => item.period);
+        const filteredValuesStatRunningTotalRequestsByPeriod = filteredDataStatRunningTotalRequestsByPeriod.map(item => item.total_running);
+
+        // Uppdatera Chart.js dataset och labels
+        chartRunningTotalRequestsByYear.data.labels = filteredLabelsStatRunningTotalRequestsByPeriod;
+        chartRunningTotalRequestsByYear.data.datasets[0].data = filteredValuesStatRunningTotalRequestsByPeriod;
+        chartRunningTotalRequestsByYear.update();
+
+
+
+        // Filtrera dataset baserat på valt datumintervall  
+        const filteredDataStatTotalRequestsByPeriod = originalDataStatTotalRequestsByPeriod.filter(item => {
+            return item.period >= currentFromToDates.fromDate && item.period <= currentFromToDates.toDate;
+        });
+
+        // Uppdatera labels och data
+        const filteredLabelsStatTotalRequestsByPeriod = filteredDataStatTotalRequestsByPeriod.map(item => item.period);
+        const filteredValuesStatTotalRequestsByPeriod = filteredDataStatTotalRequestsByPeriod.map(item => item.total);
+
+        // Uppdatera Chart.js dataset och labels
+        chartTotalRequestsByYear.data.labels = filteredLabelsStatTotalRequestsByPeriod;
+        chartTotalRequestsByYear.data.datasets[0].data = filteredValuesStatTotalRequestsByPeriod;
+        chartTotalRequestsByYear.update();
+        
+
+
+        // Filtrera dataset baserat på valt datumintervall  
+        const filteredDataStatSearchtimeRequestsByPeriod = originalDataStatSearchtimeRequestsByPeriod.filter(item => {
+            return item.period >= currentFromToDates.fromDate && item.period <= currentFromToDates.toDate;
+        });
+
+        // Uppdatera labels och data
+        const filteredLabelsStatSearchtimeRequestsByPeriod = filteredDataStatSearchtimeRequestsByPeriod.map(item => item.period);
+        const filteredValuesStatSearchtimeRequestsByPeriod = filteredDataStatSearchtimeRequestsByPeriod.map(item => item.searchtime_ms_snitt);
+
+        // Uppdatera Chart.js dataset och labels
+        chartSearchtimeRequestsByYear.data.labels = filteredLabelsStatSearchtimeRequestsByPeriod;
+        chartSearchtimeRequestsByYear.data.datasets[0].data = filteredValuesStatSearchtimeRequestsByPeriod;
+        chartSearchtimeRequestsByYear.update();
+
+
+    }  
+  }; // SLUT filterDataByDate  
+
+
+
 
 
 function ChartStatRunningTotalRequestsByPeriod(period) {
@@ -75,11 +250,20 @@ function ChartStatRunningTotalRequestsByPeriod(period) {
         success: function (msg) {
 
             var data = JSON.parse(msg.d);
+            originalDataStatRunningTotalRequestsByPeriod = data;
 
-            for (i = 0; i < data.length; ++i) {
-                chartLabel.push(data[i].period);
-                chartData.push(data[i].total_running);
+            const currentFromToDates = getCurrentFromToDates(period);
+
+            // Filtrera dataset baserat på valt datumintervall  
+            const filteredData = data.filter(item => {
+                return item.period >= currentFromToDates.fromDate && item.period <= currentFromToDates.toDate;
+            });
+
+            for (i = 0; i < filteredData.length; ++i) {
+                chartLabel.push(filteredData[i].period);
+                chartData.push(filteredData[i].total_running);
             }
+
 
         },
         error: function () {
@@ -131,9 +315,9 @@ function ChartStatRunningTotalRequestsByPeriod(period) {
 
 
             myChart = new Chart(
-                    document.getElementById("RunningTotalRequestsByYear"),
-                    config
-                );
+                document.getElementById("RunningTotalRequestsByYear"),
+                config
+            );
         }
     })
 
@@ -172,10 +356,18 @@ function ChartStatTotalRequestsByPeriod(period) {
         success: function (msg) {
 
             var data = JSON.parse(msg.d);
+            originalDataStatTotalRequestsByPeriod = data;
 
-            for (i = 0; i < data.length; ++i) {
-                chartLabel.push(data[i].period);
-                chartData.push(data[i].total);
+            const currentFromToDates = getCurrentFromToDates(period);
+
+            // Filtrera dataset baserat på valt datumintervall  
+            const filteredData = data.filter(item => {
+                return item.period >= currentFromToDates.fromDate && item.period <= currentFromToDates.toDate;
+            });
+
+            for (i = 0; i < filteredData.length; ++i) {
+                chartLabel.push(filteredData[i].period);
+                chartData.push(filteredData[i].total);
             }
 
         },
@@ -269,10 +461,18 @@ function ChartStatSearchtimeRequestsByPeriod(period) {
         success: function (msg) {
 
             var data = JSON.parse(msg.d);
+            originalDataStatSearchtimeRequestsByPeriod = data;
 
-            for (i = 0; i < data.length; ++i) {
-                chartLabel.push(data[i].period);
-                chartData.push(data[i].searchtime_ms_snitt);
+            const currentFromToDates = getCurrentFromToDates(period);
+
+            // Filtrera dataset baserat på valt datumintervall  
+            const filteredData = data.filter(item => {
+                return item.period >= currentFromToDates.fromDate && item.period <= currentFromToDates.toDate;
+            });
+
+            for (i = 0; i < filteredData.length; ++i) {
+                chartLabel.push(filteredData[i].period);
+                chartData.push(filteredData[i].searchtime_ms_snitt);
             }
 
         },
@@ -357,3 +557,23 @@ function ChangeChartsPeriod(element) {
     }
 
 }; // SLUT ChangeChartsPeriod
+
+function getCurrentFromToDates(period) {
+    switch (period) {
+        case "year":
+            return {
+                fromDate: document.getElementById('startdate').value.slice(0,4),
+                toDate: document.getElementById('enddate').value.slice(0,4)
+            }
+        case "month":
+            return {
+                fromDate: document.getElementById('startdate').value.slice(0,7),
+                toDate: document.getElementById('enddate').value.slice(0,7)
+            }
+        case "day":
+            return {
+                fromDate: document.getElementById('startdate').value,
+                toDate: document.getElementById('enddate').value
+            }
+    }
+}
