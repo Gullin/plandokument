@@ -335,6 +335,18 @@ namespace Plan.Plandokument
 
         [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string CacheExistsPlansGeoJson()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            return jsonSerializer.Serialize(PlanCache.CacheExistsPlansGeoJson());
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public string CacheExistsPlanBerorFastighet()
         {
 
@@ -386,13 +398,14 @@ namespace Plan.Plandokument
         public string CacheExistsAll()
         {
             bool planBasis = PlanCache.CacheExistsPlanBasis();
+            bool plansGeoJson = PlanCache.CacheExistsPlansGeoJson();
             bool planBerorFastighet = PlanCache.CacheExistsPlanBerorFastighet();
             bool planDocumenttypes = PlanCache.CacheExistsPlandocumenttypes();
             bool planBerorPlan = PlanCache.CacheExistsPlanBerorPlan();
             bool planDocuments = PlanCache.CacheExistsPlanDocuments();
             bool exists = false;
 
-            if (planBasis && planBerorFastighet && planDocumenttypes && planBerorPlan && planDocuments)
+            if (planBasis && plansGeoJson && planBerorFastighet && planDocumenttypes && planBerorPlan && planDocuments)
             {
                 exists = true;
             }
@@ -422,6 +435,33 @@ namespace Plan.Plandokument
                 else
                 {
                     PlanCache.setPlanCache();
+                }
+                return jsonSerializer.Serialize(true.ToString());
+            }
+            catch
+            {
+                return jsonSerializer.Serialize(false.ToString());
+            }
+
+        }
+
+
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string CacheRefreshPlansGeoJSON()
+        {
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+
+            try
+            {
+                if (PlanCache.CacheExistsPlansGeoJson())
+                {
+                    PlanCache.RemoveCachedPlansGeoJson();
+                }
+                else
+                {
+                    PlanCache.setPlansGeoJsonCache();
                 }
                 return jsonSerializer.Serialize(true.ToString());
             }
