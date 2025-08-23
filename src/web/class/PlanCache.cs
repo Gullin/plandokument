@@ -104,6 +104,27 @@ namespace Plan.Plandokument
 
 
         /// <summary>
+        /// Returnerar basinformationen för planern från cache. Existerar cachen ej skapas den.
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetPlanGeoJson()
+        {
+            DataTable cachedPlansGeoJson = (DataTable)HttpRuntime.Cache["C_PlansGeoJson"];
+
+            if (cachedPlansGeoJson != null)
+            {
+                return cachedPlansGeoJson;
+            }
+            else
+            {
+                setPlansGeoJsonCache();
+                return (DataTable)HttpRuntime.Cache["C_PlansGeoJson"];
+            }
+        }
+
+
+
+        /// <summary>
         /// Returnerar plandokumenttyperna från cache. Existerar cachen ej skapas den.
         /// </summary>
         /// <returns></returns>
@@ -198,6 +219,18 @@ namespace Plan.Plandokument
 
 
         /// <summary>
+        /// Plockar bort cachen för alla planers geometrier som GeoJSON
+        /// </summary>
+        public static void RemoveCachedPlansGeoJson()
+        {
+            if (CacheExistsPlansGeoJson())
+            {
+                HttpRuntime.Cache.Remove("C_PlansGeoJson");
+            }
+        }
+
+
+        /// <summary>
         /// Plockar bort cachen för dokumenttyper
         /// </summary>
         public static void RemoveCachePlandocumenttypes()
@@ -266,6 +299,26 @@ namespace Plan.Plandokument
         }
 
         
+        /// <summary>
+        /// Kontrollerar om alla planers geometrier som GeoJSON
+        /// </summary>
+        /// <returns></returns>
+        public static bool CacheExistsPlansGeoJson()
+        {
+            var cache = HttpRuntime.Cache["C_PlansGeoJson"];
+
+            if (cache != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+
         /// <summary>
         /// Kontrollerar om dokumenttyperna är cachade 
         /// </summary>
@@ -614,6 +667,60 @@ namespace Plan.Plandokument
             npgsqlCon.Close();
             npgsqlCon.Dispose();
         }
+
+
+
+        /// <summary>
+        /// Skapar cache för alla planers geometrier som GeoJSON
+        /// </summary>
+        public static void setPlansGeoJsonCache()
+        {
+            initPlanGeoJsonCache();
+        }
+        /// <summary>
+        /// Skapa cache för alla planers geometrier som GeoJSON med samma signatur som för delegate CacheItemRemovedCallback.
+        /// Existerar p.g.a. callback och reinitiering av cache när cache slutar existera.
+        /// </summary>
+        private static void setPlanGeoJsonCache(string key, object value, CacheItemRemovedReason reason)
+        {
+            LogCacheRemovedReason(key, reason);
+            initPlanGeoJsonCache();
+        }
+        /// <summary>
+        /// Initierar cache för alla planers geometrier som GeoJSON
+        /// </summary>
+        private static void initPlanGeoJsonCache()
+        {
+            string sqlPlanGeometries = SqlTemplates.GetPlanGeoJson;
+
+            // Databasinforamtion från PostgreSQL/PostGIS
+            DataTable dtPlanGeometries = new DataTable();
+            NpgsqlConnection npgsqlCon = UtilityDatabase.GetNpgsqlConnectionForDBGeodata();
+            NpgsqlCommand npgsqlCom = new NpgsqlCommand(sqlPlanGeometries, npgsqlCon);
+            NpgsqlDataReader npgsqlDr;
+
+            npgsqlCom.Connection.Open();
+            npgsqlDr = npgsqlCom.ExecuteReader();
+
+            dtPlanGeometries.Load(npgsqlDr);
+
+            npgsqlDr.CloseAsync();
+            npgsqlDr.DisposeAsync();
+
+            DateTime cacheExpiration = setCacheExpiration();
+
+            // Callback för när cache försvinner
+            CacheItemRemovedCallback onCachedRemoved = new CacheItemRemovedCallback(setPlanGeoJsonCache);
+
+            // Skapa cach av alla planer
+            Cache cache = HttpRuntime.Cache;
+            cache.Insert("C_PlansGeoJson", dtPlanGeometries, null, cacheExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, onCachedRemoved);
+
+            dtPlanGeometries.Dispose();
+            npgsqlCon.Close();
+            npgsqlCon.Dispose();
+        }
+
 
 
 
