@@ -18,6 +18,7 @@ using System.Xml.Linq;
 using OSGeo.MapGuide;
 using Plan.Plandokument.MapLayerDefinition;
 using Plan.Plandokument.jTable;
+using Npgsql;
 
 namespace Plan.Plandokument
 {
@@ -546,6 +547,69 @@ namespace Plan.Plandokument
 
             //return getObjectAsJson(getTableSorted(planDocs.SearchedPlansDocuments, "EXTENTION", "ASC", "DOCUMENTTYPE", "ASC"));
             return getObjectAsJson(getTableSorted(planDocs.SearchedPlansDocuments, "DOCUMENTTYPE", "ASC", "EXTENTION", "ASC"));
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string getPlansGeometryAsGeoJson(List<object> planIds)
+        {
+            DataTable dtPlans = PlanCache.GetPlanBasisCache();
+            string planAktsAsCsv = string.Join(",",
+                dtPlans.AsEnumerable()
+                    .Where(row => planIds.Contains(row["NYCKEL"]))
+                    .Select(row => $"'{row["AKT"].ToString()}'"));
+
+            DataTable dtPlanGeometriesAsGeoJSON = new DataTable();
+            NpgsqlConnection npgsqlCon = UtilityDatabase.GetNpgsqlConnectionForDBGeodata();
+            NpgsqlCommand npgsqlCom = new NpgsqlCommand(
+                SqlTemplates.GetPlanGeometriAsGeoJson.Replace("@search_string", planAktsAsCsv),
+                npgsqlCon);
+            NpgsqlDataReader npgsqlDr;
+
+            npgsqlCom.Connection.Open();
+            npgsqlDr = npgsqlCom.ExecuteReader();
+
+            dtPlanGeometriesAsGeoJSON.Load(npgsqlDr);
+
+            npgsqlDr.CloseAsync();
+            npgsqlDr.DisposeAsync();
+
+            //return getObjectAsJson(dtPlanGeometriesAsGeoJSON);
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(dtPlanGeometriesAsGeoJSON.Rows[0]["result"]);
+
+            //JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+            //return jsonSerializer.Serialize(UtilityException.FlattenException(new NotImplementedException()));
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
+        public string getPlansGeoJson()
+        {
+            DataTable dtPlans = PlanCache.GetPlanBasisCache();
+
+            DataTable dtPlanGeoJSON = new DataTable();
+            NpgsqlConnection npgsqlCon = UtilityDatabase.GetNpgsqlConnectionForDBGeodata();
+            NpgsqlCommand npgsqlCom = new NpgsqlCommand(
+                SqlTemplates.GetPlanGeoJson,
+                npgsqlCon);
+            NpgsqlDataReader npgsqlDr;
+
+            npgsqlCom.Connection.Open();
+            npgsqlDr = npgsqlCom.ExecuteReader();
+
+            dtPlanGeoJSON.Load(npgsqlDr);
+
+            npgsqlDr.CloseAsync();
+            npgsqlDr.DisposeAsync();
+
+            return getObjectAsJson(dtPlanGeoJSON);
+
+            //JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+            //return jsonSerializer.Serialize(dtPlanGeoJSON.Rows[0]["result"]);
         }
 
 
