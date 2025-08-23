@@ -41,6 +41,7 @@ namespace Plan.Plandokument
 
             Plan.Plandokument.PlanCache.GetPlandocumenttypesCache();
             Plan.Plandokument.PlanCache.GetPlanBasisCache();
+            Plan.Plandokument.PlanCache.GetPlanGeoJson();
             Plan.Plandokument.PlanCache.GetPlanBerorFastighetCache();
             Plan.Plandokument.PlanCache.GetPlanBerorPlanCache();
             Plan.Plandokument.PlanCache.GetPlanDocumentsCache();
