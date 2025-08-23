@@ -1,7 +1,8 @@
 ﻿SELECT  CAST(fir.plan_id AS VARCHAR(20)) AS plan_id,
         fir.lmakt,
         fir.egn_akt,
-	       fir.planfk,
+        fir.uuid,
+        fir.planfk,
         fir.plannamn,
         fir.status,
         fir.status_text,
@@ -19,7 +20,7 @@
             WHEN fir.lagakraft_dat IS NOT NULL THEN CONCAT(SUBSTRING(fir.lagakraft_dat, 1, 4), '-', SUBSTRING(fir.lagakraft_dat, 5, 2), '-', SUBSTRING(fir.lagakraft_dat, 7, 2))
             ELSE fir.lagakraft_dat END AS dat_lagakraft,
         kom.komkod
-FROM(SELECT fr.pb AS plan_id, fr.planfk AS planfk, fr.lmakt AS lmakt, pegn.plannr AS egn_akt, fr.plannamn AS plannamn, fr.pstatus AS status,
+FROM(SELECT fr.pb AS plan_id, fr.planfk AS planfk, fr.lmakt AS lmakt, pegn.plannr AS egn_akt, fr.uuid AS uuid, fr.plannamn AS plannamn, fr.pstatus AS status,
             CASE fr.pstatus
                 WHEN 'A' THEN 'Avregistrerad'
                 WHEN 'B' THEN 'Beslut'
