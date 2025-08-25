@@ -93,7 +93,11 @@ namespace Plan.Plandokument
                 else
                 {
                     //fungerar ej p.g.a. round trip utan sökbegrepp som rensa sessionen
-                    Session.Clear();
+                    Session.Remove("TimeStart");
+                    Session.Remove("PlanHandling");
+                    Session.Remove("Begrepp");
+                    Session.Remove("SearchedPlans");
+                    Session.Remove("PlanerAntal");
                 }
 
             }
