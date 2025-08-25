@@ -65,6 +65,30 @@
                 <h4 id="avsnitt1">Versionsinformation</h4>
                 <div id="version">
                     <ul>
+                        <li>
+                            <ul>
+                                <li><span>v0.31.2</span> Funktionsknappar till höger bättre centrerade vertikalt och ikoner från Bootstrap Icons.</li>
+                                <li><span>v0.31.1</span> Länk till handläggarkartan i CSM.</li>
+                                <li><span>v0.31.0</span> Länk till handläggarkartan i AIMS.</li>
+                            </ul>
+                        </li>
+                        <li><span>v0.31</span> Ny sajt för endast kartklient för presentation av alla planer med popup för planers dokument.</li>
+                        <li>
+                            <ul>
+                                <li><span>v0.30.4</span> Förbättrat utnyttjandet av plats för kartöversikt vid presentation plandokument.</li>
+                                <li><span>v0.30.3</span> Uppgradering av serverbibliotek och borttag av kritiska sårbarheten i biblioteken Npgsql och System.Text.Json.</li>
+                                <li><span>v0.30.2</span> Redovisning av uppskattad minnesanvändning per resp. cache under administrationssajten (kontrollpanelen).</li>
+                                <li><span>v0.30.1</span> Forcerad förnyelse av planers cache för geometrin under administrationssajten (kontrollpanelen).</li>
+                            </ul>
+                        </li>
+                        <li><span>v0.30</span> Ny kartklient vid sökning på plan och dokument. Borttagning av beroende till MapGuide/AIMS dll:er.</li>
+                        <li>
+                            <ul>
+                                <li><span>v0.29.3</span> Stöd för nya nycklar, både nationellt uuid och kartleveransens objekts nycklar i registerkarte-gml.</li>
+                                <li><span>v0.29.2</span> Bugg Tidigare sökning låg kvar när tom sida ./plan/dokument/ skulle hämtas.</li>
+                                <li><span>v0.29.1</span> Bugg där paketering av dokument till zipp-fil slutat fungera p.g.a. att tjänsterna flyttat till annan underadress ./services/.</li>
+                            </ul>
+                        </li>
                         <li><span>v0.29</span> Administrationssajt utökad med översikt som redogör för viss användningsstatistik.
                         </li>
                         <li>
