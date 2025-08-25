@@ -784,9 +784,10 @@ class MapBackground {
             }
 
             // Filtrera bort sökt plan från övriga alla andra planer
+            const aktId = document.getElementById("akt-" + this.PlaceholderId.split("-")[1])?.innerText;
             const geojsonDataFiltered = geojsonData.filter(item => {
                 const feature = JSON.parse(item.result);
-                return feature.id !== document.getElementById("akt-" + this.PlaceholderId.split("-")[1]).innerText;
+                return aktId ? feature.id !== aktId : true
             });
             // Skapa giltig GeoJSON
             let featuresFiltered = {};
