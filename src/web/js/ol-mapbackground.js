@@ -674,10 +674,24 @@ class MapBackground {
                         const id = feature.getId();
                         const props = feature.getProperties();
                         let featureExtension = feature.getGeometry().getExtent();
+
+                        let scaledGeometryExtension = ol.geom.Polygon.fromExtent(
+                            feature.getGeometry().getExtent()
+                        );
+                        scaledGeometryExtension.scale(1 + Lkr.Plan.Setting.Map.mapResizeTolerance);
+                        const scaledFeatureExtension = scaledGeometryExtension.getExtent();
+                        const wktFormat = new ol.format.WKT()
+                        const featureAsWkt = wktFormat.writeFeature(feature);
+
                         let jumpLinks = "";
                         jumps.forEach(item => {
                             if (item.active) {
-                                jumpLinks += `<p><a href="${item.link.replaceAll("{e_min}",featureExtension[0]).replaceAll("{n_min}",featureExtension[1]).replaceAll("{e_max}",featureExtension[2]).replaceAll("{n_max}",featureExtension[3])}" target="_blank">${item.name}</a><span class="linkNewWindow" style="top: 0px; left: 0px;" title="Öppnar länk i nytt webbläsarfönster"></span></p>`
+                                if (item.link.includes("{wkt}")) {
+                                    jumpLinks += `<p><a href="${item.link.replace("{wkt}", featureAsWkt).replaceAll("{e_min}", scaledFeatureExtension[0]).replaceAll("{n_min}", scaledFeatureExtension[1]).replaceAll("{e_max}", scaledFeatureExtension[2]).replaceAll("{n_max}", scaledFeatureExtension[3])}" target="_blank">${item.name}</a><span class="linkNewWindow" style="top: 0px; left: 0px;" title="Öppnar länk i nytt webbläsarfönster"></span></p>`
+                                }
+                                else {
+                                    jumpLinks += `<p><a href="${item.link.replaceAll("{e_min}", featureExtension[0]).replaceAll("{n_min}", featureExtension[1]).replaceAll("{e_max}", featureExtension[2]).replaceAll("{n_max}", featureExtension[3])}" target="_blank">${item.name}</a><span class="linkNewWindow" style="top: 0px; left: 0px;" title="Öppnar länk i nytt webbläsarfönster"></span></p>`
+                                }
                             }
                         });
                         // Bygg popup-innehåll
@@ -712,7 +726,7 @@ class MapBackground {
             if (cached) {
                 const cachedObj = JSON.parse(cached);
 
-                // Kolla om cachen är från samma dag
+                // Kolla om cachen är från samma dag        
                 const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
                 if (cachedObj.date === today) {
                     // Filtrera bort sökt plan från övriga alla andra planer om akt-elementet hittas (med andra ord sökt plan)
