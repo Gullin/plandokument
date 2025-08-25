@@ -27,6 +27,11 @@
             height: 100%;
             margin: 0;
             font-size: 1em;
+            line-height: 1em;
+            font-family: Verdana, Arial, sans-serif;
+        }
+        p {
+            margin: 0;
         }
 
         #versionWrapper {
@@ -54,6 +59,18 @@
             position: absolute;
             right: 1em;
             bottom: 1em;
+        }
+
+        .ol-popup-content {
+            font-size: 0.7em;
+            line-height: 1em;
+        }
+
+        .ol-popup-content h6 {
+            font-size: 1em;
+            line-height: 1em;
+            margin: 0;
+            padding: 0;
         }
     </style>
 
