@@ -3,6 +3,7 @@ const initialMapExtent = [96000, 6184000, 123000, 6205000];
 // EPSG:3008
 // Tas från https://epsg.io/3008.proj4
 const epsgProjectionDefintion = '+proj=tmerc +lat_0=0 +lon_0=13.5 +k=1 +x_0=150000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs';
+var urlBasePath = Lkr.Plan.Dokument.resolvedClientUrl;
 const backGroundLayerSettings = Lkr.Plan.Setting.Map.backGroundLayerSettings;
 const jumps = Lkr.Plan.Setting.Map.hopp;
 
